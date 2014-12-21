@@ -40,8 +40,8 @@ class ManagerComponent extends Component
         $this->Controller = $this->_registry->getController();
 
         $this->Controller->loadComponent('Auth', [
-            'authorize' => 'Controller',
-            'authenticate' => [
+            'authorize'            => 'Controller',
+            'authenticate'         => [
                 'Form' => [
                     'fields' => [
                         'username' => 'email',
@@ -50,22 +50,22 @@ class ManagerComponent extends Component
                 ]
             ],
             'unauthorizedRedirect' => [
-                'prefix' => false,
-                'plugin' => 'CakeManager',
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
                 'controller' => 'Users',
-                'action' => 'login'
+                'action'     => 'login'
             ],
-            'logoutRedirect' => [
-                'prefix' => false,
-                'plugin' => 'CakeManager',
+            'logoutRedirect'       => [
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
                 'controller' => 'Users',
-                'action' => 'login'
+                'action'     => 'login'
             ],
-            'loginAction' => [
-                'prefix' => false,
-                'plugin' => 'CakeManager',
+            'loginAction'          => [
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
                 'controller' => 'Users',
-                'action' => 'login'
+                'action'     => 'login'
             ]
         ]);
 
@@ -77,6 +77,7 @@ class ManagerComponent extends Component
     private function loadHelpers() {
 
         $this->Controller->helpers[] = 'CakeManager.Menu';
+        $this->Controller->helpers[] = 'CakeManager.Meta';
     }
 
     /**
