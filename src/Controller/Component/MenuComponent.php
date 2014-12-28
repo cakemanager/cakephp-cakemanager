@@ -66,6 +66,19 @@ class MenuComponent extends Component {
         }
     }
 
+    /**
+     *
+     * @param type $title
+     * @param type $item
+     *
+     * ### OPTIONS
+     * - id
+     * - parent
+     * - url
+     * - title
+     * - icon
+     * - area
+     */
     public function add($title, $item = array()) {
 
         $list = self::$data;
