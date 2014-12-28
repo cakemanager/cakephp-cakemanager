@@ -15,7 +15,36 @@ class UsersController extends AppController
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
-        $this->Auth->allow(['add', 'logout']);
+        $this->Auth->allow(['add', 'logout', 'login']);
+    }
+
+    /**
+     * Login method
+     *
+     * @return void
+     */
+    public function login() {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error('Your username or password is incorrect.');
+        }
+        if ($this->authUser) {
+            return $this->redirect($this->Auth->redirectUrl());
+        }
+    }
+
+    /**
+     * Logout method
+     *
+     * @return type
+     */
+    public function logout() {
+        $this->Flash->success('You are now logged out.');
+        return $this->redirect($this->Auth->logout());
     }
 
     /**
@@ -24,7 +53,7 @@ class UsersController extends AppController
      * @return void
      */
     public function index() {
-        $this->set('users', $this->paginate($this->Users));
+        $this->set('users', $this->paginate($this->Users->find('all', ['contain' => ['Roles']])));
     }
 
     /**
@@ -48,6 +77,8 @@ class UsersController extends AppController
      */
     public function add() {
         $user = $this->Users->newEntity($this->request->data);
+        $roles = $this->Users->Roles->find('list');
+
         if ($this->request->is('post')) {
             if ($this->Users->save($user)) {
                 $this->Flash->success('The user has been saved.');
@@ -56,7 +87,7 @@ class UsersController extends AppController
                 $this->Flash->error('The user could not be saved. Please, try again.');
             }
         }
-        $this->set(compact('user'));
+        $this->set(compact('user', 'roles'));
     }
 
     /**
@@ -70,6 +101,27 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
+
+        $roles = $this->Users->Roles->find('list');
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success('The user has been saved.');
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error('The user could not be saved. Please, try again.');
+            }
+        }
+        $this->set(compact('user', 'roles'));
+    }
+
+    public function new_password($id = null) {
+        $user = $this->Users->get($id, [
+            'contain' => []
+        ]);
+
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {

@@ -28,7 +28,11 @@ class UsersController extends AppController {
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
+
+                $roles = \Cake\ORM\TableRegistry::get('CakeManager.Roles');
+                $redirect = $roles->redirectFrom($user['id']);
+
+                return $this->redirect($redirect);
             }
             $this->Flash->error('Your username or password is incorrect.');
         }
@@ -77,6 +81,8 @@ class UsersController extends AppController {
      */
     public function add() {
         $user = $this->Users->newEntity($this->request->data);
+        $roles = $this->Users->Roles->find('all');
+
         if ($this->request->is('post')) {
             if ($this->Users->save($user)) {
                 $this->Flash->success('The user has been saved.');
@@ -85,7 +91,7 @@ class UsersController extends AppController {
                 $this->Flash->error('The user could not be saved. Please, try again.');
             }
         }
-        $this->set(compact('user'));
+        $this->set(compact('user',  'roles'));
     }
 
     /**

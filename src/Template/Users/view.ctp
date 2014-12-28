@@ -20,8 +20,8 @@
 		<div class="large-2 columns dates end">
 			<h6 class="subheader"><?= __('Created') ?></h6>
 			<p><?= h($user->created) ?></p>
-			<h6 class="subheader"><?= __('Updated') ?></h6>
-			<p><?= h($user->updated) ?></p>
+			<h6 class="subheader"><?= __('modified') ?></h6>
+			<p><?= h($user->modified) ?></p>
 		</div>
 	</div>
 </div>
@@ -37,7 +37,7 @@
 			<th><?= __('Description') ?></th>
 			<th><?= __('Url') ?></th>
 			<th><?= __('Created') ?></th>
-			<th><?= __('Updated') ?></th>
+			<th><?= __('modified') ?></th>
 			<th class="actions"><?= __('Actions') ?></th>
 		</tr>
 		<?php foreach ($user->bookmarks as $bookmarks): ?>
@@ -48,7 +48,7 @@
 			<td><?= h($bookmarks->description) ?></td>
 			<td><?= h($bookmarks->url) ?></td>
 			<td><?= h($bookmarks->created) ?></td>
-			<td><?= h($bookmarks->updated) ?></td>
+			<td><?= h($bookmarks->modified) ?></td>
 
 			<td class="actions">
 				<?= $this->Html->link(__('View'), ['controller' => 'Bookmarks', 'action' => 'view', $bookmarks->id]) ?>

@@ -9,15 +9,10 @@
     <fieldset>
         <legend><?= __('Edit User') ?></legend>
         <?php
-        echo $this->Form->input('email');
-        echo $this->Form->input('role_id', ['options' => $roles]);
-
-        echo $this->Html->link('Change Password', ['action' => 'new_password', $user->id]);
-
+        echo $this->Form->input('users_email', ['disabled', 'value' => $user->email]);
+        echo $this->Form->input('password', ['value' => '']);
+        echo $this->Form->input('confirm_password', ['type' => 'password']);
         ?>
-
-
-
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
