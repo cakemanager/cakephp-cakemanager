@@ -42,6 +42,7 @@ Default you will use the first parameter (`$this->request->params['pass'][0]`) a
 $this->IsAuthorized->config('param', 1);
 ```
 
+
 Activating the authorization
 ----------------------------
 
