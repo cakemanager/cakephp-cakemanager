@@ -61,7 +61,7 @@ class MetaHelper extends Helper
 
         $html .= $this->_View->Form->input('metas.' . $this->counter . '.name', [
             'type'  => 'hidden',
-            'value' => $key
+            'value' => $key,
         ]);
 
         $html .= $this->_View->Form->input('metas.' . $this->counter . '.value', $settings);
