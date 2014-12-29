@@ -7,15 +7,15 @@ This should be a normal request-flow by CakePHP:
 
 Controller              | Component             | 
 ------------            | -------------         | ------------
-initialize              |                       |   
-                        | beforeFilter          |  
-beforeFilter            |                       |   
-                        | startup               |  
-= action logic =        |                       |   
-                        | beforeRender          |  
-beforeRender            |                       |   
-                        | shutdown              |  
-= action render =       |                       |               
+initialize              | []                    | []  
+[]                      | beforeFilter          | [] 
+beforeFilter            | []                    | []  
+[]                      | startup               | [] 
+= action logic =        | []                    | []  
+[]                      | beforeRender          | [] 
+beforeRender            | []                    | []  
+[]                      | shutdown              | [] 
+= action render =       | []                    | []              
 
 * Note: The column 'Component' means all components
 
@@ -25,23 +25,23 @@ This gave us a very clean way for our events:
 
 Controller              | Component             | 
 ------------            | -------------         | ------------
-initialize              |                       |   
-                        | beforeFilter          |
-                        |                       | Component.Manager.beforeFilter
-                        |                       | Component.Manager.beforeFilter.prefix
-beforeFilter            |                       |   
-                        | startup               |  
-                        |                       | Component.Manager.startup
-                        |                       | Component.Manager.startup.prefix
-= action logic =        |                       |   
-                        | beforeRender          |  
-                        |                       | Component.Manager.beforeRender
-                        |                       | Component.Manager.beforeRender.prefix
-beforeRender            |                       |   
-                        | shutdown              | 
-                        |                       | Component.Manager.shutdown
-                        |                       | Component.Manager.shutdown.prefix
-= action render =       |                       |               
+initialize              | []                    | []
+[]                      | beforeFilter          | []
+[]                      | []                    | Component.Manager.beforeFilter
+[]                      | []                    | Component.Manager.beforeFilter.prefix
+beforeFilter            | []                    | []  
+[]                      | startup               | []
+[]                      | []                    | Component.Manager.startup
+[]                      | []                    | Component.Manager.startup.prefix
+= action logic =        | []                    | []  
+[]                      | beforeRender          | [] 
+[]                      | []                    | Component.Manager.beforeRender
+[]                      | []                    | Component.Manager.beforeRender.prefix
+beforeRender            | []                    | []  
+[]                      | shutdown              | []
+[]                      | []                    | Component.Manager.shutdown
+[]                      | []                    | Component.Manager.shutdown.prefix
+= action render =       | []                    | []              
 
 * Note: The column 'Component' means the ManagerComponent by CM; Events named after the component-callback are registered at the end of the component-event. Note that events may be called before your own components.
 
