@@ -22,6 +22,11 @@ Branches
 
 **develop** will be used to develop. Warning; this branche may contain non-stable code.
 
+Table Of Contents
+-----------------
+
+* [Installation](installation.md)
+* [Configurations](configurations.md)
 
 To Do
 -----
