@@ -65,3 +65,7 @@ If it's set we can authorize.
 Further Reading
 ---------------
 The component is set, now we want to activate the check by adding a behavior to specific models. Read the IsAuthorizedBehavior for more!
+
+[IsAuthorized-Behavior](Behaviors/IsAuthorized.md)
+
+
