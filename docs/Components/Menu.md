@@ -45,6 +45,7 @@ An example of adding an item:
 The first parameter is default the title of the item.
 
 The second parameter is an array of settings. 
+
 - id    You can add a id to your item. This can be usefull for controlling the item, like editing, or deleting it's item.
 - url   Adding an url is just like CakePHP: adding an array or string.
 - parent    Not supported yet... This can be used for adding items under items.
