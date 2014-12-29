@@ -46,13 +46,13 @@ The first parameter is default the title of the item.
 
 The second parameter is an array of settings. 
 
-- id    You can add a id to your item. This can be usefull for controlling the item, like editing, or deleting it's item.
-- url   Adding an url is just like CakePHP: adding an array or string.
-- parent    Not supported yet... This can be used for adding items under items.
-- title     the title can also be set via this setting. This is needed when you use the first parameter as ID.
-- icon      Sometimes you want to add icons (like font-awesome). You can add icons via this setting.
-- area      Changing the area can also via this setting.
-- active    This setting is default set to false; and will automatically be set to true if the given url is equal to the current url. The helpers will be able to read this and react on it.
+- id            You can add a id to your item. This can be usefull for controlling the item, like editing, or deleting it's item.
+- url           Adding an url is just like CakePHP: adding an array or string.
+- parent        Not supported yet... This can be used for adding items under items.
+- title         The title can also be set via this setting. This is needed when you use the first parameter as ID.
+- icon          Sometimes you want to add icons (like font-awesome). You can add icons via this setting.
+- area          Changing the area can also via this setting.
+- active        This setting is default set to false; and will automatically be set to true if the given url is equal to the current url. The helpers will be able to read this and react on it.
 
 Note: Sub-items (adding a parent) is not supported yet...
 
