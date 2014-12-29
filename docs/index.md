@@ -13,9 +13,6 @@ Get the code
 ------------
 The [source (http://github.com/bobmulder/cakephp-cakemanager)](http://github.com/bobmulder/cakephp-cakemanager) is available on Github.
 
-Contents
---------
-
 Branches
 --------
 **master** is our master-branche. This will be the latest version and latest documentation.
