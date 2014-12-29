@@ -66,6 +66,6 @@ Further Reading
 ---------------
 The component is set, now we want to activate the check by adding a behavior to specific models. Read the IsAuthorizedBehavior for more!
 
-Link: [IsAuthorized-Behavior](Behaviors/IsAuthorized.md)
+Link: [IsAuthorized-Behavior](../Behaviors/IsAuthorized.md)
 
 
