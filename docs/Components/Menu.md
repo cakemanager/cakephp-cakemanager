@@ -59,6 +59,7 @@ You can remove items using it's id:
 
     $this->Menu->remove('Bookmarks');
 
+
 Using the menu-data
 -------------------
 
