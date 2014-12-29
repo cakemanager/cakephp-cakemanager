@@ -6,7 +6,7 @@ In this chapter we will give explanation about a default and - by the CakeManage
 This should be a normal request-flow by CakePHP:
 
 Controller              | Component             | Events
-------------            | -------------         | ------------
+:------------           | :-------------        | :------------
 initialize              | ----                  | ----
 ----                    | beforeFilter          | ---- 
 beforeFilter            | ----                  | ----
@@ -24,7 +24,7 @@ You can see that the common-used callbacks for the component like `beforeFilter`
 This gave us a very clean way for our events:
 
 Controller              | Component             | Events
-------------            | -------------         | ------------
+:------------           | :-------------        | :------------
 initialize              | ----                  | ----
 ----                    | beforeFilter          | ----
 ----                    | ----                  | Component.Manager.beforeFilter
