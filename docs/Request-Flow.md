@@ -43,12 +43,6 @@ This gave us a very clean way for our events:
 | ----                    | ----                  | Component.Manager.shutdown.prefix       |
 | = action render =       | ----                  | ----                                    |
 
-
-| First Header | Second Header | Third Header |
-| ------------ | ------------- | ------------ |
-| Content Cell | Content Cell  | Content Cell |
-| Content Cell | Content Cell  | Content Cell |
-
 * Note: The column 'Component' means the ManagerComponent by CM; Events named after the component-callback are registered at the end of the component-event. Note that events may be called before your own components.
 
 This information can be usefull if you want to fire your logic in an event before or after a specific callback of the controller (for use of the user).
