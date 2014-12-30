@@ -1,7 +1,9 @@
 <?php
 
 use Cake\Core\Configure;
+use Cake\Network\Session;
 
-
-// Set the session-timeout on 60 minutes
-Configure::write('Session.timeout', 60);
+Configure::write('Session', [
+    'defaults' => 'php',
+    'timeout' => 240
+]);
