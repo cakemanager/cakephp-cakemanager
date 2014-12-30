@@ -1,5 +1,5 @@
 {
-    "name": "bobmulder/cake_manager",
+    "name": "bobmulder/cakephp-cakemanager",
     "description": "Plugin for CakePHP 3.x to manage your web-app.",
     "license": "MIT",
     "authors": [
