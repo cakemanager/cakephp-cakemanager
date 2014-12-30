@@ -24,8 +24,6 @@ class UsersTable extends Table
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
-        $this->addBehavior('CakeManager.IsAuthorized');
-
         $this->hasMany('Bookmarks', [
             'alias'      => 'Bookmarks',
             'foreignKey' => 'user_id',
@@ -53,25 +51,45 @@ class UsersTable extends Table
                 ->notEmpty('email')
                 ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'])
                 ->requirePresence('password', 'create')
-                ->notEmpty('password')
-                ->notEmpty('confirm_password')
-                ->add('confirm_password', 'custom', [
-                    'rule' => function($value, $context) {
-                        if ($value !== $context['data']['password']) {
-                            return false;
-                        }
-                        return false;
-                    },
-                    'message' => 'The passwords are not equal',
+                ->notEmpty('password');
+
+        $validator->add('new_password', 'custom', [
+            'rule' => function ($value, $context) {
+
+                if ($value !== $context['data']['confirm_password']) {
+                    return false;
+                }
+                return true;
+            },
+            'message' => 'Passwords are not equal!',
         ]);
+
+        $validator->add('confirm_password', 'custom', [
+            'rule' => function ($value, $context) {
+
+                if ($value !== $context['data']['new_password']) {
+                    return false;
+                }
+                return true;
+            },
+            'message' => 'Passwords are not equal!',
+        ]);
+
 
         return $validator;
     }
 
-    public function beforeEdit($controller) {
+    /**
+     * AfterValidate event
+     *
+     * @param type $event
+     * @param type $entity
+     * @param type $options
+     * @param type $validator
+     */
+    public function afterValidate($event, $entity, $options, $validator) {
 
-        $controller->set('roles', $this->Roles->find('list'));
-
+        $entity->password = $entity->new_password; // set for password-changes
     }
 
 }

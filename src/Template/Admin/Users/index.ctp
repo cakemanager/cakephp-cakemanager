@@ -5,6 +5,12 @@
     </ul>
 </div>
 <div class="users index large-10 medium-9 columns">
+
+    <h3>Users</h3>
+
+    <?= $this->Html->link('New user', ['action' => 'add']) ?>
+
+
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

@@ -10,8 +10,8 @@
         <legend><?= __('Edit User') ?></legend>
         <?php
         echo $this->Form->input('users_email', ['disabled', 'value' => $user->email]);
-        echo $this->Form->input('password', ['value' => '']);
-        echo $this->Form->input('confirm_password', ['type' => 'password']);
+        echo $this->Form->input('new_password', ['type' => 'password', 'value' => '']);
+        echo $this->Form->input('confirm_password', ['type' => 'password', 'value' => '']);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

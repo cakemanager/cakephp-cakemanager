@@ -17,16 +17,18 @@ class User extends Entity
      * @var array
      */
     protected $_accessible = [
-        'email'           => true,
-        'password'        => true,
-        'bookmarks'       => true,
-        'role_id'         => true,
+        'email'            => true,
+        'password'         => true,
+        'bookmarks'        => true,
+        'role_id'          => true,
+        'confirm_password' => true,
+        'new_password'     => true,
     ];
 
     protected function _setPassword($password) {
         $hasher = new DefaultPasswordHasher();
 
-        return $hasher->hash($password);
+        return $hasher->hash($this->email);
     }
 
 }
