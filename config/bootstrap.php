@@ -5,5 +5,5 @@ use Cake\Network\Session;
 
 Configure::write('Session', [
     'defaults' => 'php',
-    'timeout' => 240
+    'timeout'  => 2880
 ]);
