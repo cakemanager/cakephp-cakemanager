@@ -28,7 +28,7 @@ class MenuHelper extends Helper {
         $html = '';
 
         foreach ($menu as $item):
-            $html .= '<li>' . $this->Html->link(__($item['title']), $item['url']) . '</li>';
+            $html .= '<li '.($item['active'] ? 'class="active"' : '').'>' . $this->Html->link(__($item['title']), $item['url']) . '</li>';
         endforeach;
 
         return $html;

@@ -4,6 +4,7 @@ namespace CakeManager\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
+use Cake\Routing\Router;
 
 /**
  * Menu component
@@ -81,6 +82,8 @@ class MenuComponent extends Component {
      */
     public function add($title, $item = array()) {
 
+
+
         $list = self::$data;
 
         $_item = [
@@ -90,9 +93,16 @@ class MenuComponent extends Component {
             'title'  => $title,
             'icon'   => '',
             'area'   => false,
+            'active' => false,
         ];
 
         $item = array_merge($_item, $item);
+
+        $url = Router::url($item['url']);
+
+        if($url === "/".$this->Controller->request->url) {
+            $item['active'] = true;
+        }
 
         if ($item['area']) {
             $this->area = $item['area'];
