@@ -17,7 +17,7 @@ There are multiple configurations for the behavior. They will be explained.
 
 ### Field
 
-The field is the field where the state should be saved. Default set to 'state'.
+The field is the field where the state should be saved. Default set to `state`.
 
     $this->Stateable->config('field', 'custom_field');
 
