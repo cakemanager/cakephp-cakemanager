@@ -21,6 +21,12 @@ class MenuComponentTest extends TestCase {
 		$this->Menu = new MenuComponent($registry);
 	}
 
+    public function testExisting() {
+
+        $this->assertFalse(false);
+
+    }
+
 /**
  * tearDown method
  *
@@ -32,13 +38,5 @@ class MenuComponentTest extends TestCase {
 		parent::tearDown();
 	}
 
-/**
- * Test initial setup
- *
- * @return void
- */
-	public function testInitialization() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
 
 }

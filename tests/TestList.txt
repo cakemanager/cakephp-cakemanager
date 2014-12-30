@@ -1,0 +1,3 @@
+Commands:
+
+phpunit tests/TestCase/Controller/Component/MenuComponentTest.php
