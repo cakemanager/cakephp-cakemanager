@@ -81,7 +81,7 @@ class UsersController extends AppController {
      */
     public function add() {
         $user = $this->Users->newEntity($this->request->data);
-        $roles = $this->Users->Roles->find('all');
+        $roles = $this->Users->Roles->find('list');
 
         if ($this->request->is('post')) {
             if ($this->Users->save($user)) {

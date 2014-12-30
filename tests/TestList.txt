@@ -3,3 +3,5 @@ Commands:
 phpunit tests/TestCase/Controller/Component/MenuComponentTest.php 
 
 phpunit tests/TestCase/Controller/Component/IsAuthorizedComponentTest.php 
+
+phpunit tests/TestCase/Controller/Admin/UsersControllerTest.php 
