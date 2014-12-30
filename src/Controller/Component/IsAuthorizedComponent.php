@@ -28,6 +28,13 @@ class IsAuthorizedComponent extends Component
     ];
 
     /**
+     * The Controller
+     *
+     * @var type
+     */
+    protected $Controller = null;
+
+    /**
      * Constructor
      *
      * @param ComponentRegistry $registry
@@ -44,8 +51,14 @@ class IsAuthorizedComponent extends Component
      */
     public function initialize(array $config) {
         parent::initialize($config);
+    }
 
-        $this->Controller = $this->_registry->getController();
+    public function beforeFilter($event) {
+        $this->setController($event->subject());
+    }
+
+    public function setController($controller) {
+        $this->Controller = $controller;
     }
 
     /**
@@ -124,7 +137,7 @@ class IsAuthorizedComponent extends Component
      *
      * @return boolean
      */
-    protected function actionIsset() {
+    public function actionIsset() {
 
         $controller = $this->Controller;
 

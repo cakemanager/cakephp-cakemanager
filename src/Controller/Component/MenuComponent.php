@@ -29,12 +29,28 @@ class MenuComponent extends Component {
      * @var type
      */
     protected static $data = ['main' => []];
+
+    /**
+     * The controller
+     *
+     * @var type
+     */
     private $Controller    = null;
+
+    public function startup($event) {
+
+        $this->setController($event->subject());
+
+    }
 
     public function initialize(array $config) {
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
+    }
+
+    public function setController($controller) {
+        $this->Controller = $controller;
     }
 
     /**

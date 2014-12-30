@@ -19,8 +19,17 @@ class MenuComponentTest extends TestCase
      */
     public function setUp() {
         parent::setUp();
-        $registry = new ComponentRegistry();
-        $this->Menu = new MenuComponent($registry);
+
+         // Setup our component and fake test controller
+        $collection = new ComponentRegistry();
+        $this->Menu = new MenuComponent($collection);
+
+        $this->controller = $this->getMock(
+            'Cake\Controller\Controller',
+            ['redirect']
+        );
+        $this->Menu->setController($this->controller);
+
     }
 
     public function testArea() {
