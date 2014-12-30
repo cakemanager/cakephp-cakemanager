@@ -46,8 +46,8 @@ class MenuComponent extends Component {
      * @return type
      */
     public function area($area = null) {
-        if ($area) {
-            $this->area = $arae;
+        if ($area !== null) {
+            $this->area = $area;
         }
         return $this->area;
     }
@@ -68,6 +68,15 @@ class MenuComponent extends Component {
     }
 
     /**
+     * Clears the whole menu
+     */
+    public function clear() {
+
+        self::$data = ['main' => []];
+
+    }
+
+    /**
      *
      * @param type $title
      * @param type $item
@@ -81,8 +90,6 @@ class MenuComponent extends Component {
      * - area
      */
     public function add($title, $item = array()) {
-
-
 
         $list = self::$data;
 
