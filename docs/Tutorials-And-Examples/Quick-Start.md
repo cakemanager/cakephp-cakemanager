@@ -13,14 +13,77 @@ We asume you already got a new project of CakePHP. You can call the plugin via c
 
     "bobmulder/cakephp-cakemanager": "dev-master"
 
-After that we need to load our plugin in our `config/bootstrap.php`:
+After that we need to load our plugin in our `config/bootstrap.php`. We also need the Migrations-plugin from CakePHP to load our tables.
 
     Plugin::load('CakeManager', ['bootstrap' => true, 'routes' => true, 'autoload' => true]);
+    Plugin::load('Migrations');
 
-Creating the Schemas
+
+
+Creating the tables
+--------------------
+Schema's we know from CakePHP 2.x are not supported anymore. But we got the migrations-plugin from [CakePHP](https://github.com/cakephp/migrations).
+
+Run the following command in your shell:
+
+    $ bin/cake migrations migrate -p CakeManager
+    
+This command tells the Migrations-plugin to migrate (install) the CakeManager. This will load our tables.
+
+Loading the roles and user
+-----------------
+We created a shell to load the default roles and adding an administrator. You can access the shell via:
+
+    $ bin/cake CakeManager.Init [command] [variables]
+
+### Adding the roles
+First we will add the roles:
+
+    $ bin/cake CakeManager.Init Roles
+    
+This command creates the default roles of the CakeManager:
+- Administrators
+- Moderators
+- Users
+- Unregistered
+
+### Adding an user
+Now we need a administrator to login. Use the folling to register yourself:
+
+    $ bin/cake CakeManager.Init Admin my_email@domain.com mypassword
+    
+- The first parameter is your e-mailaddress to login with.
+- The second parameter is your (unhashed) password.
+
+> Note: Submit a valid e-mailaddress, otherwise you won't be able to login (the validation requires an e-mailaddress)
+
+> Note: If you get an error, the address already exists
+
+Adding the component
 --------------------
 
-After loading our plugin we need the Schema's of CakeManager.
+After loading the plugin we have to load the base-component: CakeManager.Manager.
 
-> Note: Schema's are not supported yet.
+        public function initialize() {
+        
+            // code
+        
+            $this->loadComponent('CakeManager.Manager');
+        
+            // code
+        
+        }
 
+### Configuring the Manager
+
+There are multiple configurations for the manager-component. 
+See the [Manager Component](../Components/Manager.md) for detailed documentation about the Manager-component.
+
+Loging in
+---------
+The CakeManager is set, we are now able to login! Go to yourdomain.com/login to login and start happy coding! 
+Good luck!
+
+Bob Mulder
+
+The CakeManager-Team
