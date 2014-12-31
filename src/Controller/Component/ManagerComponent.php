@@ -98,6 +98,8 @@ class ManagerComponent extends Component
      */
     public function beforeFilter($event) {
 
+        $this->Controller->authUser = $this->Controller->Auth->user();
+
         // beforeFilter-event
         $_event = new Event('Component.Manager.beforeFilter', $this, [
         ]);
@@ -150,6 +152,8 @@ class ManagerComponent extends Component
      */
     public function beforeRender($event) {
 
+        $this->Controller->set('authUser', $this->Controller->authUser);
+
         // beforeRender-event
         $_event = new Event('Component.Manager.beforeRender', $this, [
         ]);
@@ -200,7 +204,6 @@ class ManagerComponent extends Component
     public function admin_beforeFilter($event) {
 
         $this->Controller->layout = 'CakeManager.admin';
-
     }
 
 }
