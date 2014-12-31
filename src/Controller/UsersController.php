@@ -9,13 +9,13 @@ use CakeManager\Controller\AppController;
  *
  * @property \App\Model\Table\UsersTable $Users
  */
-class UsersController extends AppController {
+class UsersController extends AppController
+{
 
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
         $this->Auth->allow(['add', 'logout', 'login']);
-
     }
 
     /**
@@ -24,20 +24,23 @@ class UsersController extends AppController {
      * @return void
      */
     public function login() {
+        $this->loadModel('CakeManager.Roles');
+
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
 
-                $roles = \Cake\ORM\TableRegistry::get('CakeManager.Roles');
-                $redirect = $roles->redirectFrom($user['id']);
+                $redirect = $this->Roles->redirectFrom($user['role_id']);
 
                 return $this->redirect($redirect);
             }
             $this->Flash->error('Your username or password is incorrect.');
         }
         if ($this->authUser) {
-            return $this->redirect($this->Auth->redirectUrl());
+            $redirect = $this->Roles->redirectFrom($this->authUser['role_id']);
+
+            return $this->redirect($redirect);
         }
     }
 
@@ -91,7 +94,7 @@ class UsersController extends AppController {
                 $this->Flash->error('The user could not be saved. Please, try again.');
             }
         }
-        $this->set(compact('user',  'roles'));
+        $this->set(compact('user', 'roles'));
     }
 
     /**
