@@ -59,6 +59,26 @@ Now we need a administrator to login. Use the folling to register yourself:
 
 > Note: If you get an error, the address already exists
 
+Adding the component
+--------------------
+
+After loading the plugin we have to load the base-component: CakeManager.Manager.
+
+        public function initialize() {
+        
+            // code
+        
+            $this->loadComponent('CakeManager.Manager');
+        
+            // code
+        
+        }
+
+### Configuring the Manager
+
+There are multiple configurations for the manager-component. 
+See the [Manager Component](Components/Manager.md) for detailed documentation about the Manager-component.
+
 Loging in
 ---------
 The CakeManager is set, we are now able to login! Go to yourdomain.com/login to login and start happy coding! 
