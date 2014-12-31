@@ -22,11 +22,11 @@ Branches
 Table Of Contents
 -----------------
 
-* [Installation](installation.md)
-* [Configurations](configurations.md)
+* [Installation](Installation.md)
+* [Configurations](Configurations.md)
 
 To Do
 -----
-Write documentation
-Adding tests
-Many more
+- Write documentation
+- Adding tests
+- Many more
