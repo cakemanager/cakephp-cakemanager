@@ -30,7 +30,7 @@ Run the following command in your shell:
     
 This command tells the Migrations-plugin to migrate (install) the CakeManager. This will load our tables.
 
-loading the roles and user
+Loading the roles and user
 -----------------
 We created a shell to load the default roles and adding an administrator. You can access the shell via:
 
