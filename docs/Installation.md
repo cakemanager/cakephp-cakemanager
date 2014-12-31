@@ -39,7 +39,7 @@ After loading the plugin we have to load the base-component: `CakeManager.Manage
 ### Configuring the Manager
 
 There are multiple configurations for the manager-component.
-See the [Manager Component](../Components/Manager.md) for detailed documentation about the Manager-component.
+See the [Manager Component](Components/Manager.md) for detailed documentation about the Manager-component.
 
 Further reading
 -------
