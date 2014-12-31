@@ -20,42 +20,33 @@ class Inital extends AbstractMigration
 
             $table = $this->table('metas');
             $table
-                    ->addColumn('id', 'integer', [
-                        'limit'   => '11',
-                        'signed'  => '',
-                        'null'    => '',
-                        'default' => '',
-                    ])
                     ->addColumn('rel_model', 'string', [
                         'limit'   => '50',
-                        'null'    => '1',
+                        'null'    => true,
                         'default' => '',
                     ])
                     ->addColumn('rel_id', 'integer', [
-                        'limit'   => '11',
-                        'signed'  => '',
-                        'null'    => '1',
-                        'default' => '',
+                        'limit'  => '11',
+                        'signed' => '',
+                        'null'   => true,
                     ])
                     ->addColumn('name', 'string', [
                         'limit'   => '256',
-                        'null'    => '1',
+                        'null'    => true,
                         'default' => '',
                     ])
                     ->addColumn('value', 'text', [
                         'limit'   => '',
-                        'null'    => '1',
+                        'null'    => true,
                         'default' => '',
                     ])
                     ->addColumn('created', 'datetime', [
-                        'limit'   => '',
-                        'null'    => '1',
-                        'default' => '',
+                        'limit' => '',
+                        'null'  => true,
                     ])
                     ->addColumn('modified', 'datetime', [
-                        'limit'   => '',
-                        'null'    => '1',
-                        'default' => '',
+                        'limit' => '',
+                        'null'  => true,
                     ])
                     ->save();
         }
@@ -66,12 +57,6 @@ class Inital extends AbstractMigration
 
             $table = $this->table('roles');
             $table
-                    ->addColumn('id', 'integer', [
-                        'limit'   => '11',
-                        'signed'  => '',
-                        'null'    => '',
-                        'default' => '',
-                    ])
                     ->addColumn('name', 'string', [
                         'limit'   => '50',
                         'null'    => '',
@@ -79,7 +64,7 @@ class Inital extends AbstractMigration
                     ])
                     ->addColumn('login_redirect', 'string', [
                         'limit'   => '256',
-                        'null'    => '1',
+                        'null'    => true,
                         'default' => '',
                     ])
                     ->addColumn('created', 'datetime', [
@@ -101,17 +86,10 @@ class Inital extends AbstractMigration
 
             $table = $this->table('users');
             $table
-                    ->addColumn('id', 'integer', [
-                        'limit'   => '11',
-                        'signed'  => '',
-                        'null'    => '',
-                        'default' => '',
-                    ])
                     ->addColumn('role_id', 'integer', [
-                        'limit'   => '11',
-                        'signed'  => '',
-                        'null'    => '1',
-                        'default' => '',
+                        'limit'  => '11',
+                        'signed' => '',
+                        'null'   => true,
                     ])
                     ->addColumn('email', 'string', [
                         'limit'   => '255',
@@ -125,13 +103,13 @@ class Inital extends AbstractMigration
                     ])
                     ->addColumn('created', 'datetime', [
                         'limit'   => '',
-                        'null'    => '1',
-                        'default' => '',
+                        'null'    => true,
+                        'default' => '0000-00-00 00:00:00',
                     ])
                     ->addColumn('modified', 'datetime', [
                         'limit'   => '',
-                        'null'    => '1',
-                        'default' => '',
+                        'null'    => true,
+                        'default' => '0000-00-00 00:00:00',
                     ])
                     ->save();
         }
