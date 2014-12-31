@@ -1,6 +1,7 @@
 {
     "name": "bobmulder/cakephp-cakemanager",
     "description": "Plugin for CakePHP 3.x to manage your web-app.",
+    "type": "cakephp-plugin",
     "license": "MIT",
     "authors": [
         {
@@ -8,5 +9,8 @@
             "email": "bobmulder@outlook.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "extra": {
+        "installer-name": "CakeManager"
+    }
 }
