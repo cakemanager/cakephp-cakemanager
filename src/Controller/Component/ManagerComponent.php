@@ -214,4 +214,15 @@ class ManagerComponent extends Component
         $this->Controller->layout = 'CakeManager.admin';
     }
 
+    public function isAdmin($user) {
+
+        $array = Configure::read('CM.Roles.Administrators');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
