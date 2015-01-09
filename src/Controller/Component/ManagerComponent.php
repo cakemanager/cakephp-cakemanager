@@ -19,7 +19,42 @@ class ManagerComponent extends Component
      *
      * @var array
      */
-    protected $_defaultConfig = [];
+    protected $_defaultConfig = [
+        'components' => [
+            'Auth' => [
+                'authorize'            => [
+                    'CakeManager.Admin',
+                ],
+                'userModel'            => 'CakeManager.Users',
+                'authenticate'         => [
+                    'Form' => [
+                        'fields' => [
+                            'username' => 'email',
+                            'password' => 'password'
+                        ]
+                    ]
+                ],
+                'unauthorizedRedirect' => [
+                    'prefix'     => false,
+                    'plugin'     => 'CakeManager',
+                    'controller' => 'Users',
+                    'action'     => 'login'
+                ],
+                'logoutRedirect'       => [
+                    'prefix'     => false,
+                    'plugin'     => 'CakeManager',
+                    'controller' => 'Users',
+                    'action'     => 'login'
+                ],
+                'loginAction'          => [
+                    'prefix'     => false,
+                    'plugin'     => 'CakeManager',
+                    'controller' => 'Users',
+                    'action'     => 'login'
+                ]
+            ]
+        ]
+    ];
 
     /**
      * The original controller
@@ -46,42 +81,14 @@ class ManagerComponent extends Component
 
         $this->Controller = $this->_registry->getController();
 
-        $this->Controller->loadComponent('Auth', [
-            'authorize'            => 'Controller',
-            'userModel'            => 'CakeManager.Users',
-            'authenticate'         => [
-                'Form' => [
-                    'fields' => [
-                        'username' => 'email',
-                        'password' => 'password'
-                    ]
-                ]
-            ],
-            'unauthorizedRedirect' => [
-                'prefix'     => false,
-                'plugin'     => 'CakeManager',
-                'controller' => 'Users',
-                'action'     => 'login'
-            ],
-            'logoutRedirect'       => [
-                'prefix'     => false,
-                'plugin'     => 'CakeManager',
-                'controller' => 'Users',
-                'action'     => 'login'
-            ],
-            'loginAction'          => [
-                'prefix'     => false,
-                'plugin'     => 'CakeManager',
-                'controller' => 'Users',
-                'action'     => 'login'
-            ]
-        ]);
+        if ($this->config('components.Auth')) {
+            $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
+            $this->Controller->Auth->allow([]); // this makes that you automatically need to be logged in to enter a page
+        }
 
         $this->Controller->loadComponent('CakeManager.Menu');
 
         $this->Controller->loadComponent('CakeManager.IsAuthorized');
-
-
 
         $this->loadHelpers();
     }
@@ -101,6 +108,7 @@ class ManagerComponent extends Component
         $this->Controller->authUser = $this->Controller->Auth->user();
 
         // beforeFilter-event
+
         $_event = new Event('Component.Manager.beforeFilter', $this, [
         ]);
         $this->Controller->eventManager()->dispatch($_event);
