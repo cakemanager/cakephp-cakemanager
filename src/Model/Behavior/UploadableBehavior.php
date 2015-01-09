@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Behavior;
+namespace CakeManager\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
