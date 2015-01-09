@@ -79,17 +79,12 @@ class UsersTable extends Table
         return $validator;
     }
 
-    /**
-     * AfterValidate event
-     *
-     * @param type $event
-     * @param type $entity
-     * @param type $options
-     * @param type $validator
-     */
-    public function afterValidate($event, $entity, $options, $validator) {
+    public function beforeSave($event, $entity, $options) {
 
-        $entity->password = $entity->new_password; // set for password-changes
+        if (!empty($entity->new_password)) {
+            $entity->password = $entity->new_password; // set for password-changes
+        }
+
     }
 
 }

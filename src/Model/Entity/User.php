@@ -28,7 +28,7 @@ class User extends Entity
     protected function _setPassword($password) {
         $hasher = new DefaultPasswordHasher();
 
-        return $hasher->hash($this->email);
+        return $hasher->hash($password);
     }
 
     protected $_hidden = [
