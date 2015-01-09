@@ -31,4 +31,8 @@ class User extends Entity
         return $hasher->hash($this->email);
     }
 
+    protected $_hidden = [
+        'password'
+    ];
+
 }

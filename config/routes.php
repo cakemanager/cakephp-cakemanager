@@ -9,9 +9,20 @@ Router::prefix('admin', function ($routes) {
     $routes->fallbacks('InflectedRoute');
 });
 
-Router::plugin('CakeManager', ['path' => '/manager'], function ($routes) {
+Router::prefix('api', function($routes) {
+
+    $routes->extensions(['json']);
+    
+    $routes->plugin('CakeManager', ['path' => '/manager'], function ($routes) {
+        $routes->resources('Users');
         $routes->fallbacks('InflectedRoute');
     });
+    $routes->fallbacks('InflectedRoute');
+});
+
+Router::plugin('CakeManager', ['path' => '/manager'], function ($routes) {
+    $routes->fallbacks('InflectedRoute');
+});
 
 
 Router::connect('/login', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'login']);
