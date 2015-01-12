@@ -5,7 +5,7 @@ namespace CakeManager\Auth;
 use Cake\Network\Request;
 use Cake\Auth\ControllerAuthorize;
 
-class AdminAuthorize extends ControllerAuthorize
+class RolesAuthorize extends ControllerAuthorize
 {
 
     public function authorize($user, Request $request) {

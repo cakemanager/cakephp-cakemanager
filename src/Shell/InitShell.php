@@ -3,6 +3,7 @@
 namespace CakeManager\Shell;
 
 use Cake\Console\Shell;
+use Core\Configure;
 
 class InitShell extends Shell
 {
@@ -22,7 +23,7 @@ class InitShell extends Shell
             return $this->error('Please enter a password.');
         }
 
-        $this->loadModel('CakeManager.Users');
+        $this->loadModel(Configure::read('CakeManager.Users'));
 
         $data = [
             'email'    => $email,

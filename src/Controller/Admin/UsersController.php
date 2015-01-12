@@ -3,6 +3,7 @@
 namespace CakeManager\Controller\Admin;
 
 use CakeManager\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Users Controller
@@ -16,6 +17,8 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         $this->Auth->allow(['add', 'logout', 'login']);
+
+        $this->loadModel(Configure::read('CM.UserModel'));
     }
 
     /**
@@ -25,6 +28,8 @@ class UsersController extends AppController
      */
     public function index() {
         $this->set('users', $this->paginate($this->Users->find('all', ['contain' => ['Roles']])));
+
+        $this->render(Configure::read('CM.AdminUserViews.index'));
     }
 
     /**
@@ -39,6 +44,8 @@ class UsersController extends AppController
             'contain' => ['Bookmarks']
         ]);
         $this->set('user', $user);
+
+        $this->render(Configure::read('CM.AdminUserViews.view'));
     }
 
     /**
@@ -59,6 +66,8 @@ class UsersController extends AppController
             }
         }
         $this->set(compact('user', 'roles'));
+
+        $this->render(Configure::read('CM.AdminUserViews.add'));
     }
 
     /**
@@ -85,11 +94,13 @@ class UsersController extends AppController
             }
         }
         $this->set(compact('user', 'roles'));
+
+        $this->render(Configure::read('CM.AdminUserViews.edit'));
     }
 
     /**
      * Admin action to change someones password
-     * 
+     *
      * @param type $id
      * @return type
      */
@@ -110,6 +121,8 @@ class UsersController extends AppController
         }
 
         $this->set(compact('user'));
+
+        $this->render(Configure::read('CM.AdminUserViews.new_password'));
     }
 
     /**

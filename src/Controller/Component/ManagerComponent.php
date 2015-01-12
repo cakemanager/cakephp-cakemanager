@@ -23,7 +23,7 @@ class ManagerComponent extends Component
         'components' => [
             'Auth' => [
                 'authorize'            => [
-                    'CakeManager.Admin',
+                    'CakeManager.Roles',
                 ],
                 'userModel'            => 'CakeManager.Users',
                 'authenticate'         => [
@@ -217,6 +217,39 @@ class ManagerComponent extends Component
     public function isAdmin($user) {
 
         $array = Configure::read('CM.Roles.Administrators');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isModerator($user) {
+
+        $array = Configure::read('CM.Roles.Moderators');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isUser($user) {
+
+        $array = Configure::read('CM.Roles.Users');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+       public function isUnregistered($user) {
+
+        $array = Configure::read('CM.Roles.Unregistered');
 
         if (in_array($user['role_id'], $array)) {
             return true;
