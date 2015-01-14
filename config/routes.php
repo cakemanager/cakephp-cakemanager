@@ -12,7 +12,7 @@ Router::prefix('admin', function ($routes) {
 Router::prefix('api', function($routes) {
 
     $routes->extensions(['json']);
-    
+
     $routes->plugin('CakeManager', ['path' => '/manager'], function ($routes) {
         $routes->resources('Users');
         $routes->fallbacks('InflectedRoute');
@@ -27,5 +27,6 @@ Router::plugin('CakeManager', ['path' => '/manager'], function ($routes) {
 
 Router::connect('/login', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'login']);
 
-Router::connect('/logout', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'logout']);
+Router::connect('/admin', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'login']);
 
+Router::connect('/logout', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'logout']);
