@@ -18,6 +18,10 @@ class ArticlesFixture extends TestFixture {
 		'title' => ['type' => 'string', 'null' => true],
 		'body' => 'text',
 		'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
+        'created_by' => ['type' => 'integer'],
+        'modified_by' => ['type' => 'integer'],
+        'created_by_second' => ['type' => 'integer'],
+        'modified_by_second' => ['type' => 'integer'],
 		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
 	);
 /**
@@ -26,8 +30,8 @@ class ArticlesFixture extends TestFixture {
  * @var array
  */
 	public $records = array(
-		array('user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body', 'published' => 'Y'),
-		array('user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body', 'published' => 'Y'),
-		array('user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body', 'published' => 'Y')
+		array('user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body', 'published' => 'Y', 'created_by' => 1, 'modified_by' => 1),
+		array('user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body', 'published' => 'Y', 'created_by' => 1, 'modified_by' => 1),
+		array('user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body', 'published' => 'Y', 'created_by' => 1, 'modified_by' => 1)
 	);
 }
