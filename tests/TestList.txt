@@ -7,3 +7,7 @@ phpunit tests/TestCase/Controller/Component/IsAuthorizedComponentTest.php
 phpunit tests/TestCase/Controller/Admin/UsersControllerTest.php
 
 phpunit tests/TestCase/Model/Behavior/WhoDidItBehaviorTest.php
+
+phpunit tests/TestCase/Model/Behavior/IsAuthorizedBehaviorTest.php
+
+phpunit tests/TestCase/Model/Behavior/StateableBehaviorTest.php

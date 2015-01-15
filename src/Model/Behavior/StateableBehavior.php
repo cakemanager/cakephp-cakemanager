@@ -34,7 +34,6 @@ class StateableBehavior extends Behavior
         return array_flip($this->config('states'));
     }
 
-
     public function findConcept($query, $options) {
 
         $query->where([

@@ -33,7 +33,6 @@ class WhoDidItBehaviorTest extends TestCase
 
         $this->assertTrue($this->Model->behaviors()->has('WhoDidIt'));
 
-        $data = $this->Model->find('all');
     }
 
     public function testFind() {
