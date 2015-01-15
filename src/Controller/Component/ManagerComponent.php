@@ -73,7 +73,7 @@ class ManagerComponent extends Component
     public function __construct(ComponentRegistry $registry, array $config = array()) {
         parent::__construct($registry, $config);
 
-        Configure::write('Auth', $this->_registry->getController()->request->session()->read('Auth'));
+//        Configure::write('Auth', $this->_registry->getController()->request->session()->read('Auth'));
     }
 
     public function initialize(array $config) {

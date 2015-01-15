@@ -51,12 +51,12 @@ class WhoDidItBehaviorTest extends TestCase
 
         $this->AssertEquals(3, $this->Model->find('all')->Count());
 
-        Configure::write('Auth', [
+        $_SESSION['Auth'] = [
             'User' => [
                 'id'       => 1,
                 'username' => 'testing account',
             ]
-        ]);
+        ];
 
         $_data = [
             'user_id'   => 1,
@@ -83,12 +83,12 @@ class WhoDidItBehaviorTest extends TestCase
         $this->Model->addBehavior('CakeManager.WhoDidIt');
 
         // change the users id
-        Configure::write('Auth', [
+        $_SESSION['Auth'] = [
             'User' => [
                 'id'       => 2,
                 'username' => 'testing account',
             ]
-        ]);
+        ];
 
         $data = $this->Model->get(3);
 

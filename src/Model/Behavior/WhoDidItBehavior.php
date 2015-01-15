@@ -58,7 +58,7 @@ class WhoDidItBehavior extends Behavior
                 'className'  => $this->config('userModel'),
             ]);
         }
-    }
+}
 
     /**
      * Initialize
@@ -86,7 +86,7 @@ class WhoDidItBehavior extends Behavior
 
     public function beforeSave($event, $entity, $options) {
 
-        $auth = Configure::read('Auth');
+        $auth = $_SESSION['Auth'];
 
         $id = $auth['User']['id'];
 
