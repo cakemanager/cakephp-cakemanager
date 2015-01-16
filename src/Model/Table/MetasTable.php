@@ -47,8 +47,21 @@ class MetasTable extends Table
 
     public function beforeFind($event, $query, $options, $primary) {
 
+    }
 
+    public function findKeyAndValue($query, $options = array()) {
+
+        return $query;
+    }
+
+    public function getMetaData($alias, $id, $options = array()) {
+
+        $query = $this->find('all')->where(['Metas.rel_model' => $alias, 'Metas.rel_id' => $id]);
+
+        return $query->combine('name', 'value')->toArray();
 
     }
+
+
 
 }
