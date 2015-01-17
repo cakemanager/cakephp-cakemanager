@@ -9,7 +9,8 @@ use Cake\Routing\Router;
 /**
  * Menu component
  */
-class MenuComponent extends Component {
+class MenuComponent extends Component
+{
 
     /**
      * Default configuration.
@@ -35,12 +36,11 @@ class MenuComponent extends Component {
      *
      * @var type
      */
-    private $Controller    = null;
+    private $Controller = null;
 
     public function startup($event) {
 
         $this->setController($event->subject());
-
     }
 
     public function initialize(array $config) {
@@ -89,7 +89,6 @@ class MenuComponent extends Component {
     public function clear() {
 
         self::$data = ['main' => []];
-
     }
 
     /**
@@ -123,7 +122,7 @@ class MenuComponent extends Component {
 
         $url = Router::url($item['url']);
 
-        if($url === "/".$this->Controller->request->url) {
+        if ($url === "/" . $this->Controller->request->url) {
             $item['active'] = true;
         }
 
@@ -131,7 +130,11 @@ class MenuComponent extends Component {
             $this->area = $item['area'];
         }
 
-        self::$data[$this->area][$item['id']] = $item;
+        $data = self::$data;
+
+        $data[$this->area][$item['id']] = $item;
+
+        self::$data = $data;
     }
 
     public function remove($id, $options = array()) {
@@ -150,7 +153,6 @@ class MenuComponent extends Component {
     }
 
     public function beforeRender() {
-
         $this->Controller->set('menu', self::$data);
     }
 

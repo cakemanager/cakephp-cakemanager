@@ -96,7 +96,6 @@ class ManagerComponent extends Component
     private function loadHelpers() {
 
         $this->Controller->helpers[] = 'CakeManager.Menu';
-        $this->Controller->helpers[] = 'CakeManager.Meta';
     }
 
     /**
