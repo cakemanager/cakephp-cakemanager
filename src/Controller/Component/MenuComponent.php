@@ -5,6 +5,7 @@ namespace CakeManager\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 
 /**
  * Menu component
@@ -103,6 +104,7 @@ class MenuComponent extends Component
      * - title
      * - icon
      * - area
+     * - weight
      */
     public function add($title, $item = array()) {
 
@@ -114,8 +116,10 @@ class MenuComponent extends Component
             'url'    => '#',
             'title'  => $title,
             'icon'   => '',
-            'area'   => false,
+            'area'   => $this->area(),
             'active' => false,
+            'weight' => 10,
+            ''
         ];
 
         $item = array_merge($_item, $item);
@@ -126,13 +130,13 @@ class MenuComponent extends Component
             $item['active'] = true;
         }
 
-        if ($item['area']) {
-            $this->area = $item['area'];
-        }
+        $this->area = $item['area'];
 
         $data = self::$data;
 
         $data[$this->area][$item['id']] = $item;
+
+        $data[$this->area] = Hash::sort($data[$this->area], '{s}.weight', 'asc');
 
         self::$data = $data;
     }

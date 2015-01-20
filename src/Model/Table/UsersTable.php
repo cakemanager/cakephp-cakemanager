@@ -24,6 +24,10 @@ class UsersTable extends Table
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
+        $this->addBehavior('CakeManager.IsAuthorized', [
+            'field' => 'id',
+        ]);
+
         $this->hasMany('Bookmarks', [
             'alias'      => 'Bookmarks',
             'foreignKey' => 'user_id',

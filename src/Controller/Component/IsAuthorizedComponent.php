@@ -23,7 +23,7 @@ class IsAuthorizedComponent extends Component
     protected $_defaultConfig = [
         'model'   => false,
         'method'  => 'authorize',
-        'actions' => ['edit', 'delete'],
+        'actions' => ['view', 'edit', 'delete'],
         'param'   => 0,
     ];
 

@@ -22,9 +22,7 @@ class ManagerComponent extends Component
     protected $_defaultConfig = [
         'components' => [
             'Auth' => [
-                'authorize'            => [
-                    'CakeManager.Roles',
-                ],
+                'authorize'            => 'Controller',
                 'userModel'            => 'CakeManager.Users',
                 'authenticate'         => [
                     'Form' => [
@@ -33,12 +31,6 @@ class ManagerComponent extends Component
                             'password' => 'password'
                         ]
                     ]
-                ],
-                'unauthorizedRedirect' => [
-                    'prefix'     => false,
-                    'plugin'     => 'CakeManager',
-                    'controller' => 'Users',
-                    'action'     => 'login'
                 ],
                 'logoutRedirect'       => [
                     'prefix'     => false,
@@ -70,12 +62,6 @@ class ManagerComponent extends Component
         'CakeManager.Menu'
     ];
 
-    public function __construct(ComponentRegistry $registry, array $config = array()) {
-        parent::__construct($registry, $config);
-
-//        Configure::write('Auth', $this->_registry->getController()->request->session()->read('Auth'));
-    }
-
     public function initialize(array $config) {
         parent::initialize($config);
 
@@ -83,7 +69,7 @@ class ManagerComponent extends Component
 
         if ($this->config('components.Auth')) {
             $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
-            $this->Controller->Auth->allow([]); // this makes that you automatically need to be logged in to enter a page
+//            $this->Controller->Auth->allow([]); // this makes that you automatically need to be logged in to enter a page
         }
 
         $this->Controller->loadComponent('CakeManager.Menu');
