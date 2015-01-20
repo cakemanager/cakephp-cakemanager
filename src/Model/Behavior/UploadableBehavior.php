@@ -16,19 +16,36 @@ class UploadableBehavior extends Behavior
     /**
      * Default configuration.
      *
+     *
+     * ### Path
+     * {ROOT}
+     * {id}
+     * {model}
+     * {DS}
+     *
+     *
      * @var array
      */
     protected $_defaultConfig = [
-        'path'           => false,
-        'fields'         => [
-            'file'      => 'file',
-            'name'      => 'file_name',
-            'path'      => 'file_path',
-            'extension' => 'file_ext',
+        'defaultPath'    => '{ROOT}{DS}{webroot}{DS}uploads{DS}{model}{DS}{id}{DS}',
+        'files' =>[
+            'file'
         ],
         'removeOnUpdate' => false,
         'removeOnDelete' => false,
     ];
+
+    /**
+     *
+     * @var type The Table from the Behavior
+     */
+    protected $Table = null;
+
+    public function __construct(Table $table, array $config = array()) {
+        parent::__construct($table, $config);
+
+        $this->Table = $table;
+    }
 
     /**
      * BeforesSave event
@@ -65,7 +82,7 @@ class UploadableBehavior extends Behavior
             $filename = $this->_getFilename($file);
             $extension = $this->_getExtension($file);
 
-            if ($this->uploadFile($tmp, $path, $filename, $extension)) {
+            if ($this->_uploadFile($tmp, $path, $filename, $extension)) {
 
                 $entity->{$this->config('fields.name')} = $filename;
                 $entity->{$this->config('fields.path')} = $this->_getRelativePath($event->subject()->alias(), $entity->id, false);
@@ -78,12 +95,10 @@ class UploadableBehavior extends Behavior
 
     public function afterDelete($event, $entity, $options) {
 
-        if(!empty($entity->{$this->config('fields.path')})) {
+        if (!empty($entity->{$this->config('fields.path')})) {
 
             $this->_removeAllFiles($entity->{$this->config('fields.path')});
-
         }
-
     }
 
     /**
@@ -93,7 +108,7 @@ class UploadableBehavior extends Behavior
      * @param type $filename
      * @param type $extension
      */
-    public function uploadFile($tmp, $path, $filename, $extension) {
+    protected function _uploadFile($tmp, $path, $filename, $extension) {
         if (is_uploaded_file($tmp)) {
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
@@ -151,28 +166,21 @@ class UploadableBehavior extends Behavior
         return $file['tmp_name'];
     }
 
-    protected function _getAbsolutePath($model, $id) {
+    protected function buildPath($path, $id, $options = []) {
 
-        if ($this->config('path') === false) {
+        $replacements = array(
+            '{ROOT}'  => ROOT,
+            '{id}'    => $id,
+            '{model}' => Inflector::underscore($this->Table->alias),
+            '{DS}'    => DIRECTORY_SEPARATOR,
+            '//'      => DIRECTORY_SEPARATOR,
+            '/'       => DIRECTORY_SEPARATOR,
+            '\\'      => DIRECTORY_SEPARATOR,
+        );
 
-            $path = ROOT . DS . 'webroot' . DS . 'uploads' . DS . $model . DS . $id . DS;
+        $builtPath = str_replace(array_keys($replacements), array_values($replacements), $path);
 
-            return $path;
-        }
-
-        return $this->config('path');
-    }
-
-    protected function _getRelativePath($model, $id) {
-
-        if ($this->config('path') === false) {
-
-            $path = 'uploads' . '/' . $model . '/' . $id . '/';
-
-            return $path;
-        }
-
-        return $this->config('path');
+        return $builtPath;
     }
 
     protected function _removeAllFiles($path, $options = []) {
