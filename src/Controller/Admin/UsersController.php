@@ -16,9 +16,25 @@ class UsersController extends AppController
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
-        $this->Auth->allow(['add', 'logout', 'login']);
-
         $this->loadModel(Configure::read('CM.UserModel'));
+
+    }
+
+    public function isAuthorized($user) {
+
+        $this->Authorizer->action(['*'], function($auth, $user) {
+            $auth->allowRole([1]);
+        });
+
+        $this->Authorizer->action(['view'], function($auth, $user) {
+            $auth->allowRole([1]);
+        });
+
+        $this->Authorizer->action(['edit'], function($auth, $user) {
+
+        });
+
+        return $this->Authorizer->authorize();
     }
 
     /**

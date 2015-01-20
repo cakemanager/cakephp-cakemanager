@@ -5,6 +5,7 @@ namespace CakeManager\Model\Behavior;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 use Cake\Controller\Component\AuthComponent;
+use Cake\Utility\Hash;
 
 /**
  * IsAuthorized behavior
@@ -33,10 +34,9 @@ class IsAuthorizedBehavior extends Behavior
 
     public function authorize($id, $user) {
 
-        $item = $this->Table->get($id);
+        $item = $this->Table->get($id)->toArray();
 
-
-        if ($item->get($this->config('field')) == $user['id']) {
+        if (Hash::get($item, $this->config('field')) == $user['id']) {
             return true;
         }
 

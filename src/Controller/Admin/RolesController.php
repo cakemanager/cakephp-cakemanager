@@ -16,6 +16,17 @@ class RolesController extends AppController
         parent::beforeFilter($event);
 
         $this->Auth->allow([]);
+
+    }
+
+    public function isAuthorized($user) {
+
+        $this->Authorizer->action(['index'], function($auth) {
+            $this->Authorizer->setRole(1, true);
+        });
+
+        return $this->Authorizer->authorize();
+
     }
 
     /**
