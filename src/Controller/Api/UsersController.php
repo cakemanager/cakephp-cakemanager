@@ -13,22 +13,32 @@ class UsersController extends AppController
         parent::initialize();
         $this->loadComponent('RequestHandler');
 
+        $this->loadComponent('CakeManager.IsAuthorized');
+
         $this->loadComponent('Crud.Crud', [
-            'actions'   => ['Crud.view'],
+            'actions'   => [
+                'Crud.view',
+                'Crud.edit',
+                'Crud.index',
+                'Crud.add',
+                'Crud.delete'
+            ],
             'listeners' => [
                 'Crud.Api',
             ]
         ]);
 
-        $this->Auth->allow();
-        $this->Auth->deny(['index', 'view']);
+        $this->Auth->allow([]);
     }
 
     public function isAuthorized($user) {
+//
+//        $this->Authorizer->action('*', function($auth) {
+//            $auth->allowRole(1);
+//        });
 
-        $this->Authorizer->action('view', function($auth) {
-            $auth->allowRole(1);
-            $auth->setRole(2, $this->IsAuthorized->authorize());
+        $this->Authorizer->action(['view', 'edit'], function($auth) {
+            $auth->setRole([1,2,3,4], $this->IsAuthorized->authorize());
         });
 
         return $this->Authorizer->authorize();

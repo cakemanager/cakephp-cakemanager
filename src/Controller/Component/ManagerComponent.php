@@ -43,7 +43,8 @@ class ManagerComponent extends Component
                     'plugin'     => 'CakeManager',
                     'controller' => 'Users',
                     'action'     => 'login'
-                ]
+                ],
+                'unauthorizedRedirect' => false,
             ]
         ]
     ];

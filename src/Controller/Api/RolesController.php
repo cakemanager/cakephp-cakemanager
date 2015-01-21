@@ -14,14 +14,19 @@ class RolesController extends AppController
         $this->loadComponent('RequestHandler');
 
         $this->loadComponent('Crud.Crud', [
-            'actions'   => ['Crud.view'],
+            'actions'   => [
+                'Crud.view',
+                'Crud.edit',
+                'Crud.index',
+                'Crud.add',
+                'Crud.delete'
+            ],
             'listeners' => [
                 'Crud.Api',
             ]
         ]);
 
-        $this->Auth->allow();
-        $this->Auth->deny(['index', 'view']);
+        $this->Auth->allow([]);
     }
 
     public function isAuthorized($user) {
