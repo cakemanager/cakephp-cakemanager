@@ -12,16 +12,16 @@ Router::prefix('admin', function ($routes) {
 Router::prefix('api', function($routes) {
     $routes->extensions(['json']);
 
-    $routes->plugin('CakeManager', ['path' => '/manager'], function ($routes) {
-        $routes->fallbacks('InflectedRoute');
-    });
+    $routes->resources('Roles');
+    $routes->resources('Users');
 
     $routes->connect('/:controller/:action/*', [
-        'plugin'     => 'CakeManager',
+        'plugin' => 'CakeManager',
     ]);
 
     $routes->fallbacks('InflectedRoute');
 });
+
 
 Router::plugin('CakeManager', ['path' => '/manager'], function ($routes) {
     $routes->fallbacks('InflectedRoute');

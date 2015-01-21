@@ -28,11 +28,6 @@ class UsersTable extends Table
             'field' => 'id',
         ]);
 
-        $this->hasMany('Bookmarks', [
-            'alias'      => 'Bookmarks',
-            'foreignKey' => 'user_id',
-            'className'  => 'Bookmarks'
-        ]);
         $this->belongsTo('Roles', [
             'className'    => 'CakeManager.Roles',
             'foreignKey'   => 'role_id',

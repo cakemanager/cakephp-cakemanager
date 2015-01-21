@@ -19,7 +19,6 @@ class AuthorizerComponent extends Component
      */
     protected $_defaultConfig = [
         'roleField'    => 'role_id',
-        'defaultState' => false,
     ];
 
     /**
@@ -212,7 +211,7 @@ class AuthorizerComponent extends Component
         }
 
         if (!is_bool($state)) {
-            $state = $this->config('defaultState');
+            $state = false;
         }
 
 
