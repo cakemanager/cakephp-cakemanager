@@ -16,6 +16,7 @@ Router::prefix('api', function($routes) {
         $routes->resources('Roles');
         $routes->resources('Users');
 
+        $routes->fallbacks('InflectedRoute');
     });
 });
 
