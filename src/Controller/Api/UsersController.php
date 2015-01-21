@@ -32,13 +32,13 @@ class UsersController extends AppController
     }
 
     public function isAuthorized($user) {
-//
-//        $this->Authorizer->action('*', function($auth) {
-//            $auth->allowRole(1);
-//        });
+
+        $this->Authorizer->action('*', function($auth) {
+            $auth->allowRole(1);
+        });
 
         $this->Authorizer->action(['view', 'edit'], function($auth) {
-            $auth->setRole([1,2,3,4], $this->IsAuthorized->authorize());
+            $auth->setRole([2,3,4], $this->IsAuthorized->authorize());
         });
 
         return $this->Authorizer->authorize();
