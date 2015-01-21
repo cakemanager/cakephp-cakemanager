@@ -3,15 +3,14 @@
 namespace CakeManager\Shell;
 
 use Cake\Console\Shell;
-use Core\Configure;
 
 class InitShell extends Shell
 {
 
     public function main() {
         $this->out('Welcome to the CakeManager.');
-        $this->out('Use $ bake/cake CakeManager.Init Roles to load the default roles.');
-        $this->out('Use $ bake/cake CakeManager.Init Admin [email] [password] to create an user-account.');
+        $this->out('Use $ cake CakeManager.Init Roles to load the default roles.');
+        $this->out('Use $ cake CakeManager.Init Admin [email] [password] to create an user-account.');
     }
 
     public function Admin($email = null, $password = null) {
@@ -23,7 +22,7 @@ class InitShell extends Shell
             return $this->error('Please enter a password.');
         }
 
-        $this->loadModel(Configure::read('CakeManager.Users'));
+        $this->loadModel('CakeManager.Users');
 
         $data = [
             'email'    => $email,
