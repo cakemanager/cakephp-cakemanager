@@ -56,9 +56,7 @@ class UsersController extends AppController
      * @throws \Cake\Network\Exception\NotFoundException
      */
     public function view($id = null) {
-        $user = $this->Users->get($id, [
-            'contain' => ['Bookmarks']
-        ]);
+        $user = $this->Users->get($id);
         $this->set('user', $user);
 
         $this->render(Configure::read('CM.AdminUserViews.view'));

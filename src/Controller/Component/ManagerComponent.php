@@ -70,7 +70,6 @@ class ManagerComponent extends Component
 
         if ($this->config('components.Auth')) {
             $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
-//            $this->Controller->Auth->allow([]); // this makes that you automatically need to be logged in to enter a page
         }
 
         $this->Controller->loadComponent('CakeManager.Menu');

@@ -20,7 +20,7 @@ class UsersTable extends Table
      */
     public function initialize(array $config) {
         $this->table('users');
-        $this->displayField('id');
+        $this->displayField('email');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
