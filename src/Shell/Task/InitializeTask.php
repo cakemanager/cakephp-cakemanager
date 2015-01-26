@@ -1,47 +1,27 @@
 <?php
 
-namespace CakeManager\Shell;
+namespace CakeManager\Shell\Task;
 
 use Cake\Console\Shell;
 
-class InitShell extends Shell
+class InitializeTask extends Shell
 {
 
+    /**
+     * main() method.
+     *
+     */
     public function main() {
-        $this->out('Welcome to the CakeManager.');
-        $this->out('Use $ cake CakeManager.Init Roles to load the default roles.');
-        $this->out('Use $ cake CakeManager.Init Admin [email] [password] to create an user-account.');
-    }
 
-    public function Admin($email = null, $password = null) {
-
-        if (empty($email)) {
-            return $this->error('Please enter an e-mailaddress.');
-        }
-        if (empty($password)) {
-            return $this->error('Please enter a password.');
-        }
-
-        $this->loadModel('CakeManager.Users');
-
-        $data = [
-            'email'    => $email,
-            'password' => $password,
-            'role_id'  => 1,
-        ];
-
-        $new = $this->Users->newEntity($data);
-
-        if( $this->Users->save($new)) {
-            return$this->out('The user "'.$email.'" has been created as admin');
-        }
-        $this->out('Someting went wrong. The user could not be saved.');
+        // initialize the roles
+        $this->roles();
     }
 
     /**
-     * This command registers all default roles for the CakeManager
+     * roles() method.
+     *
      */
-    public function Roles() {
+    protected function roles() {
 
         $this->loadModel('CakeManager.Roles');
 
@@ -109,6 +89,17 @@ class InitShell extends Shell
         }
 
         $this->out("Done");
+    }
+
+    /**
+     * GetOptionParser method.
+     *
+     * @return type
+     */
+    public function getOptionParser() {
+        $parser = parent::getOptionParser();
+
+        return $parser;
     }
 
 }
