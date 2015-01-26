@@ -5,11 +5,13 @@ namespace CakeManager\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 
 /**
  * Menu component
  */
-class MenuComponent extends Component {
+class MenuComponent extends Component
+{
 
     /**
      * Default configuration.
@@ -35,12 +37,11 @@ class MenuComponent extends Component {
      *
      * @var type
      */
-    private $Controller    = null;
+    private $Controller = null;
 
     public function startup($event) {
 
         $this->setController($event->subject());
-
     }
 
     public function initialize(array $config) {
@@ -89,7 +90,6 @@ class MenuComponent extends Component {
     public function clear() {
 
         self::$data = ['main' => []];
-
     }
 
     /**
@@ -104,6 +104,7 @@ class MenuComponent extends Component {
      * - title
      * - icon
      * - area
+     * - weight
      */
     public function add($title, $item = array()) {
 
@@ -115,23 +116,29 @@ class MenuComponent extends Component {
             'url'    => '#',
             'title'  => $title,
             'icon'   => '',
-            'area'   => false,
+            'area'   => $this->area(),
             'active' => false,
+            'weight' => 10,
+            ''
         ];
 
         $item = array_merge($_item, $item);
 
         $url = Router::url($item['url']);
 
-        if($url === "/".$this->Controller->request->url) {
+        if ($url === "/" . $this->Controller->request->url) {
             $item['active'] = true;
         }
 
-        if ($item['area']) {
-            $this->area = $item['area'];
-        }
+        $this->area = $item['area'];
 
-        self::$data[$this->area][$item['id']] = $item;
+        $data = self::$data;
+
+        $data[$this->area][$item['id']] = $item;
+
+        $data[$this->area] = Hash::sort($data[$this->area], '{s}.weight', 'asc');
+
+        self::$data = $data;
     }
 
     public function remove($id, $options = array()) {
@@ -150,7 +157,6 @@ class MenuComponent extends Component {
     }
 
     public function beforeRender() {
-
         $this->Controller->set('menu', self::$data);
     }
 

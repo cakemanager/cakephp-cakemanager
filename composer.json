@@ -9,7 +9,9 @@
             "email": "bobmulder@outlook.com"
         }
     ],
-    "require": {},
+    "require": {
+        "friendsofcake/crud": "dev-cake3"
+    },
     "extra": {
         "installer-name": "CakeManager"
     },

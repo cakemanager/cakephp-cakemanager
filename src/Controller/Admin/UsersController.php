@@ -3,6 +3,7 @@
 namespace CakeManager\Controller\Admin;
 
 use CakeManager\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Users Controller
@@ -15,36 +16,25 @@ class UsersController extends AppController
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
-        $this->Auth->allow(['add', 'logout', 'login']);
+        $this->loadModel(Configure::read('CM.UserModel'));
+
     }
 
-    /**
-     * Login method
-     *
-     * @return void
-     */
-    public function login() {
-        if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
-            }
-            $this->Flash->error('Your username or password is incorrect.');
-        }
-        if ($this->authUser) {
-            return $this->redirect($this->Auth->redirectUrl());
-        }
-    }
+    public function isAuthorized($user) {
 
-    /**
-     * Logout method
-     *
-     * @return type
-     */
-    public function logout() {
-        $this->Flash->success('You are now logged out.');
-        return $this->redirect($this->Auth->logout());
+        $this->Authorizer->action(['*'], function($auth, $user) {
+            $auth->allowRole([1]);
+        });
+
+        $this->Authorizer->action(['view'], function($auth, $user) {
+            $auth->allowRole([1]);
+        });
+
+        $this->Authorizer->action(['edit'], function($auth, $user) {
+
+        });
+
+        return $this->Authorizer->authorize();
     }
 
     /**
@@ -54,6 +44,8 @@ class UsersController extends AppController
      */
     public function index() {
         $this->set('users', $this->paginate($this->Users->find('all', ['contain' => ['Roles']])));
+
+        $this->render(Configure::read('CM.AdminUserViews.index'));
     }
 
     /**
@@ -64,10 +56,10 @@ class UsersController extends AppController
      * @throws \Cake\Network\Exception\NotFoundException
      */
     public function view($id = null) {
-        $user = $this->Users->get($id, [
-            'contain' => ['Bookmarks']
-        ]);
+        $user = $this->Users->get($id);
         $this->set('user', $user);
+
+        $this->render(Configure::read('CM.AdminUserViews.view'));
     }
 
     /**
@@ -88,6 +80,8 @@ class UsersController extends AppController
             }
         }
         $this->set(compact('user', 'roles'));
+
+        $this->render(Configure::read('CM.AdminUserViews.add'));
     }
 
     /**
@@ -114,8 +108,16 @@ class UsersController extends AppController
             }
         }
         $this->set(compact('user', 'roles'));
+
+        $this->render(Configure::read('CM.AdminUserViews.edit'));
     }
 
+    /**
+     * Admin action to change someones password
+     *
+     * @param type $id
+     * @return type
+     */
     public function new_password($id = null) {
         $user = $this->Users->get($id, [
             'contain' => []
@@ -133,6 +135,8 @@ class UsersController extends AppController
         }
 
         $this->set(compact('user'));
+
+        $this->render(Configure::read('CM.AdminUserViews.new_password'));
     }
 
     /**

@@ -54,11 +54,11 @@ class WhoDidItBehavior extends Behavior
         if ($this->config('modified_by')) {
 
             $this->Table->belongsTo('ModifiedBy', [
-                'foreignKey' => $this->config('created_by'),
+                'foreignKey' => $this->config('modified_by'),
                 'className'  => $this->config('userModel'),
             ]);
         }
-    }
+}
 
     /**
      * Initialize
@@ -86,7 +86,7 @@ class WhoDidItBehavior extends Behavior
 
     public function beforeSave($event, $entity, $options) {
 
-        $auth = Configure::read('Auth');
+        $auth = $_SESSION['Auth'];
 
         $id = $auth['User']['id'];
 

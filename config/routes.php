@@ -9,12 +9,25 @@ Router::prefix('admin', function ($routes) {
     $routes->fallbacks('InflectedRoute');
 });
 
-Router::plugin('CakeManager', ['path' => '/manager'], function ($routes) {
+Router::prefix('api', function($routes) {
+    $routes->plugin('CakeManager', ['path' => '/'], function ($routes) {
+
+        $routes->extensions(['json']);
+        $routes->resources('Roles');
+        $routes->resources('Users');
+
         $routes->fallbacks('InflectedRoute');
     });
+});
+
+
+Router::plugin('CakeManager', ['path' => '/manager'], function ($routes) {
+    $routes->fallbacks('InflectedRoute');
+});
 
 
 Router::connect('/login', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'login']);
 
-Router::connect('/logout', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'logout']);
+Router::connect('/admin', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'login']);
 
+Router::connect('/logout', ['plugin' => 'CakeManager', 'prefix' => false, 'controller' => 'Users', 'action' => 'logout']);

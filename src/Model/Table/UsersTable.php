@@ -20,15 +20,14 @@ class UsersTable extends Table
      */
     public function initialize(array $config) {
         $this->table('users');
-        $this->displayField('id');
+        $this->displayField('email');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('Bookmarks', [
-            'alias'      => 'Bookmarks',
-            'foreignKey' => 'user_id',
-            'className'  => 'Bookmarks'
+        $this->addBehavior('CakeManager.IsAuthorized', [
+            'field' => 'id',
         ]);
+
         $this->belongsTo('Roles', [
             'className'    => 'CakeManager.Roles',
             'foreignKey'   => 'role_id',
@@ -79,17 +78,12 @@ class UsersTable extends Table
         return $validator;
     }
 
-    /**
-     * AfterValidate event
-     *
-     * @param type $event
-     * @param type $entity
-     * @param type $options
-     * @param type $validator
-     */
-    public function afterValidate($event, $entity, $options, $validator) {
+    public function beforeSave($event, $entity, $options) {
 
-        $entity->password = $entity->new_password; // set for password-changes
+        if (!empty($entity->new_password)) {
+            $entity->password = $entity->new_password; // set for password-changes
+        }
+
     }
 
 }

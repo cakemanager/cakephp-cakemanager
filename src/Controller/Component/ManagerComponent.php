@@ -19,7 +19,35 @@ class ManagerComponent extends Component
      *
      * @var array
      */
-    protected $_defaultConfig = [];
+    protected $_defaultConfig = [
+        'components' => [
+            'Auth' => [
+                'authorize'            => 'Controller',
+                'userModel'            => 'CakeManager.Users',
+                'authenticate'         => [
+                    'Form' => [
+                        'fields' => [
+                            'username' => 'email',
+                            'password' => 'password'
+                        ]
+                    ]
+                ],
+                'logoutRedirect'       => [
+                    'prefix'     => false,
+                    'plugin'     => 'CakeManager',
+                    'controller' => 'Users',
+                    'action'     => 'login'
+                ],
+                'loginAction'          => [
+                    'prefix'     => false,
+                    'plugin'     => 'CakeManager',
+                    'controller' => 'Users',
+                    'action'     => 'login'
+                ],
+                'unauthorizedRedirect' => false,
+            ]
+        ]
+    ];
 
     /**
      * The original controller
@@ -35,53 +63,16 @@ class ManagerComponent extends Component
         'CakeManager.Menu'
     ];
 
-    public function __construct(ComponentRegistry $registry, array $config = array()) {
-        parent::__construct($registry, $config);
-
-        Configure::write('Auth', $this->_registry->getController()->request->session()->read('Auth'));
-    }
-
     public function initialize(array $config) {
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
 
-        $this->Controller->loadComponent('Auth', [
-            'authorize'            => 'Controller',
-            'userModel'            => 'CakeManager.Users',
-            'authenticate'         => [
-                'Form' => [
-                    'fields' => [
-                        'username' => 'email',
-                        'password' => 'password'
-                    ]
-                ]
-            ],
-            'unauthorizedRedirect' => [
-                'prefix'     => false,
-                'plugin'     => 'CakeManager',
-                'controller' => 'Users',
-                'action'     => 'login'
-            ],
-            'logoutRedirect'       => [
-                'prefix'     => false,
-                'plugin'     => 'CakeManager',
-                'controller' => 'Users',
-                'action'     => 'login'
-            ],
-            'loginAction'          => [
-                'prefix'     => false,
-                'plugin'     => 'CakeManager',
-                'controller' => 'Users',
-                'action'     => 'login'
-            ]
-        ]);
+        if ($this->config('components.Auth')) {
+            $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
+        }
 
         $this->Controller->loadComponent('CakeManager.Menu');
-
-        $this->Controller->loadComponent('CakeManager.IsAuthorized');
-
-
 
         $this->loadHelpers();
     }
@@ -89,7 +80,6 @@ class ManagerComponent extends Component
     private function loadHelpers() {
 
         $this->Controller->helpers[] = 'CakeManager.Menu';
-        $this->Controller->helpers[] = 'CakeManager.Meta';
     }
 
     /**
@@ -98,7 +88,10 @@ class ManagerComponent extends Component
      */
     public function beforeFilter($event) {
 
+        $this->Controller->authUser = $this->Controller->Auth->user();
+
         // beforeFilter-event
+
         $_event = new Event('Component.Manager.beforeFilter', $this, [
         ]);
         $this->Controller->eventManager()->dispatch($_event);
@@ -150,6 +143,8 @@ class ManagerComponent extends Component
      */
     public function beforeRender($event) {
 
+        $this->Controller->set('authUser', $this->Controller->authUser);
+
         // beforeRender-event
         $_event = new Event('Component.Manager.beforeRender', $this, [
         ]);
@@ -200,7 +195,50 @@ class ManagerComponent extends Component
     public function admin_beforeFilter($event) {
 
         $this->Controller->layout = 'CakeManager.admin';
+    }
 
+    public function isAdmin($user) {
+
+        $array = Configure::read('CM.Roles.Administrators');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isModerator($user) {
+
+        $array = Configure::read('CM.Roles.Moderators');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isUser($user) {
+
+        $array = Configure::read('CM.Roles.Users');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+       public function isUnregistered($user) {
+
+        $array = Configure::read('CM.Roles.Unregistered');
+
+        if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
     }
 
 }
