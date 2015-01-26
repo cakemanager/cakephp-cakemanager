@@ -18,7 +18,7 @@ class ManagerComponentTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 		$registry = new ComponentRegistry();
-		$this->Manager = new ManagerComponent($registry);
+//		$this->Manager = new ManagerComponent($registry);
 	}
 
 /**

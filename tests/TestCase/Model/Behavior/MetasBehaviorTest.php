@@ -18,7 +18,7 @@ class MetasBehaviorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->Metas = new MetasBehavior();
+//        $this->Metas = new MetasBehavior();
     }
 
     /**

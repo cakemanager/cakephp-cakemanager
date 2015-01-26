@@ -45,6 +45,27 @@ class UsersController extends AppController
     }
 
     /**
+     * Add method
+     *
+     * @return void
+     */
+    public function add() {
+        $user = $this->Users->newEntity($this->request->data);
+        $roles = $this->Users->Roles->find('list');
+
+        if ($this->request->is('post')) {
+            if ($this->Users->save($user)) {
+                $this->Flash->success('The user has been saved.');
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error('The user could not be saved. Please, try again.');
+            }
+        }
+        $this->set(compact('user', 'roles'));
+
+    }
+
+    /**
      * Logout method
      *
      * @return type
@@ -53,6 +74,5 @@ class UsersController extends AppController
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Auth->logout());
     }
-
 
 }

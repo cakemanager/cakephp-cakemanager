@@ -64,6 +64,9 @@ class IsAuthorizedComponentTest extends TestCase
 
     public function testActionIsset() {
 
+        $this->IsAuthorized->config('actions', null);
+        $this->IsAuthorized->config('actions', ['edit', 'delete']);
+
         // setting the action manually
         $this->controller->request->params['action'] = 'index';
         $this->assertFalse($this->IsAuthorized->actionIsset());
