@@ -3,6 +3,7 @@
 namespace CakeManager\Controller\Admin;
 
 use CakeManager\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Roles Controller
@@ -16,7 +17,6 @@ class RolesController extends AppController
         parent::beforeFilter($event);
 
         $this->Auth->allow([]);
-
     }
 
     public function isAuthorized($user) {
@@ -26,7 +26,6 @@ class RolesController extends AppController
         });
 
         return $this->Authorizer->authorize();
-
     }
 
     /**
@@ -36,6 +35,8 @@ class RolesController extends AppController
      */
     public function index() {
         $this->set('roles', $this->paginate($this->Roles));
+
+        $this->render(Configure::read('CM.AdminRoleViews.index'));
     }
 
     /**
@@ -50,6 +51,8 @@ class RolesController extends AppController
             'contain' => []
         ]);
         $this->set('role', $role);
+
+        $this->render(Configure::read('CM.AdminRoleViews.view'));
     }
 
     /**
@@ -68,6 +71,8 @@ class RolesController extends AppController
             }
         }
         $this->set(compact('role'));
+
+        $this->render(Configure::read('CM.AdminRoleViews.add'));
     }
 
     /**
@@ -91,6 +96,8 @@ class RolesController extends AppController
             }
         }
         $this->set(compact('role'));
+
+        $this->render(Configure::read('CM.AdminRoleViews.edit'));
     }
 
     /**
@@ -109,6 +116,8 @@ class RolesController extends AppController
             $this->Flash->error('The role could not be deleted. Please, try again.');
         }
         return $this->redirect(['action' => 'index']);
+
+        $this->render(Configure::read('CM.AdminRoleViews.delete'));
     }
 
 }
