@@ -20,7 +20,7 @@ class ManagerComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'components' => [
+        'components'  => [
             'Auth' => [
                 'authorize'            => 'Controller',
                 'userModel'            => 'CakeManager.Users',
@@ -46,7 +46,13 @@ class ManagerComponent extends Component
                 ],
                 'unauthorizedRedirect' => false,
             ]
-        ]
+        ],
+        'adminTheme'  => 'CakeManager',
+        'adminLayout' => 'CakeManager.admin',
+        'adminMenus'  => [
+            'main'   => 'CakeManager.MainMenu',
+            'navbar' => 'CakeManager.NavbarMenu',
+        ],
     ];
 
     /**
@@ -59,27 +65,25 @@ class ManagerComponent extends Component
      * Preset Helpers to load
      * @var type
      */
-    public $helpers = [
-        'CakeManager.Menu'
-    ];
+    public $helpers = [];
 
     public function initialize(array $config) {
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
 
+
         if ($this->config('components.Auth')) {
             $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
         }
 
         $this->Controller->loadComponent('CakeManager.Menu');
-
-        $this->loadHelpers();
     }
 
     private function loadHelpers() {
-
-        $this->Controller->helpers[] = 'CakeManager.Menu';
+        if ($this->config('adminMenus')) {
+            $this->Controller->helpers['CakeManager.Menu'] = $this->config('adminMenus');
+        }
     }
 
     /**
@@ -109,6 +113,8 @@ class ManagerComponent extends Component
             ]);
             $this->Controller->eventManager()->dispatch($_event);
         }
+
+        $this->loadHelpers();
     }
 
     /**
@@ -194,7 +200,9 @@ class ManagerComponent extends Component
 
     public function admin_beforeFilter($event) {
 
-        $this->Controller->layout = 'CakeManager.admin';
+        $this->Controller->theme = $this->config('adminTheme');
+
+        $this->Controller->layout = $this->config('adminLayout');
     }
 
     public function isAdmin($user) {
@@ -230,11 +238,32 @@ class ManagerComponent extends Component
         return false;
     }
 
-       public function isUnregistered($user) {
+    public function isUnregistered($user) {
 
         $array = Configure::read('CM.Roles.Unregistered');
 
         if (in_array($user['role_id'], $array)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if a specific prefix isset.
+     *
+     * @param type $expected
+     * @return boolean
+     */
+    public function prefix($expected = null) {
+
+        $current = null;
+
+        if ($this->Controller->request->prefix !== null) {
+            $current = $this->Controller->request->prefix;
+        }
+
+        if ($current == $expected) {
             return true;
         }
 
