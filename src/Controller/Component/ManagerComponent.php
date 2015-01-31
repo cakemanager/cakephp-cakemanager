@@ -200,6 +200,26 @@ class ManagerComponent extends Component
 
     public function admin_beforeFilter($event) {
 
+        $this->Menu->add('Users', [
+            'url'    => [
+                'plugin'     => 'CakeManager',
+                'prefix'     => 'admin',
+                'controller' => 'users',
+                'action'     => 'index',
+            ],
+            'weight' => 0,
+        ]);
+
+        $this->Menu->add('Roles', [
+            'url'    => [
+                'plugin'     => 'CakeManager',
+                'prefix'     => 'admin',
+                'controller' => 'roles',
+                'action'     => 'index',
+            ],
+            'weight' => 1,
+        ]);
+
         $this->Controller->theme = $this->config('adminTheme');
 
         $this->Controller->layout = $this->config('adminLayout');
