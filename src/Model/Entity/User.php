@@ -23,6 +23,7 @@ class User extends Entity
         'role_id'          => true,
         'confirm_password' => true,
         'new_password'     => true,
+        'active'           => true,
     ];
 
     protected function _setPassword($password) {

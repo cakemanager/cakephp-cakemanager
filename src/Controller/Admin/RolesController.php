@@ -21,7 +21,7 @@ class RolesController extends AppController
 
     public function isAuthorized($user) {
 
-        $this->Authorizer->action(['index'], function($auth) {
+        $this->Authorizer->action(['*'], function($auth) {
             $this->Authorizer->setRole(1, true);
         });
 

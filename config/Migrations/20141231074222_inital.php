@@ -49,6 +49,11 @@ class Inital extends AbstractMigration
                     'null'    => '',
                     'default' => '',
                 ])
+                ->addColumn('active', 'integer', [
+                    'limit'   => '11',
+                    'null'    => '',
+                    'default' => 0,
+                ])
                 ->addColumn('password', 'string', [
                     'limit'   => '255',
                     'null'    => '',

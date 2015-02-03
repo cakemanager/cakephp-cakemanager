@@ -29,7 +29,8 @@ class ManagerComponent extends Component
                         'fields' => [
                             'username' => 'email',
                             'password' => 'password'
-                        ]
+                        ],
+                        'scope' => ['Users.active' => true],
                     ]
                 ],
                 'logoutRedirect'       => [
