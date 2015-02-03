@@ -62,12 +62,41 @@ class UsersControllerTest extends IntegrationTestCase
      * Test if a user is created and able to login
      *
      */
-    public function testLoginAction() {
+    public function testLoginActionPass() {
 
         $data = [
             'role_id'  => 1,
             'email'    => 'newuser@email.nl',
             'password' => 'test',
+        ];
+
+        $this->post('/manager/users/add', $data);
+
+        $this->assertResponseOk();
+        $this->assertRedirect('/manager/users/login');
+
+        $login = [
+            'email'    => 'newuser@email.nl',
+            'password' => 'test',
+        ];
+
+        $this->post('/manager/users/login', $login);
+
+        $this->assertSession(0, 'Auth.User.id');
+        $this->assertSession(null, 'Auth.User.email');
+    }
+
+    /**
+     * Test if a user is created and able to login
+     *
+     */
+    public function testLoginActionFail() {
+
+        $data = [
+            'role_id'  => 1,
+            'email'    => 'newuser@email.nl',
+            'password' => 'test',
+            'active'   => 1,
         ];
 
         $this->post('/manager/users/add', $data);
@@ -96,6 +125,7 @@ class UsersControllerTest extends IntegrationTestCase
             'role_id'  => 1,
             'email'    => 'newuser@email.nl',
             'password' => 'test',
+            'active'   => 1,
         ];
 
         $this->post('/manager/users/add', $data);
@@ -119,7 +149,6 @@ class UsersControllerTest extends IntegrationTestCase
         $this->assertSession(null, 'Auth.User.email');
 
         $this->assertRedirect('/manager/users/login');
-
     }
 
 }
