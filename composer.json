@@ -19,5 +19,11 @@
         "psr-4": {
             "CakeManager\\": "src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CakeManager\\Test\\": "tests",
+            "CakeManager\\Test\\Fixture\\": "tests/Fixture"
+        }
     }
 }
