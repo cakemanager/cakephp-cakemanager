@@ -35,13 +35,15 @@ class UsersController extends AppController
 
                 return $this->redirect($redirect);
             }
-            $this->Flash->error('Your username or password is incorrect.');
+            $this->Flash->error(__('Your username or password is incorrect.'));
         }
         if ($this->authUser) {
             $redirect = $this->Roles->redirectFrom($this->authUser['role_id']);
 
             return $this->redirect($redirect);
         }
+
+        $this->render(Configure::read('CM.UserViews.login'));
     }
 
     /**
@@ -55,10 +57,10 @@ class UsersController extends AppController
 
         if ($this->request->is('post')) {
             if ($this->Users->save($user)) {
-                $this->Flash->success('The user has been saved.');
+                $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'login']);
             } else {
-                $this->Flash->error('The user could not be saved. Please, try again.');
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
         $this->set(compact('user', 'roles'));
@@ -71,7 +73,7 @@ class UsersController extends AppController
      * @return type
      */
     public function logout() {
-        $this->Flash->success('You are now logged out.');
+        $this->Flash->success(__('You are now logged out.'));
         return $this->redirect($this->Auth->logout());
     }
 
