@@ -30,7 +30,7 @@ Configure::write('CM.UserModel', 'CakeManager.Users');
  * Default for the CakeManager itself, you can change it for your own views
  */
 Configure::write('CM.UserViews', [
-    'login' => 'CakeManager./Users/index',
+    'login' => 'CakeManager./Users/login',
 ]);
 
 /**
