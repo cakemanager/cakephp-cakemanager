@@ -33,4 +33,51 @@ class UsersControllerTest extends IntegrationTestCase
         $this->Users = TableRegistry::get('CakeManager.Users');
     }
 
+    public function testAuthorization() {
+
+        // index
+        $this->get('/admin/manager/users/index');
+        $this->assertRedirect('/manager/users/login');
+
+        // add
+        $this->get('/admin/manager/users/add');
+        $this->assertRedirect('/manager/users/login');
+
+        // view
+        $this->get('/admin/manager/users/view');
+        $this->assertRedirect('/manager/users/login');
+
+        // edit
+        $this->get('/admin/manager/users/edit');
+        $this->assertRedirect('/manager/users/login');
+
+        // delete
+        $this->get('/admin/manager/users/delete');
+        $this->assertRedirect('/manager/users/login');
+
+        // setting a wrong role_id
+        $this->session(['Auth' => ['User' => ['role_id' => 2]]]);
+
+        // index
+        $this->get('/admin/manager/users/index');
+        $this->assertResponseError();
+
+         // add
+        $this->get('/admin/manager/users/add');
+        $this->assertResponseError();
+
+        // view
+        $this->get('/admin/manager/users/view');
+        $this->assertResponseError();
+
+        // edit
+        $this->get('/admin/manager/users/edit');
+        $this->assertResponseError();
+
+        // delete
+        $this->get('/admin/manager/users/delete');
+        $this->assertResponseError();
+    }
+
+
 }

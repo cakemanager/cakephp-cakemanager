@@ -54,6 +54,10 @@ class Inital extends AbstractMigration
                     'null'    => '',
                     'default' => 0,
                 ])
+                ->addColumn('activation_key', 'integer', [
+                    'limit'   => '200',
+                    'null'    => '',
+                ])
                 ->addColumn('password', 'string', [
                     'limit'   => '255',
                     'null'    => '',

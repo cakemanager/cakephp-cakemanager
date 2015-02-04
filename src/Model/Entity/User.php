@@ -19,11 +19,11 @@ class User extends Entity
     protected $_accessible = [
         'email'            => true,
         'password'         => true,
-        'bookmarks'        => true,
         'role_id'          => true,
         'confirm_password' => true,
         'new_password'     => true,
         'active'           => true,
+        'activation_key'   => true,
     ];
 
     protected function _setPassword($password) {

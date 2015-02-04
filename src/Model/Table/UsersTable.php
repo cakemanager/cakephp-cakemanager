@@ -83,7 +83,59 @@ class UsersTable extends Table
         if (!empty($entity->new_password)) {
             $entity->password = $entity->new_password; // set for password-changes
         }
+    }
 
+    /**
+     * This method generates an activation key for a new user.
+     * This key will be mailed at the user so he can activate it's account.
+     * For activation is needed: e-mail and activation-key
+     *
+     * @return string
+     */
+    public function generateActivationKey() {
+
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $activationKey = '';
+        for ($i = 0; $i < 40; $i++) {
+            $activationKey .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $activationKey;
+    }
+
+    /**
+     * Checks if an user is allowed to do an action with a required activation-key
+     *
+     * User-data: e-mailaddress
+     *
+     * @param type $email
+     * @param type $activation_key
+     * @return boolean
+     */
+    public function validateActivationKey($email, $activation_key) {
+
+        $query = $this->findByEmailAndActivationKey($email, $activation_key);
+
+        if ($query->Count() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function activateUser($email, $activation_key) {
+
+        if ($this->validateActivationKey($email, $activation_key)) {
+
+            $user = $this->findByEmailAndActivationKey($email, $activation_key)->first();
+
+            if ($user->active == 1) {
+                $user->active = 0;
+                return $this->save($user);
+            }
+        }
+
+        return false;
     }
 
 }

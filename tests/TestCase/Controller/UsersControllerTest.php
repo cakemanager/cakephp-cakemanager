@@ -19,6 +19,17 @@ class UsersControllerTest extends IntegrationTestCase
     public $fixtures = ['plugin.cake_manager.users', 'plugin.cake_manager.roles'];
 
     /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp() {
+        parent::setUp();
+
+        $this->Users = TableRegistry::get('CakeManager.Users');
+    }
+
+    /**
      * Test if a login-form is created.
      *
      */
@@ -36,44 +47,21 @@ class UsersControllerTest extends IntegrationTestCase
     }
 
     /**
-     * Test if a user is created
-     *
-     */
-    public function testAddAction() {
 
-        $model = TableRegistry::get('CakeManager.Users');
-
-        $this->assertEquals(4, $model->find()->count());
-
-        $data = [
-            'role_id'  => 1,
-            'email'    => 'newuser@email.nl',
-            'password' => 'test',
-        ];
-
-        $this->post('/manager/users/add', $data);
-
-        $this->assertResponseOk();
-
-        $this->assertEquals(5, $model->find()->count());
-    }
-
-    /**
+      /**
      * Test if a user is created and able to login
      *
      */
     public function testLoginActionPass() {
 
+        // creating a new user
         $data = [
             'role_id'  => 1,
             'email'    => 'newuser@email.nl',
             'password' => 'test',
         ];
 
-        $this->post('/manager/users/add', $data);
-
-        $this->assertResponseOk();
-        $this->assertRedirect('/manager/users/login');
+        $this->Users->save($this->Users->newEntity($data));
 
         $login = [
             'email'    => 'newuser@email.nl',
@@ -87,68 +75,39 @@ class UsersControllerTest extends IntegrationTestCase
     }
 
     /**
-     * Test if a user is created and able to login
+     * Test if a user is able to log out
      *
      */
-    public function testLoginActionFail() {
-
-        $data = [
-            'role_id'  => 1,
-            'email'    => 'newuser@email.nl',
-            'password' => 'test',
-            'active'   => 1,
-        ];
-
-        $this->post('/manager/users/add', $data);
-
-        $this->assertResponseOk();
-        $this->assertRedirect('/manager/users/login');
-
-        $login = [
-            'email'    => 'newuser@email.nl',
-            'password' => 'test',
-        ];
-
-        $this->post('/manager/users/login', $login);
-
-        $this->assertSession(5, 'Auth.User.id');
-        $this->assertSession('newuser@email.nl', 'Auth.User.email');
-    }
-
-    /**
-     * Test if a user is created, logged in and logged out
-     *
-     */
-    public function testLogoutAction() {
-
-        $data = [
-            'role_id'  => 1,
-            'email'    => 'newuser@email.nl',
-            'password' => 'test',
-            'active'   => 1,
-        ];
-
-        $this->post('/manager/users/add', $data);
-
-        $this->assertResponseOk();
-        $this->assertRedirect('/manager/users/login');
-
-        $login = [
-            'email'    => 'newuser@email.nl',
-            'password' => 'test',
-        ];
-
-        $this->post('/manager/users/login', $login);
-
-        $this->assertSession(5, 'Auth.User.id');
-        $this->assertSession('newuser@email.nl', 'Auth.User.email');
+    public function testLogoutActionFail() {
 
         $this->get('/manager/users/logout');
 
-        $this->assertSession(null, 'Auth.User.id');
-        $this->assertSession(null, 'Auth.User.email');
-
         $this->assertRedirect('/manager/users/login');
     }
+
+    /**
+     * Test if a user is able to log out
+     *
+     */
+    public function testLogoutActionPass() {
+
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id'    => 5,
+                    'email' => 'newuser@email.nl'
+                ]
+            ]
+        ]);
+
+        $this->get('/manager/users/logout');
+
+        $this->assertRedirect('/manager/users/login');
+
+        $this->assertSession(null, 'Auth.User.id');
+        $this->assertSession(null, 'Auth.User.email');
+    }
+
+    
 
 }
