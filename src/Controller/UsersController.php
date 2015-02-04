@@ -16,7 +16,7 @@ class UsersController extends AppController
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
-        $this->Auth->allow(['new_password', 'request', 'logout', 'login']);
+        $this->Auth->allow(['new_password', 'request', 'logout', 'login', 'activate']);
     }
 
     /**
@@ -110,7 +110,7 @@ class UsersController extends AppController
 
     /**
      * Sets a new password
-     * 
+     *
      * @param type $email
      * @param type $activation_key
      * @return type

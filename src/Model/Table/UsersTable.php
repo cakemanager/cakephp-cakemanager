@@ -127,11 +127,15 @@ class UsersTable extends Table
 
         if ($this->validateActivationKey($email, $activation_key)) {
 
+
             $user = $this->findByEmailAndActivationKey($email, $activation_key)->first();
 
-            if ($user->active == 1) {
-                $user->active = 0;
-                return $this->save($user);
+            if ($user->active == 0) {
+                $user->active = 1;
+                $user->activation_key = null;
+                if($this->save($user)) {
+                    return true;
+                }
             }
         }
 
