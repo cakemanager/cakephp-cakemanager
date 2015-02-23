@@ -24,6 +24,13 @@ phpunit tests/TestCase/Model/Behavior/IsAuthorizedBehaviorTest.php
 phpunit tests/TestCase/Model/Behavior/StateableBehaviorTest.php
 
 
+# MODELS
+
+phpunit tests/TestCase/Model/Table/UsersTableTest.php
+
+phpunit tests/TestCase/Model/Table/RolesTableTest.php
+
+
 # SUITES
 
 phpunit tests/TestCase/AllComponentsSuite.php
