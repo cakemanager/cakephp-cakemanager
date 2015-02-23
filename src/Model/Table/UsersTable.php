@@ -123,6 +123,13 @@ class UsersTable extends Table
         return false;
     }
 
+    /**
+     * Activates an user
+     * 
+     * @param type $email
+     * @param type $activation_key
+     * @return boolean
+     */
     public function activateUser($email, $activation_key) {
 
         if ($this->validateActivationKey($email, $activation_key)) {
