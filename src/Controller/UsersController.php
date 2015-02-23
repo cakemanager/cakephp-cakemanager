@@ -13,10 +13,15 @@ use Cake\Core\Configure;
 class UsersController extends AppController
 {
 
-    public function beforeFilter(\Cake\Event\Event $event) {
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
         parent::beforeFilter($event);
 
         $this->Auth->allow(['new_password', 'request', 'logout', 'login', 'activate']);
+
+        $this->theme = "CakeManager";
+
+        $this->layout = "base";
     }
 
     /**
@@ -24,7 +29,8 @@ class UsersController extends AppController
      *
      * @return void
      */
-    public function login() {
+    public function login()
+    {
         $this->loadModel('CakeManager.Roles');
 
         if ($this->authUser) {
@@ -42,7 +48,7 @@ class UsersController extends AppController
 
                 return $this->redirect($redirect);
             }
-            $this->Flash->error('Your username or password is incorrect.');
+            $this->Flash->error(__('Your username or password is incorrect.'));
             return $this->redirect($this->referer());
         }
 
@@ -54,7 +60,8 @@ class UsersController extends AppController
      *
      * @return type
      */
-    public function request() {
+    public function request()
+    {
         if ($this->authUser) {
             return $this->redirect('/login');
         }
@@ -67,12 +74,14 @@ class UsersController extends AppController
 
                 $user = $user->first();
 
-                $user->set('activation_key', $this->Users->generateActivationKey());
+                if ($user->get('active') === 1) {
+                    $user->set('activation_key', $this->Users->generateActivationKey());
 
-                $this->Users->save($user);
+                    $this->Users->save($user);
+                }
             }
 
-            $this->Flash->success('We have requested your account. Check your e-mailaddress to activate your account.');
+            $this->Flash->success(__('We have requested your account. Check your e-mailaddress to activate your account.'));
             return $this->redirect($this->referer());
         }
     }
@@ -83,10 +92,11 @@ class UsersController extends AppController
      * @param type $activation_key
      * @return type
      */
-    public function activate($email, $activation_key = null) {
+    public function activate($email, $activation_key = null)
+    {
 
         if (!$activation_key) {
-            $this->Flash->error('Someting went wrong. Your password could nog be saved.');
+            $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect($this->referer());
         }
 
@@ -95,16 +105,16 @@ class UsersController extends AppController
         }
 
         if (!$this->Users->validateActivationKey($email, $activation_key)) {
-            $this->Flash->error('Your account could not be activated.');
+            $this->Flash->error(__('No your e-mailaddress is not linked to your activationkey.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect('/login');
         }
 
         if ($this->Users->activateUser($email, $activation_key)) {
-            $this->Flash->success('Congratulations! Your account has been activated!');
+            $this->Flash->success(__('Congratulations! Your account has been activated!'));
             return $this->redirect('/login');
         }
 
-        $this->Flash->error('Your account could not be activated.');
+        $this->Flash->error(__('Something went wrong.') . ' ' . __('Your account could not be activated.'));
         return $this->redirect('/login');
     }
 
@@ -115,9 +125,10 @@ class UsersController extends AppController
      * @param type $activation_key
      * @return type
      */
-    public function new_password($email, $activation_key = null) {
+    public function new_password($email, $activation_key = null)
+    {
         if (!$activation_key) {
-            $this->Flash->error('Someting went wrong. Your password could nog be saved.');
+            $this->Flash->error(__('Someting went wrong. Your password could nog be saved.'));
             return $this->redirect($this->referer());
         }
 
@@ -126,7 +137,7 @@ class UsersController extends AppController
         }
 
         if (!$this->Users->validateActivationKey($email, $activation_key)) {
-            $this->Flash->error('You are not allowed to set a new password');
+            $this->Flash->error(__('You are not allowed to set a new password'));
             return $this->redirect($this->referer());
         }
 
@@ -148,12 +159,12 @@ class UsersController extends AppController
 
                 if ($this->Users->save($user)) {
 
-                    $this->Flash->success('Your password has been saved.');
+                    $this->Flash->success(__('Your password has been saved.'));
                     return $this->redirect('/login');
                 }
             }
 
-            $this->Flash->error('Someting went wrong. Your password could nog be saved.');
+            $this->Flash->error(__('Someting went wrong. Your password could nog be saved.'));
             return $this->redirect($this->referer());
         }
     }
@@ -163,8 +174,9 @@ class UsersController extends AppController
      *
      * @return type
      */
-    public function logout() {
-        $this->Flash->success('You are now logged out.');
+    public function logout()
+    {
+        $this->Flash->success(__('You are now logged out.'));
         return $this->redirect($this->Auth->logout());
     }
 

@@ -30,7 +30,7 @@ class ManagerComponent extends Component
                             'username' => 'email',
                             'password' => 'password'
                         ],
-                        'scope' => ['Users.active' => true],
+                        'scope'  => ['Users.active' => true],
                     ]
                 ],
                 'logoutRedirect'       => [
@@ -68,7 +68,8 @@ class ManagerComponent extends Component
      */
     public $helpers = [];
 
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
@@ -81,7 +82,8 @@ class ManagerComponent extends Component
         $this->Controller->loadComponent('CakeManager.Menu');
     }
 
-    private function loadHelpers() {
+    private function _loadHelpers()
+    {
         if ($this->config('adminMenus')) {
             $this->Controller->helpers['CakeManager.Menu'] = $this->config('adminMenus');
         }
@@ -91,16 +93,17 @@ class ManagerComponent extends Component
      * BeforeFilter Callback
      *
      */
-    public function beforeFilter($event) {
+    public function beforeFilter($event)
+    {
 
         $this->Controller->authUser = $this->Controller->Auth->user();
 
         // beforeFilter-event
-
         $_event = new Event('Component.Manager.beforeFilter', $this, [
         ]);
         $this->Controller->eventManager()->dispatch($_event);
 
+        // beforeFilter-event for prefixes
         if ($event->subject()->request->prefix !== null) {
 
             $prefix = ucfirst($event->subject()->request->prefix);
@@ -115,14 +118,15 @@ class ManagerComponent extends Component
             $this->Controller->eventManager()->dispatch($_event);
         }
 
-        $this->loadHelpers();
+        $this->_loadHelpers();
     }
 
     /**
      * Startup Callback
      *
      */
-    public function startup($event) {
+    public function startup($event)
+    {
 
         // startup-event
         $_event = new Event('Component.Manager.startup', $this, [
@@ -148,7 +152,8 @@ class ManagerComponent extends Component
      * BeforeRender Callback
      *
      */
-    public function beforeRender($event) {
+    public function beforeRender($event)
+    {
 
         $this->Controller->set('authUser', $this->Controller->authUser);
 
@@ -176,8 +181,8 @@ class ManagerComponent extends Component
      * Shutdown Callback
      *
      */
-    public function shutdown($event) {
-
+    public function shutdown($event)
+    {
 
         // shutdown-event
         $_event = new Event('Component.Manager.shutdown', $this, [
@@ -199,7 +204,16 @@ class ManagerComponent extends Component
         }
     }
 
-    public function admin_beforeFilter($event) {
+    /**
+     * Admin BeforeFilter
+     *
+     * Loads the first menu-items for the admin-area
+     * and sets the theme and layout
+     *
+     * @param type $event
+     */
+    public function admin_beforeFilter($event)
+    {
 
         $this->Controller->Menu->add('Users', [
             'url'    => [
@@ -226,57 +240,14 @@ class ManagerComponent extends Component
         $this->Controller->layout = $this->config('adminLayout');
     }
 
-    public function isAdmin($user) {
-
-        $array = Configure::read('CM.Roles.Administrators');
-
-        if (in_array($user['role_id'], $array)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isModerator($user) {
-
-        $array = Configure::read('CM.Roles.Moderators');
-
-        if (in_array($user['role_id'], $array)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isUser($user) {
-
-        $array = Configure::read('CM.Roles.Users');
-
-        if (in_array($user['role_id'], $array)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isUnregistered($user) {
-
-        $array = Configure::read('CM.Roles.Unregistered');
-
-        if (in_array($user['role_id'], $array)) {
-            return true;
-        }
-
-        return false;
-    }
-
     /**
-     * Checks if a specific prefix isset.
+     * Quick method to check if a specific prefix is set.
      *
      * @param type $expected
      * @return boolean
      */
-    public function prefix($expected = null) {
+    public function prefix($expected = null)
+    {
 
         $current = null;
 
