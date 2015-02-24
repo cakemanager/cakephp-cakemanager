@@ -20,33 +20,31 @@ class ManagerComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'components'  => [
-            'Auth' => [
-                'authorize'            => 'Controller',
-                'userModel'            => 'CakeManager.Users',
-                'authenticate'         => [
-                    'Form' => [
-                        'fields' => [
-                            'username' => 'email',
-                            'password' => 'password'
-                        ],
-                        'scope'  => ['Users.active' => true],
-                    ]
-                ],
-                'logoutRedirect'       => [
-                    'prefix'     => false,
-                    'plugin'     => 'CakeManager',
-                    'controller' => 'Users',
-                    'action'     => 'login'
-                ],
-                'loginAction'          => [
-                    'prefix'     => false,
-                    'plugin'     => 'CakeManager',
-                    'controller' => 'Users',
-                    'action'     => 'login'
-                ],
-                'unauthorizedRedirect' => false,
-            ]
+        'Auth'        => [
+            'authorize'            => 'Controller',
+            'userModel'            => 'CakeManager.Users',
+            'authenticate'         => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'password'
+                    ],
+                    'scope'  => ['Users.active' => true],
+                ]
+            ],
+            'logoutRedirect'       => [
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
+                'controller' => 'Users',
+                'action'     => 'login'
+            ],
+            'loginAction'          => [
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
+                'controller' => 'Users',
+                'action'     => 'login'
+            ],
+            'unauthorizedRedirect' => false,
         ],
         'adminTheme'  => 'CakeManager',
         'adminLayout' => 'CakeManager.admin',
@@ -75,8 +73,8 @@ class ManagerComponent extends Component
         $this->Controller = $this->_registry->getController();
 
 
-        if ($this->config('components.Auth')) {
-            $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
+        if ($this->config('Auth')) {
+            $this->Controller->loadComponent('Auth', $this->config('Auth'));
         }
 
         $this->Controller->loadComponent('CakeManager.Menu');
