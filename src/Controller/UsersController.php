@@ -13,15 +13,26 @@ use Cake\Core\Configure;
 class UsersController extends AppController
 {
 
+    /**
+     * BeforeFilter Callback
+     *
+     * @param \Cake\Event\Event $event
+     */
     public function beforeFilter(\Cake\Event\Event $event)
     {
         parent::beforeFilter($event);
 
+        // Auth-settings: Allows all user-related methods
         $this->Auth->allow(['new_password', 'request', 'logout', 'login', 'activate']);
 
-        $this->theme = "CakeManager";
-
-        $this->layout = "base";
+        // Setting up the base-theme
+        if (!$this->theme) {
+            $this->theme = "CakeManager";
+        }
+        // Setting up the base-layout
+        if (!$this->layout) {
+            $this->layout = "base";
+        }
     }
 
     /**
@@ -33,9 +44,9 @@ class UsersController extends AppController
     {
         $this->loadModel('CakeManager.Roles');
 
+        // Redirect if user is already logged in
         if ($this->authUser) {
             $redirect = $this->Roles->redirectFrom($this->authUser['role_id']);
-
             return $this->redirect($redirect);
         }
 
@@ -52,16 +63,19 @@ class UsersController extends AppController
             return $this->redirect($this->referer());
         }
 
+        // Render the view. The view-file can be changed via Configure::write('CM.UserViews.login
         $this->render(Configure::read('CM.UserViews.login'));
     }
 
     /**
      * Requests a new activation for the user.
+     * Needs an e-mailaddress to request its account.
      *
      * @return type
      */
     public function request()
     {
+        // Redirect if user is already logged in
         if ($this->authUser) {
             return $this->redirect('/login');
         }
@@ -88,6 +102,15 @@ class UsersController extends AppController
 
     /**
      * Activates a new account
+     *
+     * User will receive an email with this url.
+     *
+     * URL-example
+     *
+     * mywebsite.com/users/activate/user{at}email.com/{its_activation_key}
+     *
+     * User will be redirected to the login-page
+     *
      * @param type $email
      * @param type $activation_key
      * @return type
@@ -100,6 +123,7 @@ class UsersController extends AppController
             return $this->redirect($this->referer());
         }
 
+        // Redirect if user is already logged in
         if ($this->authUser) {
             return $this->redirect('/login');
         }
@@ -121,6 +145,12 @@ class UsersController extends AppController
     /**
      * Sets a new password
      *
+     * User will receive an email with this url.
+     *
+     * URL-example
+     *
+     * mywebsite.com/users/new_password/user{at}email.com/{its_activation_key}
+     *
      * @param type $email
      * @param type $activation_key
      * @return type
@@ -132,6 +162,7 @@ class UsersController extends AppController
             return $this->redirect($this->referer());
         }
 
+        // Redirect if user is already logged in
         if ($this->authUser) {
             return $this->redirect('/login');
         }
