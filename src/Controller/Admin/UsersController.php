@@ -13,6 +13,13 @@ use Cake\Core\Configure;
 class UsersController extends AppController
 {
 
+     public $paginate = [
+        'limit' => 25,
+        'order' => [
+            'Users.created' => 'asc'
+        ]
+    ];
+
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
@@ -26,14 +33,6 @@ class UsersController extends AppController
             $auth->allowRole([1]);
         });
 
-        $this->Authorizer->action(['view'], function($auth, $user) {
-            $auth->allowRole([1]);
-        });
-
-        $this->Authorizer->action(['edit'], function($auth, $user) {
-
-        });
-
         return $this->Authorizer->authorize();
     }
 
@@ -43,6 +42,7 @@ class UsersController extends AppController
      * @return void
      */
     public function index() {
+
         $this->set('users', $this->paginate($this->Users->find('all', ['contain' => ['Roles']])));
 
         $this->render(Configure::read('CM.AdminUserViews.index'));
@@ -119,10 +119,10 @@ class UsersController extends AppController
      * @return type
      */
     public function new_password($id = null) {
+
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
-
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
