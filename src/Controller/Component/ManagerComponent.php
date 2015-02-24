@@ -66,6 +66,11 @@ class ManagerComponent extends Component
      */
     public $helpers = [];
 
+    /**
+     * Initialize Callback
+     *
+     * @param array $config
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -80,6 +85,12 @@ class ManagerComponent extends Component
         $this->Controller->loadComponent('CakeManager.Menu');
     }
 
+    /**
+     * _loadHelpers
+     *
+     * Internal method to load all listed helpers
+     *
+     */
     private function _loadHelpers()
     {
         if ($this->config('adminMenus')) {
@@ -172,6 +183,22 @@ class ManagerComponent extends Component
             $_event = new Event('Component.Manager.beforeRender.' . $prefix, $this, [
             ]);
             $this->Controller->eventManager()->dispatch($_event);
+        }
+    }
+
+    /**
+     * Admin BeforeRender
+     *
+     * Sets the last stuff before an call with the admin-prefix
+     *
+     * @param type $event
+     */
+    public function admin_beforeRender($event)
+    {
+
+        // setting up the default title-variable for default view
+        if (!key_exists('title', $this->Controller->viewVars)) {
+            $this->Controller->set('title', $this->Controller->name);
         }
     }
 
