@@ -24,10 +24,6 @@ class UsersTable extends Table
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
-        $this->addBehavior('CakeManager.IsAuthorized', [
-            'field' => 'id',
-        ]);
-
         $this->belongsTo('Roles', [
             'className'    => 'CakeManager.Roles',
             'foreignKey'   => 'role_id',
@@ -125,7 +121,7 @@ class UsersTable extends Table
 
     /**
      * Activates an user
-     * 
+     *
      * @param type $email
      * @param type $activation_key
      * @return boolean
