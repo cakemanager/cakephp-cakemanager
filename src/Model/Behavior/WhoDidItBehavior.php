@@ -22,14 +22,14 @@ class WhoDidItBehavior extends Behavior
      * - created_by         string      field to use
      * - modified_by        string      field to use
      * - userModel          string      model to use
-     * - fields             array       list of fields to get on query // not working yet
+     * - fields             array       list of fields to get on query
      *
      */
     protected $_defaultConfig = [
         'created_by'  => 'created_by',
         'modified_by' => 'modified_by',
         'userModel'   => 'CakeManager.Users',
-        'fields'      => ['id', 'email', 'role_id'],
+        'fields'      => [],
     ];
     protected $Table;
 
@@ -85,7 +85,15 @@ class WhoDidItBehavior extends Behavior
     public function beforeFind($event, $query, $options, $primary)
     {
 
-        $query->contain(['CreatedBy', 'ModifiedBy']);
+        if ($this->config('created_by')) {
+
+            $query->contain(['CreatedBy' => ['fields' => $this->config('fields')]]);
+        }
+
+        if ($this->config('modified_by')) {
+
+            $query->contain(['ModifiedBy' => ['fields' => $this->config('fields')]]);
+        }
     }
 
     public function beforeSave($event, $entity, $options)
@@ -94,10 +102,14 @@ class WhoDidItBehavior extends Behavior
         $id = Hash::get($auth, 'User.id');
 
         if ($entity->isNew()) {
-            $entity->set($this->config('created_by'), $id);
+            if ($this->config('created_by')) {
+                $entity->set($this->config('created_by'), $id);
+            }
         }
 
-        $entity->set($this->config('modified_by'), $id);
+        if ($this->config('modified_by')) {
+            $entity->set($this->config('modified_by'), $id);
+        }
     }
 
 }
