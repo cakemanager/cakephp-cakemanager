@@ -19,35 +19,78 @@ class WhoDidItBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->Model = \Cake\ORM\TableRegistry::get('Articles');
-    }
-
-    public function testLoadingBehavior() {
-
-        $this->assertFalse($this->Model->behaviors()->has('WhoDidIt'));
-
         $this->Model->addBehavior('CakeManager.WhoDidIt');
 
-        $this->assertTrue($this->Model->behaviors()->has('WhoDidIt'));
-
+        $this->poep = 'Vies';
     }
 
-    public function testFind() {
-
-        $this->Model->addBehavior('CakeManager.WhoDidIt');
+    /**
+     * Test if the relations are added to 'created_by' and 'modified_by'
+     *
+     */
+    public function testFind()
+    {
 
         $data = $this->Model->get(1);
 
         $this->AssertEquals(1, $data->created_by->id);
         $this->AssertEquals(1, $data->modified_by->id);
+
+        $this->AssertEquals(7, count($data->created_by->toArray()));
+        $this->AssertEquals(7, count($data->modified_by->toArray()));
     }
 
-    public function testAddArticle() {
+    /**
+     * Test if the field-option works
+     *
+     */
+    public function testFindWithFields()
+    {
 
-        $this->Model->addBehavior('CakeManager.WhoDidIt');
+        $behavior = $this->Model->behaviors()->get('WhoDidIt');
+
+        $behavior->config('fields', ['id', 'email']);
+
+        $data = $this->Model->get(1);
+
+        $this->AssertEquals(2, count($data->created_by->toArray()));
+        $this->AssertEquals(2, count($data->modified_by->toArray()));
+
+        $behavior->config('fields', null);
+        $behavior->config('fields', []);
+    }
+
+    /**
+     * Test if disabeling any option will work
+     *
+     */
+    public function testFindCreatedByOnly()
+    {
+
+        $behavior = $this->Model->behaviors()->get('WhoDidIt');
+
+        $behavior->config('modified_by', false);
+
+        $data = $this->Model->get(1);
+
+        $this->AssertEquals(7, count($data->created_by->toArray()));
+        $this->AssertEquals(1, $data->modified_by);
+
+        $behavior->config('modified_by', 'modified_by');
+
+    }
+
+    /**
+     * Test if the users id's are added when adding an article
+     *
+     */
+    public function testAddArticle()
+    {
 
         $this->AssertEquals(3, $this->Model->find('all')->Count());
 
@@ -78,9 +121,12 @@ class WhoDidItBehaviorTest extends TestCase
         $this->AssertEquals(1, $data->modified_by->id);
     }
 
-    public function testEditArticle() {
-
-        $this->Model->addBehavior('CakeManager.WhoDidIt');
+    /**
+     * Test if the users id is added when adding an article
+     *
+     */
+    public function testEditArticle()
+    {
 
         // change the users id
         $_SESSION['Auth'] = [
@@ -111,7 +157,10 @@ class WhoDidItBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown() {
+    public function tearDown()
+    {
+        $this->Model = null;
+
         unset($this->Model);
 
         parent::tearDown();

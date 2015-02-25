@@ -7,9 +7,11 @@ use Cake\TestSuite\TestSuite;
 class AllControllersSuite extends TestSuite
 {
 
-    public static function suite() {
+    public static function suite()
+    {
         $suite = new self('Controller related tests');
         $suite->addTestDirectory(__DIR__ . DS . 'Controller');
+        $suite->addTestDirectory(__DIR__ . DS . 'Controller' . DS . 'Admin');
         return $suite;
     }
 

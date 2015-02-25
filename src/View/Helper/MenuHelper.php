@@ -22,20 +22,19 @@ class MenuHelper extends Helper
      * @var array
      */
     protected $_defaultConfig = [
-        'defaultHelper' => 'CakeManager.MainMenu',
-        'helperOptions' => [],
+            'main' => 'CakeManager.MainMenu',
+            'navbar' => 'CakeManager.NavBarMenu',
     ];
 
     public function menu($area, $options = []) {
 
         $_options = [
-            'builder' => $this->config('defaultHelper'),
-            'options' => $this->config('helperOptions'),
+            'helper' => $this->config($area),
         ];
 
         $options = Hash::merge($_options, $options);
 
-        $builder = $this->_View->helpers()->load($options['builder'], $options['options']);
+        $builder = $this->_View->helpers()->load($options['helper']);
 
         $menu = $this->_View->viewVars['menu'][$area];
 

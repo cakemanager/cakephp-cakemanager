@@ -4,8 +4,8 @@ namespace CakeManager\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
+use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * Uploadable behavior
@@ -16,210 +16,348 @@ class UploadableBehavior extends Behavior
     /**
      * Default configuration.
      *
-     *
-     * ### Path
-     * {ROOT}
-     * {id}
-     * {model}
-     * {DS}
-     *
-     *
      * @var array
      */
     protected $_defaultConfig = [
-        'defaultPath'    => '{ROOT}{DS}{webroot}{DS}uploads{DS}{model}{DS}{id}{DS}',
-        'files' =>[
-            'file'
-        ],
-        'removeOnUpdate' => false,
-        'removeOnDelete' => false,
+        'defaultFieldConfig' => [
+            'fields'             => [
+                'directory' => false,
+                'type'      => false,
+                'size'      => false,
+            ],
+            'removeFileOnUpdate' => false,
+            'removeFileOnDelete' => true,
+            'field'              => 'id',
+            'path'               => '{ROOT}{DS}{WEBROOT}{DS}uploads{DS}{model}{DS}{field}{DS}',
+            'fileName'           => '{ORIGINAL}',
+        ]
     ];
 
     /**
+     * Preset cofiguration-keys who will be ignored by getting the fields
      *
-     * @var type The Table from the Behavior
+     * @var type
      */
-    protected $Table = null;
+    protected $_presetConfigKeys = [
+        'defaultFieldConfig',
+    ];
 
-    public function __construct(Table $table, array $config = array()) {
-        parent::__construct($table, $config);
+    /**
+     * Holder for the Table-Model
+     *
+     * @var type
+     */
+    protected $_Table = null;
 
-        $this->Table = $table;
+    /**
+     * Testmethod
+     */
+    public function test()
+    {
+
+        $this->normalizeAll();
     }
 
     /**
-     * BeforesSave event
+     * BeforeSave Callback
      *
      * @param type $event
      * @param type $entity
      * @param type $options
      */
-    public function beforeSave($event, $entity, $options) {
+    public function beforeSave($event, $entity, $options)
+    {
+        $this->_Table = $event->subject();
+    }
 
-        $file = $entity->{$this->config('fields.file')};
+    /**
+     * AfterSave Callback
+     *
+     * @param type $event
+     * @param type $entity
+     * @param type $options
+     */
+    public function afterSave($event, $entity, $options)
+    {
+        $fields = $this->getFieldList();
 
-        if ($this->_fileUploaded($file)) {
-            // if is update
-            if (!$entity->isNew()) {
-                if ($this->config('removeOnUpdate')) {
-                    $this->_removeAllFiles($entity->{$this->config('fields.path')}, ['except' => [$this->_getFullFilename($file)]]);
+        foreach ($fields as $field => $data) {
+
+            if ($this->_ifUploaded($entity, $field)) {
+
+                if ($this->_uploadFile($entity, $field)) {
+                    $this->_Table->save($this->_setUploadColumns($entity, $field));
                 }
             }
-
-            $entity->{$this->config('fields.name')} = $this->_getFilename($file) . '.' . $this->_getExtension($file);
-        }
-    }
-
-    public function afterSave($event, $entity, $options) {
-
-        $file = $entity->{$this->config('fields.file')};
-
-        if ($this->_fileUploaded($file)) {
-
-            $tmp = $this->_getTmpName($file);
-            $path = $this->_getAbsolutePath($event->subject()->alias(), $entity->id);
-
-            $filename = $this->_getFilename($file);
-            $extension = $this->_getExtension($file);
-
-            if ($this->_uploadFile($tmp, $path, $filename, $extension)) {
-
-                $entity->{$this->config('fields.name')} = $filename;
-                $entity->{$this->config('fields.path')} = $this->_getRelativePath($event->subject()->alias(), $entity->id, false);
-                $entity->{$this->config('fields.extension')} = $extension;
-
-                $event->subject()->save($entity);
-            }
-        }
-    }
-
-    public function afterDelete($event, $entity, $options) {
-
-        if (!empty($entity->{$this->config('fields.path')})) {
-
-            $this->_removeAllFiles($entity->{$this->config('fields.path')});
         }
     }
 
     /**
-     * Uploads the file to the given path
-     * @param type $tmp
-     * @param type $path
-     * @param type $filename
-     * @param type $extension
+     * Returns a list of all registered fields to upload
+     *
+     * ### Options
+     * - normalize      boolean if each field should be normalized. Default set to true
+     *
+     * @param type $options
      */
-    protected function _uploadFile($tmp, $path, $filename, $extension) {
-        if (is_uploaded_file($tmp)) {
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
+    public function getFieldList($options = [])
+    {
+
+        $_options = [
+            'normalize' => true,
+        ];
+
+        $options = Hash::merge($_options, $options);
+
+        $list = [];
+
+        foreach ($this->config() as $key => $value) {
+
+            if (!in_array($key, $this->_presetConfigKeys) || is_integer($key)) {
+
+                if (is_integer($key)) {
+                    $field = $value;
+                } else {
+                    $field = $key;
+                }
+
+                if ($options['normalize']) {
+                    $field_config = $this->_normalizeField($field);
+                } else {
+                    $field_config = (($this->config($field) == null) ? [] : $this->config($field));
+                }
+
+                $list[$field] = $field_config;
             }
-            return move_uploaded_file($tmp, $path . $filename . '.' . $extension);
         }
+
+        return $list;
+    }
+
+    /**
+     * Method to normalize all fields
+     */
+    public function normalizeAll()
+    {
+
+        $this->getFieldList();
+    }
+
+    /**
+     * Normalizes the requested field
+     *
+     * ### Options
+     * - save           boolean if the normalized data should be saved in config
+     *                  default set to true
+     *
+     * @param string $field
+     */
+    protected function _normalizeField($field, $options = [])
+    {
+
+        $_options = [
+            'save' => true,
+        ];
+
+        $options = Hash::merge($_options, $options);
+
+        $data = $this->config($field);
+
+        if (is_null($data)) {
+
+            foreach ($this->config() as $key => $config) {
+                if ($config == $field) {
+
+                    if ($options['save']) {
+                        $this->config($field, []);
+
+                        $this->_configDelete($key);
+                    }
+
+                    $data = [];
+                }
+            }
+        }
+
+        // adding the default directory-field if not set
+        if (is_null(Hash::get($data, 'fields.directory'))) {
+            $data = Hash::insert($data, 'fields.directory', $field);
+        }
+
+        $data = Hash::merge($this->config('defaultFieldConfig'), $data);
+
+        if ($options['save']) {
+            $this->config($field, $data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Checks if an file has been uploaded by user.
+     *
+     * Returns boolean
+     *
+     * @param type $entity
+     * @param type $field
+     * @return boolean
+     */
+    protected function _ifUploaded($entity, $field)
+    {
+        if ($entity->get($field)) {
+            $data = $entity->get($field);
+
+            if (!empty($data['tmp_name'])) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     /**
-     * Returns the extension of the given file
+     * Uploads the file to the directory
      *
-     * @param $file
-     * @return string
+     * @param type $entity
+     * @param type $field
+     * @param type $options
      */
-    protected function _getExtension($file) {
+    protected function _uploadFile($entity, $field, $options = [])
+    {
 
-        $info = pathinfo($file['name']);
+        $field_config = $this->config($field);
 
-        return $info['extension'];
+        $_upload = $entity->get($field);
+
+        $upload_path = $this->_getPath($entity, $field, ['file' => true]);
+
+        // creating the path if not exists
+        if (!file_exists($this->_getPath($entity, $field, ['file' => false]))) {
+            mkdir($this->_getPath($entity, $field, ['file' => false]), 0777, true);
+        }
+
+        // upload the file and return true
+        if (move_uploaded_file($_upload['tmp_name'], $upload_path)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Returns the filename of the given file
+     * Writes all data of the uplaod to the entity
      *
-     * @param $file
-     * @return string
+     * Returns the modified entity
+     *
+     * @param type $entity
+     * @param type $field
+     * @param type $options
+     * @return Entity who is modified
      */
-    protected function _getFilename($file) {
+    protected function _setUploadColumns($entity, $field, $options = [])
+    {
 
-        $info = pathinfo($file['name']);
+        $field_config = $this->config($field);
 
-        return $info['filename'];
+        $_upload = $entity->get($field);
+
+        // set all columns with values
+        foreach ($field_config['fields'] as $key => $column) {
+            if ($column) {
+                if ($key == "directory") {
+                    $entity->set($column, $this->_getPath($entity, $field, ['root' => false, 'file' => true]));
+                }
+                if ($key == "type") {
+                    $entity->set($column, $_upload['type']);
+                }
+                if ($key == "size") {
+                    $entity->set($column, $_upload['size']);
+                }
+            }
+        }
+
+        return $entity;
     }
 
     /**
-     * Returns the full filename of the given file
+     * Returns te path of the given field
      *
-     * @param $file
-     * @return string
+     * @param Entity $entity
+     * @param string $field
+     * @param array $options
      */
-    protected function _getFullFilename($file) {
+    protected function _getPath($entity, $field, $options = [])
+    {
 
-        return $this->_getFilename($file) . '.' . $this->_getExtension($file);
-    }
+        $_options = [
+            'root' => true,
+            'file' => false,
+        ];
 
-    /**
-     * Returns the tmpname
-     *
-     * @param $file
-     * @return string
-     */
-    protected function _getTmpName($file) {
+        $options = Hash::merge($_options, $options);
 
-        return $file['tmp_name'];
-    }
+        $config = $this->config($field);
 
-    protected function buildPath($path, $id, $options = []) {
+        $path = $config['path'];
 
         $replacements = array(
-            '{ROOT}'  => ROOT,
-            '{id}'    => $id,
-            '{model}' => Inflector::underscore($this->Table->alias),
-            '{DS}'    => DIRECTORY_SEPARATOR,
-            '//'      => DIRECTORY_SEPARATOR,
-            '/'       => DIRECTORY_SEPARATOR,
-            '\\'      => DIRECTORY_SEPARATOR,
+            '{ROOT}'    => ROOT,
+            '{WEBROOT}' => 'webroot',
+            '{field}'   => $entity->get($config['field']),
+            '{model}'   => Inflector::underscore($this->_Table->alias()),
+            '{DS}'      => DIRECTORY_SEPARATOR,
+            '//'        => DIRECTORY_SEPARATOR,
+            '/'         => DIRECTORY_SEPARATOR,
+            '\\'        => DIRECTORY_SEPARATOR,
         );
 
         $builtPath = str_replace(array_keys($replacements), array_values($replacements), $path);
 
+        if (!$options['root']) {
+            $builtPath = str_replace(ROOT . DS . 'webroot' . DS, '', $builtPath);
+        }
+
+        if ($options['file']) {
+            $builtPath = $builtPath . $entity[$field]['name'];
+        }
+
         return $builtPath;
     }
 
-    protected function _removeAllFiles($path, $options = []) {
-
+    /**
+     * Returns the fileName of the given field
+     *
+     * @param type $entity
+     * @param type $field
+     * @param type $options
+     * @return type
+     */
+    protected function _getFileName($entity, $field, $options = [])
+    {
         $_options = [
-            'except' => []
         ];
 
-        $options = array_merge($_options, $options);
+        $options = Hash::merge($_options, $options);
 
-        $dir = new Folder($path);
+        $config = $this->config($field);
 
-        $files = $dir->find();
+        $_upload = $entity->get($field);
 
-        foreach ($files as $_file) {
+        $fileName = $config['fileName'];
 
-            $file = new File($dir->pwd() . DS . $_file);
+        $replacements = array(
+            '{ORIGINAL}'  => $_upload['name'],
+            '{field}'     => $entity->get($config['field']),
+            '{extension}' => end(explode('.', $_upload['name'])),
+            '{DS}'        => DIRECTORY_SEPARATOR,
+            '//'          => DIRECTORY_SEPARATOR,
+            '/'           => DIRECTORY_SEPARATOR,
+            '\\'          => DIRECTORY_SEPARATOR,
+        );
 
-            if (!in_array($_file, $options['except'])) {
-                $file->delete();
-            }
-        }
-    }
+        $builtFileName = str_replace(array_keys($replacements), array_values($replacements), $fileName);
 
-    /**
-     * Checks if a file has been uploaded or not
-     *
-     * @param type $file
-     * @return boolean
-     */
-    protected function _fileUploaded($file) {
-
-        if (is_array($file)) {
-
-            if ($file['tmp_name'] === '') {
-                return false;
-            }
-        }
-        return true;
+        return $builtFileName;
     }
 
 }

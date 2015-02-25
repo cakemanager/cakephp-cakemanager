@@ -30,7 +30,7 @@ Configure::write('CM.UserModel', 'CakeManager.Users');
  * Default for the CakeManager itself, you can change it for your own views
  */
 Configure::write('CM.UserViews', [
-    'login' => 'CakeManager./Users/index',
+    'login' => 'CakeManager./Users/login',
 ]);
 
 /**
@@ -43,4 +43,15 @@ Configure::write('CM.AdminUserViews', [
     'add'          => 'CakeManager./Admin/Users/add',
     'edit'         => 'CakeManager./Admin/Users/edit',
     'new_password' => 'CakeManager./Admin/Users/new_password',
+]);
+
+/**
+ * The RoleViews to use for admin-section
+ * Default for the CakeManager itself, you can change it for your own views
+ */
+Configure::write('CM.AdminRoleViews', [
+    'index'        => 'CakeManager./Admin/Roles/index',
+    'view'         => 'CakeManager./Admin/Roles/view',
+    'add'          => 'CakeManager./Admin/Roles/add',
+    'edit'         => 'CakeManager./Admin/Roles/edit',
 ]);

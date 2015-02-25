@@ -5,6 +5,7 @@ namespace CakeManager\Model\Behavior;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * WhoDidIt behavior
@@ -21,14 +22,14 @@ class WhoDidItBehavior extends Behavior
      * - created_by         string      field to use
      * - modified_by        string      field to use
      * - userModel          string      model to use
-     * - fields             array       list of fields to get on query // not working yet
+     * - fields             array       list of fields to get on query
      *
      */
     protected $_defaultConfig = [
         'created_by'  => 'created_by',
         'modified_by' => 'modified_by',
         'userModel'   => 'CakeManager.Users',
-        'fields'      => ['id', 'email', 'role_id'],
+        'fields'      => [],
     ];
     protected $Table;
 
@@ -38,7 +39,8 @@ class WhoDidItBehavior extends Behavior
      * @param Table $table
      * @param array $config
      */
-    public function __construct(Table $table, array $config = array()) {
+    public function __construct(Table $table, array $config = array())
+    {
         parent::__construct($table, $config);
 
         $this->Table = $table;
@@ -58,14 +60,15 @@ class WhoDidItBehavior extends Behavior
                 'className'  => $this->config('userModel'),
             ]);
         }
-}
+    }
 
     /**
      * Initialize
      *
      * @param array $config
      */
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         parent::initialize($config);
     }
 
@@ -79,22 +82,34 @@ class WhoDidItBehavior extends Behavior
      * @param type $options
      * @param type $primary
      */
-    public function beforeFind($event, $query, $options, $primary) {
+    public function beforeFind($event, $query, $options, $primary)
+    {
 
-        $query->contain(['CreatedBy', 'ModifiedBy']);
-    }
+        if ($this->config('created_by')) {
 
-    public function beforeSave($event, $entity, $options) {
-
-        $auth = $_SESSION['Auth'];
-
-        $id = $auth['User']['id'];
-
-        if ($entity->isNew()) {
-            $entity->set($this->config('created_by'), $id);
+            $query->contain(['CreatedBy' => ['fields' => $this->config('fields')]]);
         }
 
-        $entity->set($this->config('modified_by'), $id);
+        if ($this->config('modified_by')) {
+
+            $query->contain(['ModifiedBy' => ['fields' => $this->config('fields')]]);
+        }
+    }
+
+    public function beforeSave($event, $entity, $options)
+    {
+        $auth = $_SESSION['Auth'];
+        $id = Hash::get($auth, 'User.id');
+
+        if ($entity->isNew()) {
+            if ($this->config('created_by')) {
+                $entity->set($this->config('created_by'), $id);
+            }
+        }
+
+        if ($this->config('modified_by')) {
+            $entity->set($this->config('modified_by'), $id);
+        }
     }
 
 }

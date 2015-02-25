@@ -12,7 +12,7 @@
  * @since         0.10.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-$this->assign('title', $title);
+$cakeDescription = 'CakeManager';
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,6 +20,7 @@ $this->assign('title', $title);
         <?= $this->Html->charset() ?>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>
+            <?= $cakeDescription ?>:
             <?= $this->fetch('title') ?>
         </title>
         <?= $this->Html->meta('icon') ?>
@@ -72,14 +73,7 @@ $this->assign('title', $title);
 
                 <div class="row">
 
-                    <div class="actions columns large-2 medium-3">
-                        <h3><?= __('Actions') ?></h3>
-                        <ul class="side-nav">
-                            <?= $this->Menu->menu('main') ?>
-                        </ul>
-                    </div>
-
-                    <div class="users index large-10 medium-9 columns">
+                    <div class="users index large-12 medium-12 columns">
 
                         <?= $this->fetch('content') ?>
 

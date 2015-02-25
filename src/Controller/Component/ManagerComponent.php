@@ -20,33 +20,38 @@ class ManagerComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'components' => [
-            'Auth' => [
-                'authorize'            => 'Controller',
-                'userModel'            => 'CakeManager.Users',
-                'authenticate'         => [
-                    'Form' => [
-                        'fields' => [
-                            'username' => 'email',
-                            'password' => 'password'
-                        ]
-                    ]
-                ],
-                'logoutRedirect'       => [
-                    'prefix'     => false,
-                    'plugin'     => 'CakeManager',
-                    'controller' => 'Users',
-                    'action'     => 'login'
-                ],
-                'loginAction'          => [
-                    'prefix'     => false,
-                    'plugin'     => 'CakeManager',
-                    'controller' => 'Users',
-                    'action'     => 'login'
-                ],
-                'unauthorizedRedirect' => false,
-            ]
-        ]
+        'Auth'        => [
+            'authorize'            => 'Controller',
+            'userModel'            => 'CakeManager.Users',
+            'authenticate'         => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'password'
+                    ],
+                    'scope'  => ['Users.active' => true],
+                ]
+            ],
+            'logoutRedirect'       => [
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
+                'controller' => 'Users',
+                'action'     => 'login'
+            ],
+            'loginAction'          => [
+                'prefix'     => false,
+                'plugin'     => 'CakeManager',
+                'controller' => 'Users',
+                'action'     => 'login'
+            ],
+            'unauthorizedRedirect' => false,
+        ],
+        'adminTheme'  => 'CakeManager',
+        'adminLayout' => 'CakeManager.admin',
+        'adminMenus'  => [
+            'main'   => 'CakeManager.MainMenu',
+            'navbar' => 'CakeManager.NavbarMenu',
+        ],
     ];
 
     /**
@@ -59,43 +64,55 @@ class ManagerComponent extends Component
      * Preset Helpers to load
      * @var type
      */
-    public $helpers = [
-        'CakeManager.Menu'
-    ];
+    public $helpers = [];
 
-    public function initialize(array $config) {
+    /**
+     * Initialize Callback
+     *
+     * @param array $config
+     */
+    public function initialize(array $config)
+    {
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
 
-        if ($this->config('components.Auth')) {
-            $this->Controller->loadComponent('Auth', $this->config('components.Auth'));
+
+        if ($this->config('Auth')) {
+            $this->Controller->loadComponent('Auth', $this->config('Auth'));
         }
 
         $this->Controller->loadComponent('CakeManager.Menu');
-
-        $this->loadHelpers();
     }
 
-    private function loadHelpers() {
-
-        $this->Controller->helpers[] = 'CakeManager.Menu';
+    /**
+     * _loadHelpers
+     *
+     * Internal method to load all listed helpers
+     *
+     */
+    private function _loadHelpers()
+    {
+        if ($this->config('adminMenus')) {
+            $this->Controller->helpers['CakeManager.Menu'] = $this->config('adminMenus');
+        }
     }
 
     /**
      * BeforeFilter Callback
      *
      */
-    public function beforeFilter($event) {
+    public function beforeFilter($event)
+    {
 
         $this->Controller->authUser = $this->Controller->Auth->user();
 
         // beforeFilter-event
-
         $_event = new Event('Component.Manager.beforeFilter', $this, [
         ]);
         $this->Controller->eventManager()->dispatch($_event);
 
+        // beforeFilter-event for prefixes
         if ($event->subject()->request->prefix !== null) {
 
             $prefix = ucfirst($event->subject()->request->prefix);
@@ -109,13 +126,16 @@ class ManagerComponent extends Component
             ]);
             $this->Controller->eventManager()->dispatch($_event);
         }
+
+        $this->_loadHelpers();
     }
 
     /**
      * Startup Callback
      *
      */
-    public function startup($event) {
+    public function startup($event)
+    {
 
         // startup-event
         $_event = new Event('Component.Manager.startup', $this, [
@@ -141,7 +161,8 @@ class ManagerComponent extends Component
      * BeforeRender Callback
      *
      */
-    public function beforeRender($event) {
+    public function beforeRender($event)
+    {
 
         $this->Controller->set('authUser', $this->Controller->authUser);
 
@@ -166,11 +187,27 @@ class ManagerComponent extends Component
     }
 
     /**
+     * Admin BeforeRender
+     *
+     * Sets the last stuff before an call with the admin-prefix
+     *
+     * @param type $event
+     */
+    public function admin_beforeRender($event)
+    {
+
+        // setting up the default title-variable for default view
+        if (!key_exists('title', $this->Controller->viewVars)) {
+            $this->Controller->set('title', $this->Controller->name);
+        }
+    }
+
+    /**
      * Shutdown Callback
      *
      */
-    public function shutdown($event) {
-
+    public function shutdown($event)
+    {
 
         // shutdown-event
         $_event = new Event('Component.Manager.shutdown', $this, [
@@ -192,49 +229,58 @@ class ManagerComponent extends Component
         }
     }
 
-    public function admin_beforeFilter($event) {
+    /**
+     * Admin BeforeFilter
+     *
+     * Loads the first menu-items for the admin-area
+     * and sets the theme and layout
+     *
+     * @param type $event
+     */
+    public function admin_beforeFilter($event)
+    {
 
-        $this->Controller->layout = 'CakeManager.admin';
+        $this->Controller->Menu->add('Users', [
+            'url'    => [
+                'plugin'     => 'CakeManager',
+                'prefix'     => 'admin',
+                'controller' => 'users',
+                'action'     => 'index',
+            ],
+            'weight' => 0,
+        ]);
+
+        $this->Controller->Menu->add('Roles', [
+            'url'    => [
+                'plugin'     => 'CakeManager',
+                'prefix'     => 'admin',
+                'controller' => 'roles',
+                'action'     => 'index',
+            ],
+            'weight' => 1,
+        ]);
+
+        $this->Controller->theme = $this->config('adminTheme');
+
+        $this->Controller->layout = $this->config('adminLayout');
     }
 
-    public function isAdmin($user) {
+    /**
+     * Quick method to check if a specific prefix is set.
+     *
+     * @param type $expected
+     * @return boolean
+     */
+    public function prefix($expected = null)
+    {
 
-        $array = Configure::read('CM.Roles.Administrators');
+        $current = null;
 
-        if (in_array($user['role_id'], $array)) {
-            return true;
+        if ($this->Controller->request->prefix !== null) {
+            $current = $this->Controller->request->prefix;
         }
 
-        return false;
-    }
-
-    public function isModerator($user) {
-
-        $array = Configure::read('CM.Roles.Moderators');
-
-        if (in_array($user['role_id'], $array)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isUser($user) {
-
-        $array = Configure::read('CM.Roles.Users');
-
-        if (in_array($user['role_id'], $array)) {
-            return true;
-        }
-
-        return false;
-    }
-
-       public function isUnregistered($user) {
-
-        $array = Configure::read('CM.Roles.Unregistered');
-
-        if (in_array($user['role_id'], $array)) {
+        if ($current == $expected) {
             return true;
         }
 
