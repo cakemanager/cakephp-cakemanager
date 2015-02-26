@@ -39,7 +39,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->get('/login');
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
         $this->assertNoRedirect();
 
         $this->assertResponseContains('<input type="email" name="email" id="email">');
@@ -71,7 +71,7 @@ class UsersControllerTest extends IntegrationTestCase
             'password' => 'test',
         ];
 
-        $this->post('/manager/users/login', $login);
+        $this->post('/users/login', $login);
 
         $this->assertSession(0, 'Auth.User.id');
         $this->assertSession(null, 'Auth.User.email');
@@ -84,9 +84,9 @@ class UsersControllerTest extends IntegrationTestCase
     public function testLogoutActionFail()
     {
 
-        $this->get('/manager/users/logout');
+        $this->get('/users/logout');
 
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
     }
 
     /**
@@ -105,9 +105,9 @@ class UsersControllerTest extends IntegrationTestCase
             ]
         ]);
 
-        $this->get('/manager/users/logout');
+        $this->get('/users/logout');
 
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
 
         $this->assertSession(null, 'Auth.User.id');
         $this->assertSession(null, 'Auth.User.email');
@@ -128,9 +128,9 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEquals(1, $user->active);
 
-        $this->get('/manager/users/activate/' . $user->email . '/' . $user->activation_key . '');
+        $this->get('/users/activate/' . $user->email . '/' . $user->activation_key . '');
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/login');
 
@@ -158,9 +158,9 @@ class UsersControllerTest extends IntegrationTestCase
                 'role_id' => 1,
         ]]);
 
-        $this->get('/manager/users/activate/' . $user->email . '/' . $user->activation_key . '');
+        $this->get('/users/activate/' . $user->email . '/' . $user->activation_key . '');
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/login');
     }
@@ -183,9 +183,9 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEquals(0, $user->active);
 
-        $this->get('/manager/users/activate/' . $user->email . '/customkeywhosinvalid');
+        $this->get('/users/activate/' . $user->email . '/customkeywhosinvalid');
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/login');
 
@@ -212,9 +212,9 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEquals(0, $user->active);
 
-        $this->get('/manager/users/activate/' . $user->email . '/');
+        $this->get('/users/activate/' . $user->email . '/');
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/');
 
@@ -239,9 +239,9 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEquals(0, $user->active);
 
-        $this->get('/manager/users/activate/' . $user->email . '/' . $user->activation_key);
+        $this->get('/users/activate/' . $user->email . '/' . $user->activation_key);
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/login');
 
@@ -267,9 +267,9 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEmpty($user->get('activation_key'));
 
-        $this->post('/manager/users/request', $data);
+        $this->post('/users/request', $data);
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/');
 
@@ -292,9 +292,9 @@ class UsersControllerTest extends IntegrationTestCase
                 'role_id' => 1,
         ]]);
 
-        $this->get('/manager/users/request');
+        $this->get('/users/request');
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/login');
     }
@@ -313,9 +313,9 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEmpty($user->get('activation_key'));
 
-        $this->post('/manager/users/request', $data);
+        $this->post('/users/request', $data);
 
-        $this->assertResponseOk();
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/');
 

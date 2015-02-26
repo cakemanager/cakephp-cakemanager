@@ -38,3 +38,5 @@ phpunit tests/TestCase/AllComponentsSuite.php
 phpunit tests/TestCase/AllBehaviorsSuite.php
 
 phpunit tests/TestCase/AllControllersSuite.php
+
+phpunit tests/TestCase/AllModelsSuite.php

@@ -82,7 +82,7 @@ class ManagerComponent extends Component
             $this->Controller->loadComponent('Auth', $this->config('Auth'));
         }
 
-        $this->Controller->loadComponent('CakeManager.Menu');
+        $this->Controller->loadComponent('Utils.Menu');
     }
 
     /**
