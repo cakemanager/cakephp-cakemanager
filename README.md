@@ -6,7 +6,7 @@ The CakeManager offers a build-in login-system, and a strong admin-section to ma
 Documentation
 -------------
 
-For documentation, as well as tutorials, see the [documentation](http://http://cakemanager.readthedocs.org) on Read The Docs.
+For documentation, as well as tutorials, see the [documentation](http://cakemanager.readthedocs.org) on Read The Docs.
 
 Support
 -------
