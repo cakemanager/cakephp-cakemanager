@@ -3,25 +3,12 @@ Commands:
 
 # COMPONENTS
 
-phpunit tests/TestCase/Controller/Component/MenuComponentTest.php 
-
-phpunit tests/TestCase/Controller/Component/IsAuthorizedComponentTest.php 
-
 
 # CONTROLLERS
 
 phpunit tests/TestCase/Controller/Admin/UsersControllerTest.php
 
 phpunit tests/TestCase/Controller/UsersControllerTest.php
-
-
-# BEHAVIORS
-
-phpunit tests/TestCase/Model/Behavior/WhoDidItBehaviorTest.php
-
-phpunit tests/TestCase/Model/Behavior/IsAuthorizedBehaviorTest.php
-
-phpunit tests/TestCase/Model/Behavior/StateableBehaviorTest.php
 
 
 # MODELS
