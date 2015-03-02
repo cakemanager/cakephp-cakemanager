@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "cakephp/cakephp": "3.0.*-dev",
         "cakemanager/cakephp-utils": "dev-master",
         "friendsofcake/crud": "dev-cake3"
     },
