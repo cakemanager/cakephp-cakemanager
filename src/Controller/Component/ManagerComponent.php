@@ -260,6 +260,16 @@ class ManagerComponent extends Component
             'weight' => 1,
         ]);
 
+        $this->Controller->Menu->add('Plugins', [
+            'url'    => [
+                'plugin'     => 'CakeManager',
+                'prefix'     => 'admin',
+                'controller' => 'pages',
+                'action'     => 'display', 'plugins',
+            ],
+            'weight' => 1,
+        ]);
+
         $this->Controller->theme = $this->config('adminTheme');
 
         $this->Controller->layout = $this->config('adminLayout');

@@ -4,6 +4,7 @@ namespace CakeManager\Controller;
 
 use CakeManager\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -61,8 +62,21 @@ class UsersController extends AppController
 
                 $redirect = $this->Roles->redirectFrom($user['role_id']);
 
+                // firing an event: afterLogin
+                $_event = new Event('Controller.Users.afterLogin', $this, [
+                    'user' => $user
+                ]);
+                $this->eventManager()->dispatch($_event);
+
                 return $this->redirect($redirect);
             }
+
+            // firing an event: afterInvalidLogin
+            $_event = new Event('Controller.Users.afterInvalidLogin', $this, [
+                'user' => $user
+            ]);
+            $this->eventManager()->dispatch($_event);
+
             $this->Flash->error(__('Your username or password is incorrect.'));
             return $this->redirect($this->referer());
         }
@@ -107,6 +121,12 @@ class UsersController extends AppController
                     $user->set('activation_key', $this->Users->generateActivationKey());
 
                     $this->Users->save($user);
+
+                    // firing an event: afterForgotPassword
+                    $_event = new Event('Controller.Users.afterForgotPassword', $this, [
+                        'user' => $user
+                    ]);
+                    $this->eventManager()->dispatch($_event);
                 }
             }
 

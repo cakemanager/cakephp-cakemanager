@@ -35,12 +35,11 @@ class PagesController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Auth->allow();
+        $this->Auth->deny('display');
     }
 
     public function isAuthorized($user)
     {
-
         $this->Authorizer->action(['*'], function($auth, $user) {
             $auth->allowRole([1]);
         });

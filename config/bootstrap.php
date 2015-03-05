@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Core\Configure;
+use CakeManager\Controller\Event\MailEventListener;
 
 /**
  * Default Session-settings
@@ -24,6 +25,11 @@ Configure::write('CM.Roles', [
  * The UserModel to use. Default 'CakeManager.Users'
  */
 Configure::write('CM.UserModel', 'CakeManager.Users');
+
+
+Configure::write('CM.Mail', [
+    'From' => ['noreply@cakemanager.org' => 'CakeManager']
+]);
 
 /**
  * The UserViews to use
@@ -57,3 +63,8 @@ Configure::write('CM.AdminRoleViews', [
     'add'   => 'CakeManager./Admin/Roles/add',
     'edit'  => 'CakeManager./Admin/Roles/edit',
 ]);
+
+/**
+ * Attach the MailEventListener to the event manager
+ */
+Cake\Event\EventManager::instance()->attach(new MailEventListener());
