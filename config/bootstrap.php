@@ -30,7 +30,9 @@ Configure::write('CM.UserModel', 'CakeManager.Users');
  * Default for the CakeManager itself, you can change it for your own views
  */
 Configure::write('CM.UserViews', [
-    'login' => 'CakeManager./Users/login',
+    'login'           => 'CakeManager./Users/login',
+    'forgot_password' => 'CakeManager./Users/forgot_password',
+    'reset_password'  => 'CakeManager./Users/reset_password',
 ]);
 
 /**
@@ -50,8 +52,8 @@ Configure::write('CM.AdminUserViews', [
  * Default for the CakeManager itself, you can change it for your own views
  */
 Configure::write('CM.AdminRoleViews', [
-    'index'        => 'CakeManager./Admin/Roles/index',
-    'view'         => 'CakeManager./Admin/Roles/view',
-    'add'          => 'CakeManager./Admin/Roles/add',
-    'edit'         => 'CakeManager./Admin/Roles/edit',
+    'index' => 'CakeManager./Admin/Roles/index',
+    'view'  => 'CakeManager./Admin/Roles/view',
+    'add'   => 'CakeManager./Admin/Roles/add',
+    'edit'  => 'CakeManager./Admin/Roles/edit',
 ]);

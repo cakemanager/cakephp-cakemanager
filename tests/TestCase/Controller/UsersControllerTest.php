@@ -252,7 +252,7 @@ class UsersControllerTest extends IntegrationTestCase
      * Test if an user requests a new password
      *
      */
-    public function testRequestFailNonActive()
+    public function testForgotPasswordFailNonActive()
     {
 
         $user = $this->Users->get(1);
@@ -267,7 +267,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEmpty($user->get('activation_key'));
 
-        $this->post('/users/request', $data);
+        $this->post('/users/forgot_password', $data);
 
         $this->assertResponseSuccess();
 
@@ -284,7 +284,7 @@ class UsersControllerTest extends IntegrationTestCase
      * Fails because logged in
      *
      */
-    public function testRequestFailLoggedin()
+    public function testForgotPasswordFailLoggedin()
     {
 
         $this->session(['Auth.User' => [
@@ -292,7 +292,7 @@ class UsersControllerTest extends IntegrationTestCase
                 'role_id' => 1,
         ]]);
 
-        $this->get('/users/request');
+        $this->get('/users/forgot_password');
 
         $this->assertResponseSuccess();
 
@@ -303,7 +303,7 @@ class UsersControllerTest extends IntegrationTestCase
      * Test request true
      *
      */
-    public function testRequestPass()
+    public function testForgotPasswordPass()
     {
         $user = $this->Users->get(1);
 
@@ -313,7 +313,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEmpty($user->get('activation_key'));
 
-        $this->post('/users/request', $data);
+        $this->post('/users/forgot_password', $data);
 
         $this->assertResponseSuccess();
 
@@ -324,13 +324,14 @@ class UsersControllerTest extends IntegrationTestCase
         $this->assertNotEmpty($user->get('activation_key'));
     }
 
-    /**
-     * Test if an user sets a new paswword
-     *
-     */
-    public function testNewPassword()
+    public function testResetPasswordFail()
     {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 
+    public function testResetPasswordPass()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
     }
 
 }
