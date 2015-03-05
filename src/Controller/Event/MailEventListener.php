@@ -19,13 +19,16 @@ class MailEventListener implements EventListenerInterface
     public function afterLogin(\Cake\Event\Event $event)
     {
 
-        $user = $event->data['user'];
+        if (Configure::read('CM.Mail.afterLogin')) {
+
+            $user = $event->data['user'];
 
 //        $email = new Email('default');
 //        $email->from(Configure::read('CM.Mail.From'))
 //                ->to($user['email'])
 //                ->subject(__('You logged in succesfully'))
 //                ->send('Congratulations!');
+        }
     }
 
 }

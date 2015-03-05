@@ -28,7 +28,8 @@ Configure::write('CM.UserModel', 'CakeManager.Users');
 
 
 Configure::write('CM.Mail', [
-    'From' => ['noreply@cakemanager.org' => 'CakeManager']
+    'From'       => ['noreply@cakemanager.org' => 'CakeManager'],
+    'afterLogin' => true,
 ]);
 
 /**
