@@ -4,6 +4,7 @@ namespace CakeManager\Controller;
 
 use CakeManager\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -23,7 +24,7 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         // Auth-settings: Allows all user-related methods
-        $this->Auth->allow(['new_password', 'request', 'logout', 'login', 'activate']);
+        $this->Auth->allow(['reset_password', 'forgot_password', 'logout', 'login', 'activate', 'test']);
 
         // Setting up the base-theme
         if (!$this->theme) {
@@ -36,7 +37,11 @@ class UsersController extends AppController
     }
 
     /**
-     * Login method
+     * Login action
+     *
+     * # Changing the view:
+     *
+     * Configure::write('CM.UserViews.login', 'custom/view');
      *
      * @return void
      */
@@ -57,23 +62,46 @@ class UsersController extends AppController
 
                 $redirect = $this->Roles->redirectFrom($user['role_id']);
 
+                // firing an event: afterLogin
+                $_event = new Event('Controller.Users.afterLogin', $this, [
+                    'user' => $user
+                ]);
+                $this->eventManager()->dispatch($_event);
+
                 return $this->redirect($redirect);
             }
+
+            // firing an event: afterInvalidLogin
+            $_event = new Event('Controller.Users.afterInvalidLogin', $this, [
+                'user' => $user
+            ]);
+            $this->eventManager()->dispatch($_event);
+
             $this->Flash->error(__('Your username or password is incorrect.'));
             return $this->redirect($this->referer());
         }
 
-        // Render the view. The view-file can be changed via Configure::write('CM.UserViews.login
         $this->render(Configure::read('CM.UserViews.login'));
     }
 
     /**
-     * Requests a new activation for the user.
-     * Needs an e-mailaddress to request its account.
+     * Forgot password action
+     *
+     * Via this action you are able to request a new password.
+     * After the post it will send a mail with a link.
+     * This link will redirect to the action 'reset_password'.
+     *
+     * This action always gives a success-message.
+     * That's because else hackers (or other bad-guys) will be able
+     * to see if an e-mail is registered or not.
+     *
+     * # Changing the view:
+     *
+     * Configure::write('CM.UserViews.forgot_password', 'custom/view');
      *
      * @return type
      */
-    public function request()
+    public function forgot_password()
     {
         // Redirect if user is already logged in
         if ($this->authUser) {
@@ -84,6 +112,7 @@ class UsersController extends AppController
 
             $user = $this->Users->findByEmail($this->request->data['email']);
 
+
             if ($user->Count()) {
 
                 $user = $user->first();
@@ -92,32 +121,36 @@ class UsersController extends AppController
                     $user->set('activation_key', $this->Users->generateActivationKey());
 
                     $this->Users->save($user);
+
+                    // firing an event: afterForgotPassword
+                    $_event = new Event('Controller.Users.afterForgotPassword', $this, [
+                        'user' => $user
+                    ]);
+                    $this->eventManager()->dispatch($_event);
                 }
             }
 
-            $this->Flash->success(__('We have requested your account. Check your e-mailaddress to activate your account.'));
+            // Always return a success-message. Else hackers will be able to see if an e-mail is registered or not
+            $this->Flash->success(__('We have sent you a mail. Check your e-mailaddress to activate your account.'));
             return $this->redirect($this->referer());
         }
+
+        $this->render(Configure::read('CM.UserViews.forgot_password'));
     }
 
     /**
-     * Activates a new account
+     * Activate action
      *
-     * User will receive an email with this url.
-     *
-     * URL-example
-     *
-     * mywebsite.com/users/activate/user{at}email.com/{its_activation_key}
-     *
-     * User will be redirected to the login-page
+     * Users will reach this action when they need to activate their account.
+     * Ths action will activate the account and redirect to the login-page.
      *
      * @param type $email
      * @param type $activation_key
-     * @return type
      */
     public function activate($email, $activation_key = null)
     {
 
+        // If there's no activation_key
         if (!$activation_key) {
             $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect($this->referer());
@@ -128,37 +161,41 @@ class UsersController extends AppController
             return $this->redirect('/login');
         }
 
+        // If the email and key doesn't match
         if (!$this->Users->validateActivationKey($email, $activation_key)) {
-            $this->Flash->error(__('No your e-mailaddress is not linked to your activationkey.') . ' ' . __('Your account could not be activated.'));
+            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect('/login');
         }
 
+        // If the user has been activated
         if ($this->Users->activateUser($email, $activation_key)) {
             $this->Flash->success(__('Congratulations! Your account has been activated!'));
             return $this->redirect('/login');
         }
 
+        // If noting happened. Safety :)
         $this->Flash->error(__('Something went wrong.') . ' ' . __('Your account could not be activated.'));
         return $this->redirect('/login');
     }
 
     /**
-     * Sets a new password
+     * Reset password action
      *
-     * User will receive an email with this url.
+     * Users will reach this action when they need to set a new password for their account.
+     * This action will set a new password and redirect to the login page
      *
-     * URL-example
+     * # Changing the view:
      *
-     * mywebsite.com/users/new_password/user{at}email.com/{its_activation_key}
+     * Configure::write('CM.UserViews.reset_password', 'custom/view');
      *
      * @param type $email
      * @param type $activation_key
-     * @return type
      */
-    public function new_password($email, $activation_key = null)
+    public function reset_password($email, $activation_key = null)
     {
+        // If there's no activation_key
         if (!$activation_key) {
-            $this->Flash->error(__('Someting went wrong. Your password could nog be saved.'));
+            $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect($this->referer());
         }
 
@@ -167,11 +204,13 @@ class UsersController extends AppController
             return $this->redirect('/login');
         }
 
+        // If the email and key doesn't match
         if (!$this->Users->validateActivationKey($email, $activation_key)) {
-            $this->Flash->error(__('You are not allowed to set a new password'));
-            return $this->redirect($this->referer());
+            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.') . ' ' . __('Your account could not be activated.'));
+            return $this->redirect('/login');
         }
 
+        // If we passed and the POST isset
         if ($this->request->is('post')) {
 
             $data = $this->Users->find()->where([
@@ -183,12 +222,12 @@ class UsersController extends AppController
 
                 $data = $data->first();
 
-                $this->request->data['activation_key'] = null;
-                $this->request->data['active'] = 1;
-
                 $user = $this->Users->patchEntity($data, $this->request->data);
 
-                if ($this->Users->save($user)) {
+                $data->set('active', 1);
+                $data->set('activation_key', null);
+
+                if ($this->Users->save($data)) {
 
                     $this->Flash->success(__('Your password has been saved.'));
                     return $this->redirect('/login');
@@ -196,14 +235,17 @@ class UsersController extends AppController
             }
 
             $this->Flash->error(__('Someting went wrong. Your password could nog be saved.'));
-            return $this->redirect($this->referer());
         }
+
+        $this->render(Configure::read('CM.UserViews.reset_password'));
     }
 
     /**
      * Logout method
      *
-     * @return type
+     * This method logs the user out and redirects to the login-page.
+     * The login-page is chosen by the AuthComponent
+     *
      */
     public function logout()
     {

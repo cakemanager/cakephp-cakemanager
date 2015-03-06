@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Core\Configure;
+use CakeManager\Controller\Event\MailEventListener;
 
 /**
  * Default Session-settings
@@ -25,12 +26,20 @@ Configure::write('CM.Roles', [
  */
 Configure::write('CM.UserModel', 'CakeManager.Users');
 
+
+Configure::write('CM.Mail', [
+    'From'       => ['noreply@cakemanager.org' => 'CakeManager'],
+    'afterLogin' => true,
+]);
+
 /**
  * The UserViews to use
  * Default for the CakeManager itself, you can change it for your own views
  */
 Configure::write('CM.UserViews', [
-    'login' => 'CakeManager./Users/login',
+    'login'           => 'CakeManager./Users/login',
+    'forgot_password' => 'CakeManager./Users/forgot_password',
+    'reset_password'  => 'CakeManager./Users/reset_password',
 ]);
 
 /**
@@ -50,8 +59,13 @@ Configure::write('CM.AdminUserViews', [
  * Default for the CakeManager itself, you can change it for your own views
  */
 Configure::write('CM.AdminRoleViews', [
-    'index'        => 'CakeManager./Admin/Roles/index',
-    'view'         => 'CakeManager./Admin/Roles/view',
-    'add'          => 'CakeManager./Admin/Roles/add',
-    'edit'         => 'CakeManager./Admin/Roles/edit',
+    'index' => 'CakeManager./Admin/Roles/index',
+    'view'  => 'CakeManager./Admin/Roles/view',
+    'add'   => 'CakeManager./Admin/Roles/add',
+    'edit'  => 'CakeManager./Admin/Roles/edit',
 ]);
+
+/**
+ * Attach the MailEventListener to the event manager
+ */
+Cake\Event\EventManager::instance()->attach(new MailEventListener());

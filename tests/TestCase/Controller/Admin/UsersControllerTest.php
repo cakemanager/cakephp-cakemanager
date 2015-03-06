@@ -37,23 +37,23 @@ class UsersControllerTest extends IntegrationTestCase
 
         // index
         $this->get('/admin/manager/users/index');
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
 
         // add
         $this->get('/admin/manager/users/add');
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
 
         // view
         $this->get('/admin/manager/users/view');
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
 
         // edit
         $this->get('/admin/manager/users/edit');
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
 
         // delete
         $this->get('/admin/manager/users/delete');
-        $this->assertRedirect('/manager/users/login');
+        $this->assertRedirect('/users/login');
 
         // setting a wrong role_id
         $this->session(['Auth' => ['User' => ['role_id' => 2]]]);

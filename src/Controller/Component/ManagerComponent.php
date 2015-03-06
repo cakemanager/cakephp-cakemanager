@@ -82,7 +82,7 @@ class ManagerComponent extends Component
             $this->Controller->loadComponent('Auth', $this->config('Auth'));
         }
 
-        $this->Controller->loadComponent('CakeManager.Menu');
+        $this->Controller->loadComponent('Utils.Menu');
     }
 
     /**
@@ -256,6 +256,16 @@ class ManagerComponent extends Component
                 'prefix'     => 'admin',
                 'controller' => 'roles',
                 'action'     => 'index',
+            ],
+            'weight' => 1,
+        ]);
+
+        $this->Controller->Menu->add('Plugins', [
+            'url'    => [
+                'plugin'     => 'CakeManager',
+                'prefix'     => 'admin',
+                'controller' => 'pages',
+                'action'     => 'display', 'plugins',
             ],
             'weight' => 1,
         ]);
