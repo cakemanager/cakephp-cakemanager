@@ -75,37 +75,6 @@ class Inital extends AbstractMigration
                 ])
                 ->create();
 
-        $table = $this->table('metas');
-        $table
-                ->addColumn('rel_model', 'string', [
-                    'limit'   => '50',
-                    'null'    => true,
-                    'default' => '',
-                ])
-                ->addColumn('rel_id', 'integer', [
-                    'limit'  => '11',
-                    'signed' => '',
-                    'null'   => true,
-                ])
-                ->addColumn('name', 'string', [
-                    'limit'   => '256',
-                    'null'    => true,
-                    'default' => '',
-                ])
-                ->addColumn('value', 'text', [
-                    'limit'   => '',
-                    'null'    => true,
-                    'default' => '',
-                ])
-                ->addColumn('created', 'datetime', [
-                    'limit' => '',
-                    'null'  => true,
-                ])
-                ->addColumn('modified', 'datetime', [
-                    'limit' => '',
-                    'null'  => true,
-                ])
-                ->create();
     }
 
     /**
@@ -119,7 +88,6 @@ class Inital extends AbstractMigration
 
         $this->dropTable('roles');
 
-        $this->dropTable('metas');
     }
 
 }
