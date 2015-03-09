@@ -1,6 +1,8 @@
 CakeManager Plugin for Cake 3.x
 ===================
 
+[![Join the chat at https://gitter.im/cakemanager/cakephp-cakemanager](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cakemanager/cakephp-cakemanager?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The CakeManager offers a build-in login-system, and a strong admin-section to manage your application. You are able to manage your users and roles, and own data. Also the CakeManager offers you many components and behaviors to make developing easier.
 
 Documentation
