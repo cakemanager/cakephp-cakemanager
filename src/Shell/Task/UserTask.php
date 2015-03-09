@@ -23,10 +23,12 @@ class UserTask extends Shell
         $data = [
             'email'    => $email,
             'password' => $password,
-            'role_id'  => 1,
         ];
 
         $new = $this->Users->newEntity($data);
+
+        $new->set('role_id', 1);
+        $new->set('active', 1);
 
         if ($this->Users->save($new)) {
             return $this->out('The user "' . $email . '" has been created.');
