@@ -11,6 +11,8 @@ For documentation, as well as tutorials, go to http://cakemanager.org.
 Support
 -------
 
+If you need help, you are welcome at https://gitter.im/cakemanager/cakephp-cakemanager. Here we will talk about related items to CakePHP and the CakeManager.
+
 For bugs and feature requests, please use the [issues](https://github.com/cakemanager/cakephp-cakemanager/issues) section of this repository.
 
 Bugs and feature requests for the documentation can be done in the [docs repo](https://github.com/cakemanager/docs/issues)
