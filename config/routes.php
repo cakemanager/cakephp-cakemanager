@@ -7,6 +7,14 @@ use Cake\Routing\Router;
  */
 Router::prefix('admin', function ($routes) {
     $routes->plugin('CakeManager', ['path' => '/manager'], function ($routes) {
+
+        $routes->connect('/pages/*', [
+            'prefix'     => 'admin',
+            'plugin'     => 'CakeManager',
+            'controller' => 'Pages',
+            'action'     => 'display',
+        ]);
+
         $routes->fallbacks('InflectedRoute');
     });
     $routes->fallbacks('InflectedRoute');

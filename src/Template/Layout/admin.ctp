@@ -91,4 +91,6 @@ $this->assign('title', $title);
             </footer>
         </div>
     </body>
+    <?= $this->Html->script('jquery-1.11.2.min') ?>
+    <?= $this->fetch('scriptBottom'); ?>
 </html>

@@ -84,5 +84,6 @@ $cakeDescription = 'CakeManager';
             <footer>
             </footer>
         </div>
+        <?= $this->Html->script('jquery-1.11.2.min') ?>
     </body>
 </html>
