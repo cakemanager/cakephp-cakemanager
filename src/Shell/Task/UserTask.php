@@ -1,19 +1,38 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Shell\Task;
 
 use Cake\Console\Shell;
 
+/**
+ * User task
+ *
+ * This task is able to create a new administrator via the shell.
+ * This can be helpful when there are no user after the plugin has been loaded.
+ *
+ */
 class UserTask extends Shell
 {
 
     /**
      * Main() method.
      *
-     * @return type
+     * @return void|int|bool
      */
-    public function main() {
-
+    public function main()
+    {
         $this->loadModel('CakeManager.Users');
 
         $email = $this->in('Enter the e-mailaddress');
@@ -21,7 +40,7 @@ class UserTask extends Shell
         $password = $this->in('Enter the password');
 
         $data = [
-            'email'    => $email,
+            'email' => $email,
             'password' => $password,
         ];
 
@@ -44,14 +63,14 @@ class UserTask extends Shell
     /**
      * GetOptionParser method.
      *
-     * @return type
+     * @return ConsoleOptionParser
      */
-    public function getOptionParser() {
+    public function getOptionParser()
+    {
         $parser = parent::getOptionParser();
 
         $parser->description(['Here you will be able to generate an user.']);
 
         return $parser;
     }
-
 }

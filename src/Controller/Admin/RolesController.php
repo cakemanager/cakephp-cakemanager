@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Controller\Admin;
 
 use CakeManager\Controller\AppController;
@@ -8,11 +20,18 @@ use Cake\Core\Configure;
 /**
  * Roles Controller
  *
- * @property \CakeManager\Model\Table\RolesTable $Roles
+ * Manages Admin pages for roles.
+ *
  */
 class RolesController extends AppController
 {
 
+    /**
+     * beforeFilter Callback
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
     public function beforeFilter(\Cake\Event\Event $event)
     {
         parent::beforeFilter($event);
@@ -20,10 +39,18 @@ class RolesController extends AppController
         $this->Auth->allow([]);
     }
 
+    /**
+     * isAuthorized method
+     *
+     * Used for authorization per controller.
+     *
+     * @param array $user Logged In user.
+     * @return bool If user is allowed to the requested action.
+     */
     public function isAuthorized($user)
     {
-        $this->Authorizer->action(['*'], function($auth) {
-            $this->Authorizer->setRole(1, true);
+        $this->Authorizer->action(['*'], function ($auth) {
+            $auth->allowRole(1);
         });
 
         return $this->Authorizer->authorize();
@@ -44,9 +71,9 @@ class RolesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Role id
+     * @param string|null $id Role id.
      * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @throws \Cake\Network\Exception\NotFoundException Exception if the role couldn't be found.
      */
     public function view($id = null)
     {
@@ -61,7 +88,7 @@ class RolesController extends AppController
     /**
      * Add method
      *
-     * @return void
+     * @return void|\Cake\Network\Respose
      */
     public function add()
     {
@@ -82,9 +109,9 @@ class RolesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Role id
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @param string|null $id Role id.
+     * @return void|\Cake\Network\Respose
+     * @throws \Cake\Network\Exception\NotFoundException Exception if the role couldn't be found.
      */
     public function edit($id = null)
     {
@@ -110,9 +137,9 @@ class RolesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Role id
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @param string|null $id Role id.
+     * @return void|\Cake\Network\Respose
+     * @throws \Cake\Network\Exception\NotFoundException Exception if the role couldn't be found.
      */
     public function delete($id = null)
     {
@@ -127,8 +154,5 @@ class RolesController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
-
-        $this->render(Configure::read('CM.AdminRoleViews.delete'));
     }
-
 }

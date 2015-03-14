@@ -1,13 +1,25 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
  * Users Model
+ *
  */
 class UsersTable extends Table
 {
@@ -18,15 +30,16 @@ class UsersTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         $this->table('users');
         $this->displayField('email');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Roles', [
-            'className'    => 'CakeManager.Roles',
-            'foreignKey'   => 'role_id',
+            'className' => 'CakeManager.Roles',
+            'foreignKey' => 'role_id',
             'propertyName' => 'role',
         ]);
     }
@@ -34,10 +47,11 @@ class UsersTable extends Table
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator instance
+     * @param \Cake\Validation\Validator $validator Validator.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator)
+    {
         $validator
                 ->add('id', 'valid', ['rule' => 'numeric'])
                 ->allowEmpty('id', 'create')
@@ -74,8 +88,16 @@ class UsersTable extends Table
         return $validator;
     }
 
-    public function beforeSave($event, $entity, $options) {
-
+    /**
+     * beforeSave Callback
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @param \Cake\ORM\Entity $entity Current entity.
+     * @param array $options Options.
+     * @return void
+     */
+    public function beforeSave($event, $entity, $options)
+    {
         if (!empty($entity->new_password)) {
             $entity->password = $entity->new_password; // set for password-changes
         }
@@ -88,8 +110,8 @@ class UsersTable extends Table
      *
      * @return string
      */
-    public function generateActivationKey() {
-
+    public function generateActivationKey()
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $activationKey = '';
@@ -104,13 +126,13 @@ class UsersTable extends Table
      *
      * User-data: e-mailaddress
      *
-     * @param type $email
-     * @param type $activation_key
-     * @return boolean
+     * @param string $email E-mailaddress of the user.
+     * @param string $activationKey Activation key of the user.
+     * @return bool
      */
-    public function validateActivationKey($email, $activation_key) {
-
-        $query = $this->findByEmailAndActivationKey($email, $activation_key);
+    public function validateActivationKey($email, $activationKey)
+    {
+        $query = $this->findByEmailAndActivationKey($email, $activationKey);
 
         if ($query->Count() > 0) {
             return true;
@@ -122,21 +144,19 @@ class UsersTable extends Table
     /**
      * Activates an user
      *
-     * @param type $email
-     * @param type $activation_key
-     * @return boolean
+     * @param string $email E-mailaddress of the user.
+     * @param string $activationKey Activation key of the user.
+     * @return bool
      */
-    public function activateUser($email, $activation_key) {
-
-        if ($this->validateActivationKey($email, $activation_key)) {
-
-
-            $user = $this->findByEmailAndActivationKey($email, $activation_key)->first();
+    public function activateUser($email, $activationKey)
+    {
+        if ($this->validateActivationKey($email, $activationKey)) {
+            $user = $this->findByEmailAndActivationKey($email, $activationKey)->first();
 
             if ($user->active == 0) {
                 $user->active = 1;
                 $user->activation_key = null;
-                if($this->save($user)) {
+                if ($this->save($user)) {
                     return true;
                 }
             }
@@ -144,5 +164,4 @@ class UsersTable extends Table
 
         return false;
     }
-
 }

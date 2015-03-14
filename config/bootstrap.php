@@ -38,8 +38,8 @@ Configure::write('CM.Mail', [
  */
 Configure::write('CM.UserViews', [
     'login'           => 'CakeManager./Users/login',
-    'forgot_password' => 'CakeManager./Users/forgot_password',
-    'reset_password'  => 'CakeManager./Users/reset_password',
+    'forgot_password' => 'CakeManager./Users/forgotPassword',
+    'reset_password'  => 'CakeManager./Users/resetPassword',
 ]);
 
 /**
@@ -51,7 +51,7 @@ Configure::write('CM.AdminUserViews', [
     'view'         => 'CakeManager./Admin/Users/view',
     'add'          => 'CakeManager./Admin/Users/add',
     'edit'         => 'CakeManager./Admin/Users/edit',
-    'new_password' => 'CakeManager./Admin/Users/new_password',
+    'new_password' => 'CakeManager./Admin/Users/newPassword',
 ]);
 
 /**

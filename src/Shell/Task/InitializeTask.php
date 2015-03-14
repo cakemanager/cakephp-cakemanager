@@ -1,42 +1,61 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Shell\Task;
 
 use Cake\Console\Shell;
 
+/**
+ * Initialize task.
+ *
+ * This task is used to initiaze the CakeManager Plugin.
+ * That means that roles will be created, and configures will be set.
+ *
+ */
 class InitializeTask extends Shell
 {
 
     /**
      * main() method.
      *
+     * @return void
      */
-    public function main() {
-
+    public function main()
+    {
         // initialize the roles
-        $this->roles();
+        $this->_roles();
     }
 
     /**
      * roles() method.
      *
+     * @return void
      */
-    protected function roles() {
-
+    protected function _roles()
+    {
         $this->loadModel('CakeManager.Roles');
 
         $list = $this->Roles->find('list')->toArray();
 
         if (empty($list)) {
-
             $this->out('No roles found.');
         }
 
+        // Creating administrators
         if (!in_array('Administrators', $list)) {
-
-            // Creating administrators
             $data = [
-                'name'           => 'Administrators',
+                'name' => 'Administrators',
                 'login_redirect' => '/admin/manager/users',
             ];
 
@@ -46,11 +65,10 @@ class InitializeTask extends Shell
             $this->out('Role "Administrators" created');
         }
 
+        // Creating moderators
         if (!in_array('Moderators', $list)) {
-
-            // Creating moderators
             $data = [
-                'name'           => 'Moderators',
+                'name' => 'Moderators',
                 'login_redirect' => '/',
             ];
 
@@ -60,11 +78,10 @@ class InitializeTask extends Shell
             $this->out('Role "Moderators" created');
         }
 
+        // Creating Users
         if (!in_array('Users', $list)) {
-
-            // Creating Users
             $data = [
-                'name'           => 'Users',
+                'name' => 'Users',
                 'login_redirect' => '/',
             ];
 
@@ -74,11 +91,10 @@ class InitializeTask extends Shell
             $this->out('Role "Users" created');
         }
 
+        // Creating unregisterd
         if (!in_array('Users', $list)) {
-
-            // Creating unregisterd
             $data = [
-                'name'           => 'Unregistered',
+                'name' => 'Unregistered',
                 'login_redirect' => '/',
             ];
 
@@ -94,12 +110,12 @@ class InitializeTask extends Shell
     /**
      * GetOptionParser method.
      *
-     * @return type
+     * @return ConsoleOptionParser
      */
-    public function getOptionParser() {
+    public function getOptionParser()
+    {
         $parser = parent::getOptionParser();
 
         return $parser;
     }
-
 }

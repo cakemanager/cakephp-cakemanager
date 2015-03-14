@@ -47,7 +47,7 @@ Router::plugin('CakeManager', ['path' => '/'], function ($routes) {
  * Previous:
  * manager/users/request
  *
- * New:
+ * Now:
  * users/request
  *
  */

@@ -8,5 +8,5 @@
     </fieldset>
     <?= $this->Form->button(__('Login')); ?>
     <?= $this->Form->end() ?>
-    <?= $this->Html->link('Forgot password', ['action' => 'forgot_password']); ?>
+    <?= $this->Html->link('Forgot password', ['action' => 'forgotPassword']); ?>
 </div>

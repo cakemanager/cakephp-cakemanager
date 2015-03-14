@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Controller;
 
 use CakeManager\Controller\AppController;
@@ -9,7 +21,6 @@ use Cake\Event\Event;
 /**
  * Users Controller
  *
- * @property \App\Model\Table\UsersTable $Users
  */
 class UsersController extends AppController
 {
@@ -17,19 +28,21 @@ class UsersController extends AppController
     /**
      * BeforeFilter Callback
      *
-     * @param \Cake\Event\Event $event
+     * @param \Cake\Event\Event $event Event.
+     * @return void
      */
     public function beforeFilter(\Cake\Event\Event $event)
     {
         parent::beforeFilter($event);
 
         // Auth-settings: Allows all user-related methods
-        $this->Auth->allow(['reset_password', 'forgot_password', 'logout', 'login', 'activate', 'test']);
+        $this->Auth->allow(['resetPassword', 'forgotPassword', 'logout', 'login', 'activate']);
 
         // Setting up the base-theme
         if (!$this->theme) {
             $this->theme = "CakeManager";
         }
+
         // Setting up the base-layout
         if (!$this->layout) {
             $this->layout = "base";
@@ -43,7 +56,7 @@ class UsersController extends AppController
      *
      * Configure::write('CM.UserViews.login', 'custom/view');
      *
-     * @return void
+     * @return void|\Cake\Network\Respose
      */
     public function login()
     {
@@ -99,9 +112,9 @@ class UsersController extends AppController
      *
      * Configure::write('CM.UserViews.forgot_password', 'custom/view');
      *
-     * @return type
+     * @return void|\Cake\Network\Respose
      */
-    public function forgot_password()
+    public function forgotPassword()
     {
         // Redirect if user is already logged in
         if ($this->authUser) {
@@ -109,12 +122,10 @@ class UsersController extends AppController
         }
 
         if ($this->request->is('post')) {
-
             $user = $this->Users->findByEmail($this->request->data['email']);
 
 
             if ($user->Count()) {
-
                 $user = $user->first();
 
                 if ($user->get('active') === 1) {
@@ -135,7 +146,7 @@ class UsersController extends AppController
             return $this->redirect($this->referer());
         }
 
-        $this->render(Configure::read('CM.UserViews.forgot_password'));
+        $this->render(Configure::read('CM.UserViews.forgotPassword'));
     }
 
     /**
@@ -144,14 +155,14 @@ class UsersController extends AppController
      * Users will reach this action when they need to activate their account.
      * Ths action will activate the account and redirect to the login-page.
      *
-     * @param type $email
-     * @param type $activation_key
+     * @param string $email The e-mailaddress from the user.
+     * @param string $activationKey The refering activation key.
+     * @return void|\Cake\Network\Respose
      */
-    public function activate($email, $activation_key = null)
+    public function activate($email, $activationKey = null)
     {
-
         // If there's no activation_key
-        if (!$activation_key) {
+        if (!$activationKey) {
             $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect($this->referer());
         }
@@ -162,13 +173,13 @@ class UsersController extends AppController
         }
 
         // If the email and key doesn't match
-        if (!$this->Users->validateActivationKey($email, $activation_key)) {
-            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.') . ' ' . __('Your account could not be activated.'));
+        if (!$this->Users->validateActivationKey($email, $activationKey)) {
+            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.'));
             return $this->redirect('/login');
         }
 
         // If the user has been activated
-        if ($this->Users->activateUser($email, $activation_key)) {
+        if ($this->Users->activateUser($email, $activationKey)) {
             $this->Flash->success(__('Congratulations! Your account has been activated!'));
             return $this->redirect('/login');
         }
@@ -188,13 +199,14 @@ class UsersController extends AppController
      *
      * Configure::write('CM.UserViews.reset_password', 'custom/view');
      *
-     * @param type $email
-     * @param type $activation_key
+     * @param string $email The e-mailaddress from the user.
+     * @param string $activationKey The refering activation key.
+     * @return void|\Cake\Network\Respose
      */
-    public function reset_password($email, $activation_key = null)
+    public function resetPassword($email, $activationKey = null)
     {
         // If there's no activation_key
-        if (!$activation_key) {
+        if (!$activationKey) {
             $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
             return $this->redirect($this->referer());
         }
@@ -205,21 +217,19 @@ class UsersController extends AppController
         }
 
         // If the email and key doesn't match
-        if (!$this->Users->validateActivationKey($email, $activation_key)) {
-            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.') . ' ' . __('Your account could not be activated.'));
+        if (!$this->Users->validateActivationKey($email, $activationKey)) {
+            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.'));
             return $this->redirect('/login');
         }
 
         // If we passed and the POST isset
         if ($this->request->is('post')) {
-
             $data = $this->Users->find()->where([
-                'email'          => $email,
-                'activation_key' => $activation_key,
+                'email' => $email,
+                'activation_key' => $activationKey,
             ]);
 
             if ($data->Count() > 0) {
-
                 $data = $data->first();
 
                 $user = $this->Users->patchEntity($data, $this->request->data);
@@ -228,7 +238,6 @@ class UsersController extends AppController
                 $data->set('activation_key', null);
 
                 if ($this->Users->save($data)) {
-
                     $this->Flash->success(__('Your password has been saved.'));
                     return $this->redirect('/login');
                 }
@@ -237,7 +246,7 @@ class UsersController extends AppController
             $this->Flash->error(__('Someting went wrong. Your password could nog be saved.'));
         }
 
-        $this->render(Configure::read('CM.UserViews.reset_password'));
+        $this->render(Configure::read('CM.UserViews.resetPassword'));
     }
 
     /**
@@ -246,11 +255,11 @@ class UsersController extends AppController
      * This method logs the user out and redirects to the login-page.
      * The login-page is chosen by the AuthComponent
      *
+     * @return void|\Cake\Network\Respose
      */
     public function logout()
     {
         $this->Flash->success(__('You are now logged out.'));
         return $this->redirect($this->Auth->logout());
     }
-
 }
