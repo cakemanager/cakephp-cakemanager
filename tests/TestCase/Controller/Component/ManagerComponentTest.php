@@ -1,44 +1,328 @@
-<?php
-namespace CakeManager\Test\TestCase\Controller\Component;
+<?php namespace CakeManager\Test\TestCase\Controller\Component;
 
 use CakeManager\Controller\Component\ManagerComponent;
 use Cake\Controller\ComponentRegistry;
+use Cake\Event\Event;
+use Cake\Network\Request;
+use Cake\Network\Response;
 use Cake\TestSuite\TestCase;
 
 /**
  * CakeManager\Controller\Component\ManagerComponent Test Case
  */
-class ManagerComponentTest extends TestCase {
+class ManagerComponentTest extends TestCase
+{
 
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-		$registry = new ComponentRegistry();
-//		$this->Manager = new ManagerComponent($registry);
-	}
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		unset($this->Manager);
+        $this->Manager = $this->setUpRequest([
+            'prefix' => null,
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+    }
 
-		parent::tearDown();
-	}
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        unset($this->Manager);
 
-/**
- * Test initial setup
- *
- * @return void
- */
-	public function testInitialization() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
+        parent::tearDown();
+    }
 
+    /**
+     * Test startup event
+     *
+     * @return void
+     */
+    public function testStartupEvent()
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => [
+                'prefix' => 'admin',
+                'plugin' => 'cakemanager',
+                'controller' => 'users',
+                'action' => 'index'
+        ]]);
+        $response = new Response();
+
+        $eventManager = $this->getMock('Cake\Event\EventManager', ['dispatch']);
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response, null, $eventManager]);
+
+        $eventManager->expects($this->at(0))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.startup')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $eventManager->expects($this->at(1))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.startup.admin')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $registry = new ComponentRegistry($this->controller);
+
+        $manager = $this->getMock('CakeManager\Controller\Component\ManagerComponent', ['adminStartup'], [$registry]);
+
+        $manager->expects($this->once())->method('adminStartup');
+
+        $event = new Event('Controller.startup', $this->controller);
+
+        $manager->startup($event);
+    }
+
+    /**
+     * Test beforeFilter event
+     *
+     * @return void
+     */
+    public function testBeforeFilterEvent()
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => [
+                'prefix' => 'admin',
+                'plugin' => 'cakemanager',
+                'controller' => 'users',
+                'action' => 'index'
+        ]]);
+        $response = new Response();
+
+        $eventManager = $this->getMock('Cake\Event\EventManager', ['dispatch']);
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response, null, $eventManager]);
+
+        $eventManager->expects($this->at(0))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.beforeFilter')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $eventManager->expects($this->at(1))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.beforeFilter.admin')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $registry = new ComponentRegistry($this->controller);
+
+        $manager = $this->getMock('CakeManager\Controller\Component\ManagerComponent', ['adminBeforeFilter'], [$registry]);
+
+        $manager->expects($this->once())->method('adminBeforeFilter');
+
+        $event = new Event('Controller.beforeFilter', $this->controller);
+
+        $manager->beforeFilter($event);
+    }
+
+    /**
+     * Test beforeRender event
+     *
+     * @return void
+     */
+    public function testBeforeRenderEvent()
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => [
+                'prefix' => 'admin',
+                'plugin' => 'cakemanager',
+                'controller' => 'users',
+                'action' => 'index'
+        ]]);
+        $response = new Response();
+
+        $eventManager = $this->getMock('Cake\Event\EventManager', ['dispatch']);
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response, null, $eventManager]);
+
+        $eventManager->expects($this->at(0))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.beforeRender')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $eventManager->expects($this->at(1))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.beforeRender.admin')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $registry = new ComponentRegistry($this->controller);
+
+        $manager = $this->getMock('CakeManager\Controller\Component\ManagerComponent', ['adminBeforeRender'], [$registry]);
+
+        $manager->expects($this->once())->method('adminBeforeRender');
+
+        $event = new Event('Controller.beforeRender', $this->controller);
+
+        $manager->beforeRender($event);
+    }
+
+    /**
+     * Test shutdown event
+     *
+     * @return void
+     */
+    public function testShutdownEvent()
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => [
+                'prefix' => 'admin',
+                'plugin' => 'cakemanager',
+                'controller' => 'users',
+                'action' => 'index'
+        ]]);
+        $response = new Response();
+
+        $eventManager = $this->getMock('Cake\Event\EventManager', ['dispatch']);
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response, null, $eventManager]);
+
+        $eventManager->expects($this->at(0))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.shutdown')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $eventManager->expects($this->at(1))->method('dispatch')
+            ->with($this->logicalAnd($this->isInstanceOf('Cake\Event\Event'), $this->attributeEqualTo('_name', 'Component.Manager.shutdown.admin')))
+            ->will($this->returnValue($this->getMock('Cake\Event\Event', null, [], '', false)));
+
+        $registry = new ComponentRegistry($this->controller);
+
+        $manager = $this->getMock('CakeManager\Controller\Component\ManagerComponent', ['adminShutdown'], [$registry]);
+
+        $manager->expects($this->once())->method('adminShutdown');
+
+        $event = new Event('Controller.shutdown', $this->controller);
+
+        $manager->shutdown($event);
+    }
+
+    /**
+     * Test testPrefix method
+     *
+     * @return void
+     */
+    public function testPrefix()
+    {
+        $request = $this->setUpRequest([
+            'prefix' => null,
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertFalse($this->Manager->prefix('admin'));
+        $this->assertFalse($this->Manager->prefix('moderator'));
+        $this->assertFalse($this->Manager->prefix('user'));
+        $this->assertTrue($this->Manager->prefix(''));
+
+        $request = $this->setUpRequest([
+            'prefix' => 'admin',
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertFalse($this->Manager->prefix(''));
+        $this->assertFalse($this->Manager->prefix('moderator'));
+        $this->assertFalse($this->Manager->prefix('user'));
+        $this->assertTrue($this->Manager->prefix('admin'));
+    }
+
+    /**
+     * Test testIsPrefix method
+     *
+     * @return void
+     */
+    public function testIsPrefix()
+    {
+        $request = $this->setUpRequest([
+            'prefix' => null,
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertFalse($this->Manager->isPrefix());
+
+        $request = $this->setUpRequest([
+            'prefix' => 'admin',
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertTrue($this->Manager->isPrefix());
+
+        $request = $this->setUpRequest([
+            'prefix' => 'customPrefix',
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertTrue($this->Manager->isPrefix());
+    }
+
+    /**
+     * Test testGetPrefix method
+     *
+     * @return void
+     */
+    public function testGetPrefix()
+    {
+        $request = $this->setUpRequest([
+            'prefix' => 'admin',
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertEquals('admin', $this->Manager->getPrefix());
+
+        $request = $this->setUpRequest([
+            'prefix' => 'user',
+            'plugin' => 'cakemanager',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
+
+        $this->Manager->setController($request);
+
+        $this->assertEquals('user', $this->Manager->getPrefix());
+    }
+
+    /**
+     * Helper to return a component with a given url
+     *
+     * @param array $params
+     */
+    public function setUpRequest($params)
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => $params]);
+        $response = new Response();
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response]);
+
+        $registry = new ComponentRegistry($this->controller);
+        $manager = new ManagerComponent($registry);
+
+        $manager->setController($this->controller);
+
+        return $manager;
+    }
 }

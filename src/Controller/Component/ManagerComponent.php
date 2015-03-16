@@ -94,6 +94,19 @@ class ManagerComponent extends Component
     }
 
     /**
+     * setController
+     *
+     * Setter for the Controller.
+     *
+     * @param Controller $controller Controller.
+     * @return void
+     */
+    public function setController($controller)
+    {
+        $this->Controller = $controller;
+    }
+
+    /**
      * __loadHelpers
      *
      * Internal method to load all listed helpers.
@@ -104,6 +117,27 @@ class ManagerComponent extends Component
     {
         if ($this->config('adminMenus')) {
             $this->Controller->helpers['CakeManager.Menu'] = $this->config('adminMenus');
+        }
+    }
+
+    /**
+     * Startup Callback
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function startup($event)
+    {
+        // startup-event
+        $_event = new Event('Component.Manager.startup', $this, [
+        ]);
+        $this->Controller->eventManager()->dispatch($_event);
+
+        if ($this->isPrefix()) {
+            $this->_runCallback("startup", $event);
+
+            // startup-event with Prefix
+            $this->_runEvent("startup");
         }
     }
 
@@ -131,27 +165,6 @@ class ManagerComponent extends Component
         }
 
         $this->__loadHelpers();
-    }
-
-    /**
-     * Startup Callback
-     *
-     * @param \Cake\Event\Event $event Event.
-     * @return void
-     */
-    public function startup($event)
-    {
-        // startup-event
-        $_event = new Event('Component.Manager.startup', $this, [
-        ]);
-        $this->Controller->eventManager()->dispatch($_event);
-
-        if ($this->isPrefix()) {
-            $this->_runCallback("startup", $event);
-
-            // startup-event with Prefix
-            $this->_runEvent("startup");
-        }
     }
 
     /**
