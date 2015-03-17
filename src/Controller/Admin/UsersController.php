@@ -16,6 +16,7 @@ namespace CakeManager\Controller\Admin;
 
 use CakeManager\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * Users Controller
@@ -101,10 +102,15 @@ class UsersController extends AppController
      */
     public function add()
     {
-        $user = $this->Users->newEntity($this->request->data);
+        $user = $this->Users->newEntity();
+
+        $user->accessible('role_id', true); // the role_id field should be accessible
+        $user->accessible('active', true); // the active field should be accessible
+
         $roles = $this->Users->Roles->find('list');
 
         if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
                 $this->Flash->success('The user has been saved.');
                 return $this->redirect(['action' => 'index']);
@@ -112,7 +118,10 @@ class UsersController extends AppController
                 $this->Flash->error('The user could not be saved. Please, try again.');
             }
         }
-        $this->set(compact('user', 'roles'));
+        
+        $customFields = Hash::normalize(Configure::read('CM.UserFields'));
+        
+        $this->set(compact('user', 'roles', 'customFields'));
 
         $this->render(Configure::read('CM.AdminUserViews.add'));
     }
@@ -129,6 +138,9 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
+
+        $user->accessible('role_id', true); // the role_id field should be accessible
+        $user->accessible('active', true); // the active field should be accessible
 
         $roles = $this->Users->Roles->find('list');
 
@@ -186,13 +198,13 @@ class UsersController extends AppController
     {
         $user = $this->Users->get($id);
         $this->request->allowMethod(['post', 'delete']);
-        
+
         if ($this->Users->delete($user)) {
             $this->Flash->success('The user has been deleted.');
         } else {
             $this->Flash->error('The user could not be deleted. Please, try again.');
         }
-        
+
         return $this->redirect(['action' => 'index']);
     }
 }

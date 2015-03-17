@@ -65,6 +65,10 @@ Configure::write('CM.AdminRoleViews', [
     'edit'  => 'CakeManager./Admin/Roles/edit',
 ]);
 
+Configure::write('CM.UserFields', [
+    'age'
+]);
+
 /**
  * Attach the MailEventListener to the event manager
  */
