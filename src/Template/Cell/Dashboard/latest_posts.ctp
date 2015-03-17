@@ -19,3 +19,4 @@ use Cake\I18n\Time;
 Read more at <a href="http://cakemanager.org">cakemanager.org</a>.
 <br><br>
 <a href="https://twitter.com/CakeManager" target="_blank" class="twitter-follow-button" data-show-count="false">Follow @CakeManager</a>
+<hr>

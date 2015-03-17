@@ -109,4 +109,33 @@ class DashboardCell extends Cell
 
         $this->set('list', $links);
     }
+
+    /**
+     * Plugins method
+     *
+     * @return void
+     */
+    public function plugins()
+    {
+        $links = [
+            'Utils' => [
+                'url' => 'https://github.com/cakemanager/cakephp-utils',
+                'description' => 'Utilities for Cake 3.x.'
+            ],
+            'PostTypes [not stable yet]' => [
+                'url' => 'https://github.com/cakemanager/cakephp-posttypes',
+                'description' => 'Plugin to create dynamic CRUD for your admin-panel.'
+            ],
+            'Settings [not stable yet]' => [
+                'url' => 'https://github.com/cakemanager/cakephp-settings',
+                'description' => 'Plugin to save settings in your database and manage them.'
+            ],
+            'Who Is Online [not stable yet]' => [
+                'url' => 'https://github.com/cakemanager/cakephp-whosonline',
+                'description' => 'Plugin to follow your users on your app.'
+            ],
+        ];
+
+        $this->set('list', $links);
+    }
 }

@@ -13,6 +13,7 @@ $this->set('title', 'Dashboard');
 <div class="row">
     <div class="columns large-6">
         <?= $this->cell('CakeManager.Dashboard::gettingStarted') ?>
+        <?= $this->cell('CakeManager.Dashboard::plugins'); ?>
         <?= $this->cell('CakeManager.Dashboard::gettingHelp'); ?>
     </div>
     <div class="columns large-6">
