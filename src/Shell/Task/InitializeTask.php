@@ -56,7 +56,7 @@ class InitializeTask extends Shell
         if (!in_array('Administrators', $list)) {
             $data = [
                 'name' => 'Administrators',
-                'login_redirect' => '/admin/manager/users',
+                'login_redirect' => '/admin/manager/pages/dashboard',
             ];
 
             $new = $this->Roles->newEntity($data);

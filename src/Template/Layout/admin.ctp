@@ -54,11 +54,10 @@ $this->assign('title', $title);
                             ]) )
                     ?>
 
-
                 </small>
             </div>
             <div class="header-help">
-                <span><a target="_blank" href="http://cakemanager.readthedocs.org/en/develop/">CakeManager Documentation</a></span>
+                <span><a target="_blank" href="http://cakemanager.org/docs/1.0/">CakeManager Documentation</a></span>
                 <span><a target="_blank" href="https://github.com/bobmulder/cakephp-cakemanager">CakeManager GitHub</a></span>
                 <span><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></span>
                 <span><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></span>
