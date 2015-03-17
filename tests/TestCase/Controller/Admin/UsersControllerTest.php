@@ -1,17 +1,27 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Test\TestCase\Controller\Admin;
 
-use CakeManager\Controller\Admin\UsersController;
-use Cake\TestSuite\IntegrationTestCase;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestCase;
 
 /**
  * CakeManager\Controller\Admin\UsersController Test Case
  */
 class UsersControllerTest extends IntegrationTestCase
 {
-
     /**
      * Fixtures
      *
@@ -27,14 +37,15 @@ class UsersControllerTest extends IntegrationTestCase
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->Users = TableRegistry::get('CakeManager.Users');
     }
 
-    public function testAuthorization() {
-
+    public function testAuthorization()
+    {
         // index
         $this->get('/admin/manager/users/index');
         $this->assertRedirect('/users/login');
@@ -62,7 +73,7 @@ class UsersControllerTest extends IntegrationTestCase
         $this->get('/admin/manager/users/index');
         $this->assertResponseError();
 
-         // add
+        // add
         $this->get('/admin/manager/users/add');
         $this->assertResponseError();
 
@@ -78,6 +89,4 @@ class UsersControllerTest extends IntegrationTestCase
         $this->get('/admin/manager/users/delete');
         $this->assertResponseError();
     }
-
-
 }

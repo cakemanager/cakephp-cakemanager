@@ -1,22 +1,32 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Test\TestCase\Controller;
 
-use CakeManager\Controller\UsersController;
-use Cake\TestSuite\IntegrationTestCase;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestCase;
 
 /**
  * CakeManager\Controller\[Users]Controller Test Case
  */
 class UsersControllerTest extends IntegrationTestCase
 {
-
     /**
      * Fixtures that have to be loaded
      * @var type
      */
-    public $fixtures = ['plugin.cake_manager.users', 'plugin.cake_manager.roles'];
+    public $fixtures = ['plugin.cake_manager.roles', 'plugin.cake_manager.users'];
 
     /**
      * setUp method
@@ -36,7 +46,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLoginForm()
     {
-
         $this->get('/login');
 
         $this->assertResponseSuccess();
@@ -56,18 +65,17 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLoginActionPass()
     {
-
         // creating a new user
         $data = [
-            'role_id'  => 1,
-            'email'    => 'newuser@email.nl',
+            'role_id' => 1,
+            'email' => 'newuser@email.nl',
             'password' => 'test',
         ];
 
         $this->Users->save($this->Users->newEntity($data));
 
         $login = [
-            'email'    => 'newuser@email.nl',
+            'email' => 'newuser@email.nl',
             'password' => 'test',
         ];
 
@@ -83,7 +91,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLogoutActionFail()
     {
-
         $this->get('/users/logout');
 
         $this->assertRedirect('/users/login');
@@ -95,11 +102,10 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLogoutActionPass()
     {
-
         $this->session([
             'Auth' => [
                 'User' => [
-                    'id'    => 5,
+                    'id' => 5,
                     'email' => 'newuser@email.nl'
                 ]
             ]
@@ -119,7 +125,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateFailUserActive()
     {
-
         $user = $this->Users->get(1);
 
         $user->set('activation_key', $this->Users->generateActivationKey());
@@ -146,7 +151,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateFailLoggedin()
     {
-
         $user = $this->Users->get(1);
 
         $user->set('activation_key', $this->Users->generateActivationKey());
@@ -154,7 +158,7 @@ class UsersControllerTest extends IntegrationTestCase
         $user = $this->Users->save($user);
 
         $this->session(['Auth.User' => [
-                'id'      => 1,
+                'id' => 1,
                 'role_id' => 1,
         ]]);
 
@@ -172,7 +176,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateFailWrongKey()
     {
-
         $user = $this->Users->get(1);
 
         $user->set('activation_key', $this->Users->generateActivationKey());
@@ -201,7 +204,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateFailNoKey()
     {
-
         $user = $this->Users->get(1);
 
         $user->set('activation_key', $this->Users->generateActivationKey());
@@ -228,7 +230,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivatePass()
     {
-
         $user = $this->Users->get(1);
 
         $user->set('activation_key', $this->Users->generateActivationKey());
@@ -254,7 +255,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testForgotPasswordFailNonActive()
     {
-
         $user = $this->Users->get(1);
 
         $user->set('active', 0);
@@ -267,7 +267,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEmpty($user->get('activation_key'));
 
-        $this->post('/users/forgot_password', $data);
+        $this->post('/users/forgotPassword', $data);
 
         $this->assertResponseSuccess();
 
@@ -286,13 +286,12 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testForgotPasswordFailLoggedin()
     {
-
         $this->session(['Auth.User' => [
-                'id'      => 1,
+                'id' => 1,
                 'role_id' => 1,
         ]]);
 
-        $this->get('/users/forgot_password');
+        $this->get('/users/forgotPassword');
 
         $this->assertResponseSuccess();
 
@@ -313,7 +312,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertEmpty($user->get('activation_key'));
 
-        $this->post('/users/forgot_password', $data);
+        $this->post('/users/forgotPassword', $data);
 
         $this->assertResponseSuccess();
 
@@ -333,5 +332,4 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

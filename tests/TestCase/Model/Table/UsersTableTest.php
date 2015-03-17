@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Test\TestCase\Model\Table;
 
 use CakeManager\Model\Table\UsersTable;
@@ -11,7 +23,6 @@ use Cake\TestSuite\TestCase;
  */
 class UsersTableTest extends TestCase
 {
-
     /**
      * Fixtures
      *
@@ -53,7 +64,6 @@ class UsersTableTest extends TestCase
      */
     public function testGenerateActivationKey()
     {
-
         $data = $this->Users->generateActivationKey();
         $_data = $this->Users->generateActivationKey();
 
@@ -72,19 +82,18 @@ class UsersTableTest extends TestCase
      */
     public function testValidateActivationKey()
     {
-
-        $activation_key = $this->Users->generateActivationKey();
+        $activationKey = $this->Users->generateActivationKey();
 
         $email = 'info@cakemanager.com';
 
         $_user = [
-            'email'    => $email,
+            'email' => $email,
             'password' => 'cakemanager',
         ];
 
         $entity = $this->Users->newEntity($_user);
 
-        $entity->set('activation_key', $activation_key);
+        $entity->set('activation_key', $activationKey);
 
         $save = $this->Users->save($entity);
 
@@ -98,10 +107,10 @@ class UsersTableTest extends TestCase
         $this->assertFalse($this->Users->validateActivationKey($email, 'wrongActivationKey'));
 
         // test if email is wrong
-        $this->assertFalse($this->Users->validateActivationKey('wrong_email', $activation_key));
+        $this->assertFalse($this->Users->validateActivationKey('wrong_email', $activationKey));
 
         // test if its true
-        $this->assertTrue($this->Users->validateActivationKey($email, $activation_key));
+        $this->assertTrue($this->Users->validateActivationKey($email, $activationKey));
 
         $save->set('activation_key', null);
         $this->Users->save($save);
@@ -118,19 +127,18 @@ class UsersTableTest extends TestCase
      */
     public function testActivateUser()
     {
-
-        $activation_key = $this->Users->generateActivationKey();
+        $activationKey = $this->Users->generateActivationKey();
 
         $email = 'info@cakemanager.com';
 
         $_user = [
-            'email'    => $email,
+            'email' => $email,
             'password' => 'cakemanager',
         ];
 
         $entity = $this->Users->newEntity($_user);
 
-        $entity->set('activation_key', $activation_key);
+        $entity->set('activation_key', $activationKey);
 
         $save = $this->Users->save($entity);
 
@@ -144,10 +152,10 @@ class UsersTableTest extends TestCase
         $this->assertFalse($this->Users->activateUser($email, 'wrongActivationKey'));
 
         // test if email is wrong
-        $this->assertFalse($this->Users->activateUser('wrong_email', $activation_key));
+        $this->assertFalse($this->Users->activateUser('wrong_email', $activationKey));
 
         // test if its true
-        $this->assertTrue($this->Users->activateUser($email, $activation_key));
+        $this->assertTrue($this->Users->activateUser($email, $activationKey));
 
         $save->set('activation_key', null);
         $this->Users->save($save);
@@ -155,5 +163,4 @@ class UsersTableTest extends TestCase
         // test if key is null
         $this->assertFalse($this->Users->activateUser($email, null));
     }
-
 }

@@ -1,4 +1,17 @@
 <?php
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace CakeManager\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
@@ -9,23 +22,66 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class RolesFixture extends TestFixture
 {
-
     /**
      * Fields
      *
      * @var array
      */
     public $fields = [
-        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'name' => ['type' => 'string', 'length' => 50, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'login_redirect' => ['type' => 'string', 'length' => 256, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
-        'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => '0000-00-00 00:00:00', 'comment' => '', 'precision' => null],
-        'modified' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => '0000-00-00 00:00:00', 'comment' => '', 'precision' => null],
+        'id' => [
+            'type' => 'integer',
+            'length' => 11,
+            'unsigned' => false,
+            'null' => false,
+            'default' => null,
+            'comment' => '',
+            'autoIncrement' => true,
+            'precision' => null
+        ],
+        'name' => [
+            'type' => 'string',
+            'length' => 50,
+            'null' => false,
+            'default' => '0',
+            'comment' => '',
+            'precision' => null,
+            'fixed' => null
+        ],
+        'login_redirect' => [
+            'type' => 'string',
+            'length' => 256,
+            'null' => true,
+            'default' => null,
+            'comment' => '',
+            'precision' => null,
+            'fixed' => null
+        ],
+        'created' => [
+            'type' => 'datetime',
+            'length' => null,
+            'null' => false,
+            'default' => '0000-00-00 00:00:00',
+            'comment' => '',
+            'precision' => null
+        ],
+        'modified' => [
+            'type' => 'datetime',
+            'length' => null,
+            'null' => false,
+            'default' => '0000-00-00 00:00:00',
+            'comment' => '',
+            'precision' => null
+        ],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+            'primary' => [
+                'type' => 'primary',
+                'columns' => ['id'],
+                'length' => []
+            ],
         ],
         '_options' => [
-'engine' => 'InnoDB', 'collation' => 'latin1_swedish_ci'
+            'engine' => 'InnoDB',
+            'collation' => 'latin1_swedish_ci'
         ],
     ];
 
