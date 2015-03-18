@@ -50,14 +50,22 @@ class UserTask extends Shell
         $new->set('active', 1);
 
         if ($this->Users->save($new)) {
-            return $this->out('The user "' . $email . '" has been created.');
+            $this->out('The user "' . $email . '" has been created.');
+            return true;
         }
 
         $this->out('Someting went wrong. The user could not be saved. We will debug the validation errors...');
 
         if ($new->errors()) {
-            debug($new->errors());
+            $errors = $new->errors();
+            foreach ($errors as $key => $error) {
+                foreach($error as $message) {
+                    $this->out($key . ': ' . ($message));
+                }
+            }
         }
+
+        return false;
     }
 
     /**

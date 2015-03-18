@@ -34,7 +34,7 @@ class InitializeTask extends Shell
     public function main()
     {
         // initialize the roles
-        $this->_roles();
+        return $this->_roles();
     }
 
     /**
@@ -60,9 +60,12 @@ class InitializeTask extends Shell
             ];
 
             $new = $this->Roles->newEntity($data);
-            $this->Roles->save($new);
-
-            $this->out('Role "Administrators" created');
+            if ($this->Roles->save($new)) {
+                $this->out('Role "Administrators" created');
+            } else {
+                $this->out('Role "Administrators" could not be created');
+                return false;
+            }
         }
 
         // Creating moderators
@@ -73,9 +76,12 @@ class InitializeTask extends Shell
             ];
 
             $new = $this->Roles->newEntity($data);
-            $this->Roles->save($new);
-
-            $this->out('Role "Moderators" created');
+            if ($this->Roles->save($new)) {
+                $this->out('Role "Moderators" created');
+            } else {
+                $this->out('Role "Moderators" could not be created');
+                return false;
+            }
         }
 
         // Creating Users
@@ -86,9 +92,12 @@ class InitializeTask extends Shell
             ];
 
             $new = $this->Roles->newEntity($data);
-            $this->Roles->save($new);
-
-            $this->out('Role "Users" created');
+            if ($this->Roles->save($new)) {
+                $this->out('Role "Users" created');
+            } else {
+                $this->out('Role "Users" could not be created');
+                return false;
+            }
         }
 
         // Creating unregisterd
@@ -99,12 +108,16 @@ class InitializeTask extends Shell
             ];
 
             $new = $this->Roles->newEntity($data);
-            $this->Roles->save($new);
-
-            $this->out('Role "Unregistered" created');
+            if ($this->Roles->save($new)) {
+                $this->out('Role "Unregistered" created');
+            } else {
+                $this->out('Role "Unregistered" could not be created');
+                return false;
+            }
         }
 
-        $this->out("Done");
+        $this->out("Done.");
+        return true;
     }
 
     /**
