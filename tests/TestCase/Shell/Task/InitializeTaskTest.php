@@ -65,17 +65,9 @@ class InitializeTaskTest extends TestCase
     public function testInitializeTaskPass()
     {
         $this->Roles = TableRegistry::get('CakeManager.Roles');
-
-        debug($this->Roles->find('all')->Count());
-
-//        $this->Task->expects($this->at(0))->method('out')
-//            ->with($this->logicalAnd($this->attributeEqualTo('No roles found.')))
-//            ->will($this->returnValue(true));
         
         $action = $this->Task->main();
 
         $this->assertTrue($action);
-        
-        debug($this->Roles->find('all')->Count());
     }
 }

@@ -40,8 +40,7 @@ class UsersTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Users') ? [] : ['className' => 'CakeManager\Model\Table\UsersTable'];
-        $this->Users = TableRegistry::get('Users', $config);
+        $this->Users = TableRegistry::get('CakeManager.Users');
     }
 
     /**
