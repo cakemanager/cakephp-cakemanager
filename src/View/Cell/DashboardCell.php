@@ -66,7 +66,7 @@ class DashboardCell extends Cell
     public function gettingStarted()
     {
         $links = [
-            'CakeManager 3.0 Docs' => [
+            'CakeManager Docs' => [
                 'url' => 'http://cakemanager.org/docs/1.0/',
                 'description' => 'Documentation about the CakeManager Plugin.'
             ],
@@ -99,7 +99,7 @@ class DashboardCell extends Cell
                 'url' => 'https://github.com/cakemanager/cakephp-cakemanager/issues',
                 'description' => 'When there\'s something wrong, please open a new issue!',
             ],
-            'CakeManager 3.0 Docs' => [
+            'CakeManager Docs' => [
                 'url' => 'http://cakemanager.org/docs/1.0/',
                 'description' => 'Documentation about the CakeManager Plugin.',
             ],

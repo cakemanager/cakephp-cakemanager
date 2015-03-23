@@ -3,6 +3,7 @@
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 
+$this->set('title', 'Plugins');
 ?>
 
 <h3>Plugins</h3>
@@ -39,4 +40,12 @@ use Cake\Filesystem\File;
 
 <h4>How to load and unload</h4>
 
-<p>Via the shell you are able to load and unload plugins.</p>
+<p>Via the shell you are able to load and unload plugins.
+    <br><br>
+    Use <code>bin/cake plugin load PLUGINNAME</code> to load a plugin. 
+    <br><br>
+    To load <code>bootstrap.php</code> or <code>routes.php</code> 
+    use <code>bin/cake plugin load -b -r PLUGINNAME</code>
+
+</p>
+
