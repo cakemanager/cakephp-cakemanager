@@ -38,6 +38,14 @@ class UsersController extends AppController
         ]
     ];
 
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->loadComponent('Utils.Search', []);
+        $this->helpers[] = 'Utils.Search';
+    }
+
     /**
      * beforeFilter Callback
      *
@@ -75,7 +83,15 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->set('users', $this->paginate($this->Users->find('all', ['contain' => ['Roles']])));
+        $this->Search->addFilter('email');
+        
+        $this->Search->addFilter('role_id', [
+            'options' => $this->Users->Roles->find('list')->toArray(),
+        ]);
+
+        $search = $this->Search->search($this->Users->find('all', ['contain' => ['Roles']]));
+
+        $this->set('users', $this->paginate($search));
 
         $this->render(Configure::read('CM.AdminUserViews.index'));
     }
@@ -89,7 +105,7 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Users->get($id);
+        $user = $this->Users->get($id);       
         $this->set('user', $user);
 
         $this->render(Configure::read('CM.AdminUserViews.view'));
@@ -118,9 +134,9 @@ class UsersController extends AppController
                 $this->Flash->error('The user could not be saved. Please, try again.');
             }
         }
-        
+
         $customFields = Hash::normalize(Configure::read('CM.UserFields'));
-        
+
         $this->set(compact('user', 'roles', 'customFields'));
 
         $this->render(Configure::read('CM.AdminUserViews.add'));
@@ -153,7 +169,10 @@ class UsersController extends AppController
                 $this->Flash->error('The user could not be saved. Please, try again.');
             }
         }
-        $this->set(compact('user', 'roles'));
+
+        $customFields = Hash::normalize(Configure::read('CM.UserFields'));
+
+        $this->set(compact('user', 'roles', 'customFields'));
 
         $this->render(Configure::read('CM.AdminUserViews.edit'));
     }

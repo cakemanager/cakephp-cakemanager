@@ -26,7 +26,14 @@ Configure::write('CM.Roles', [
  */
 Configure::write('CM.UserModel', 'CakeManager.Users');
 
+/**
+ * CakeManager Version
+ */
+Configure::write('CM.Version', "1.0.0-RC2");
 
+/**
+ * Mail Settings
+ */
 Configure::write('CM.Mail', [
     'From'       => ['noreply@cakemanager.org' => 'CakeManager'],
     'afterLogin' => true,
@@ -66,7 +73,6 @@ Configure::write('CM.AdminRoleViews', [
 ]);
 
 Configure::write('CM.UserFields', [
-    'age'
 ]);
 
 /**
