@@ -56,12 +56,7 @@ $this->assign('title', $title);
 
                 </small>
             </div>
-            <div class="header-help">
-                <span><a target="_blank" href="http://cakemanager.org/docs/1.0/">CakeManager Documentation</a></span>
-                <span><a target="_blank" href="https://github.com/bobmulder/cakephp-cakemanager">CakeManager GitHub</a></span>
-                <span><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></span>
-                <span><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></span>
-            </div>
+            <?= $this->Menu->menu('header', 'CakeManager.HeaderMenu') ?>
         </header>
         <div id="container">
 
@@ -74,7 +69,7 @@ $this->assign('title', $title);
                     <div class="actions columns large-2 medium-3">
                         <h3><?= __('Actions') ?></h3>
                         <ul class="side-nav">
-                            <?= $this->Menu->menu('main') ?>
+                            <?= $this->Menu->menu('main', 'CakeManager.MainMenu') ?>
                         </ul>
                     </div>
 

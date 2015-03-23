@@ -16,6 +16,7 @@ namespace CakeManager\View\Helper;
 
 use Utils\View\Helper\MenuBuilderInterface;
 use Cake\View\Helper;
+use Cake\Routing\Router;
 
 /**
  * Menu helper
@@ -24,7 +25,7 @@ use Cake\View\Helper;
  * Thats the `main` area.
  *
  */
-class MainMenuHelper extends Helper implements MenuBuilderInterface
+class HeaderMenuHelper extends Helper implements MenuBuilderInterface
 {
     /**
      * Used helpers
@@ -53,7 +54,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      */
     public function afterMenu($menu = array(), $options = array())
     {
-        return '';
+        return '</div>';
     }
 
     /**
@@ -81,7 +82,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      */
     public function beforeMenu($menu = array(), $options = array())
     {
-        return '';
+        return '<div class="header-help">';
     }
 
     /**
@@ -108,9 +109,9 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @return string
      */
     public function item($item = array(), $options = array())
-    {
-        $html = '<li ' . ($item['active'] ? 'class="active"' : '') . '>' .
-            $this->Html->link(__($item['title']), $item['url']) . '</li>';
+    {       
+        $html = '<span><a target="_blank" href="'.Router::url($item['url']).'">'.$item['title'].'</a></span>';
+        
         return $html;
     }
 

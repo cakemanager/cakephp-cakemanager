@@ -14,7 +14,7 @@
  */
 namespace CakeManager\View\Helper;
 
-use CakeManager\View\Helper\MenuBuilderInterface;
+use Utils\View\Helper\MenuBuilderInterface;
 use Cake\View\Helper;
 
 /**

@@ -56,10 +56,6 @@ class ManagerComponent extends Component
         ],
         'adminTheme' => 'CakeManager',
         'adminLayout' => 'CakeManager.admin',
-        'adminMenus' => [
-            'main' => 'CakeManager.MainMenu',
-            'navbar' => 'CakeManager.NavbarMenu',
-        ],
     ];
 
     /**
@@ -115,9 +111,8 @@ class ManagerComponent extends Component
      */
     private function __loadHelpers()
     {
-        if ($this->config('adminMenus')) {
-            $this->Controller->helpers['CakeManager.Menu'] = $this->config('adminMenus');
-        }
+        // addig the MenuHelper from the Utils Plugin
+        $this->Controller->helpers['Utils.Menu'] = [];
     }
 
     /**
@@ -222,7 +217,8 @@ class ManagerComponent extends Component
      */
     public function adminBeforeFilter($event)
     {
-        $this->Controller->Menu->add('Dashboard', [
+        $controller = $this->Controller;
+        $controller->Menu->add('Dashboard', [
             'url' => [
                 'plugin' => 'CakeManager',
                 'prefix' => 'admin',
@@ -232,7 +228,7 @@ class ManagerComponent extends Component
             'weight' => -1,
         ]);
 
-        $this->Controller->Menu->add('Users', [
+        $controller->Menu->add('Users', [
             'url' => [
                 'plugin' => 'CakeManager',
                 'prefix' => 'admin',
@@ -242,7 +238,7 @@ class ManagerComponent extends Component
             'weight' => 0,
         ]);
 
-        $this->Controller->Menu->add('Roles', [
+        $controller->Menu->add('Roles', [
             'url' => [
                 'plugin' => 'CakeManager',
                 'prefix' => 'admin',
@@ -252,7 +248,7 @@ class ManagerComponent extends Component
             'weight' => 1,
         ]);
 
-        $this->Controller->Menu->add('Plugins', [
+        $controller->Menu->add('Plugins', [
             'url' => [
                 'plugin' => 'CakeManager',
                 'prefix' => 'admin',
@@ -261,6 +257,26 @@ class ManagerComponent extends Component
             ],
             'weight' => 1,
         ]);
+        
+        $controller->Menu->area('header');
+        
+        $controller->Menu->add('CakeManager Documentation', [
+            'url' => 'http://cakemanager.org/docs/1.0/',
+        ]);
+        
+        $controller->Menu->add('CakeManager GitHub', [
+            'url' => 'https://github.com/bobmulder/cakephp-cakemanager',
+        ]);
+        
+        $controller->Menu->add('Documentation', [
+            'url' => 'http://book.cakephp.org/3.0/',
+        ]);
+        
+        $controller->Menu->add('API', [
+            'url' => 'http://api.cakephp.org/3.0/',
+        ]);
+        
+        $controller->Menu->area('main');
 
         $this->Controller->theme = $this->config('adminTheme');
         $this->Controller->layout = $this->config('adminLayout');
