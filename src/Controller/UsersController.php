@@ -91,7 +91,6 @@ class UsersController extends AppController
             $this->eventManager()->dispatch($_event);
 
             $this->Flash->error(__('Your username or password is incorrect.'));
-            return $this->redirect($this->referer());
         }
 
         $this->render(Configure::read('CM.UserViews.login'));
@@ -143,7 +142,7 @@ class UsersController extends AppController
 
             // Always return a success-message. Else hackers will be able to see if an e-mail is registered or not
             $this->Flash->success(__('We have sent you a mail. Check your e-mailaddress to activate your account.'));
-            return $this->redirect($this->referer());
+            return $this->redirect('/login');
         }
 
         $this->render(Configure::read('CM.UserViews.forgotPassword'));

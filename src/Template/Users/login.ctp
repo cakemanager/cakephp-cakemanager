@@ -4,7 +4,7 @@
     <fieldset>
         <legend><?= __('Login') ?></legend>
         <?= $this->Form->input('email') ?>
-        <?= $this->Form->input('password') ?>
+        <?= $this->Form->input('password', ['value' => '']) ?>
     </fieldset>
     <?= $this->Form->button(__('Login')); ?>
     <?= $this->Form->end() ?>
