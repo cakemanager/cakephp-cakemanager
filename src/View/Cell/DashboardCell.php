@@ -124,6 +124,10 @@ class DashboardCell extends Cell
                 'url' => 'https://github.com/cakemanager/cakephp-utils',
                 'description' => 'Utilities for Cake 3.x.'
             ],
+            'Who Is Online' => [
+                'url' => 'https://github.com/cakemanager/cakephp-whosonline',
+                'description' => 'Plugin to follow your users on your app.'
+            ],
             'PostTypes [not stable yet]' => [
                 'url' => 'https://github.com/cakemanager/cakephp-posttypes',
                 'description' => 'Plugin to create dynamic CRUD for your admin-panel.'
@@ -131,10 +135,6 @@ class DashboardCell extends Cell
             'Settings [not stable yet]' => [
                 'url' => 'https://github.com/cakemanager/cakephp-settings',
                 'description' => 'Plugin to save settings in your database and manage them.'
-            ],
-            'Who Is Online [not stable yet]' => [
-                'url' => 'https://github.com/cakemanager/cakephp-whosonline',
-                'description' => 'Plugin to follow your users on your app.'
             ],
         ];
 
