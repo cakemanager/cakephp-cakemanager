@@ -27,3 +27,8 @@ phpunit tests/TestCase/AllBehaviorsSuite.php
 phpunit tests/TestCase/AllControllersSuite.php
 
 phpunit tests/TestCase/AllModelsSuite.php
+
+
+# APIGEN
+
+apigen generate --source src --destination api --template-theme bootstrap
