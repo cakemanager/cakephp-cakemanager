@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "cakephp/cakephp": "3.0.*-dev",
-        "cakemanager/cakephp-utils": "1.0.*@dev"
+        "cakephp/cakephp": "~3.0",
+        "cakemanager/cakephp-utils": "1.0.x-dev"
     },
     "extra": {
         "installer-name": "CakeManager"
