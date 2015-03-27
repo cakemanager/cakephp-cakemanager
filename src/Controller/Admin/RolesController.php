@@ -92,8 +92,9 @@ class RolesController extends AppController
      */
     public function add()
     {
-        $role = $this->Roles->newEntity($this->request->data);
+        $role = $this->Roles->newEntity();
         if ($this->request->is('post')) {
+            $role = $this->Roles->patchEntity($role, $this->request->data);
             if ($this->Roles->save($role)) {
                 $this->Flash->success('The role has been saved.');
                 return $this->redirect(['action' => 'index']);
