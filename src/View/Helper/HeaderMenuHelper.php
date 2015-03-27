@@ -14,9 +14,9 @@
  */
 namespace CakeManager\View\Helper;
 
-use Utils\View\Helper\MenuBuilderInterface;
-use Cake\View\Helper;
 use Cake\Routing\Router;
+use Cake\View\Helper;
+use Utils\View\Helper\MenuBuilderInterface;
 
 /**
  * Menu helper
@@ -109,9 +109,9 @@ class HeaderMenuHelper extends Helper implements MenuBuilderInterface
      * @return string
      */
     public function item($item = array(), $options = array())
-    {       
-        $html = '<span><a target="_blank" href="'.Router::url($item['url']).'">'.$item['title'].'</a></span>';
-        
+    {
+        $html = '<span><a target="_blank" href="' . Router::url($item['url']) . '">' . $item['title'] . '</a></span>';
+
         return $html;
     }
 

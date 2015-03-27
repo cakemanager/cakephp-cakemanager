@@ -47,8 +47,7 @@ class DashboardCell extends Cell
      */
     public function latestPosts()
     {
-
-        $rss = @file_get_contents('http://cakemanager.org/rss', false);
+        $rss = file_get_contents('http://cakemanager.org/rss', false);
 
         if ($rss) {
             $xml = Xml::toArray(Xml::build($rss));

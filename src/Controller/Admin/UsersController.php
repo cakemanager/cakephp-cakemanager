@@ -38,6 +38,11 @@ class UsersController extends AppController
         ]
     ];
 
+    /**
+     * initialize
+     *
+     * @return void
+     */
     public function initialize()
     {
         parent::initialize();
@@ -105,7 +110,7 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Users->get($id);       
+        $user = $this->Users->get($id);
         $this->set('user', $user);
 
         $this->render(Configure::read('CM.AdminUserViews.view'));

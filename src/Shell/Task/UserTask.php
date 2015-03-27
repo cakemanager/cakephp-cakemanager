@@ -59,7 +59,7 @@ class UserTask extends Shell
         if ($new->errors()) {
             $errors = $new->errors();
             foreach ($errors as $key => $error) {
-                foreach($error as $message) {
+                foreach ($error as $message) {
                     $this->out($key . ': ' . ($message));
                 }
             }
