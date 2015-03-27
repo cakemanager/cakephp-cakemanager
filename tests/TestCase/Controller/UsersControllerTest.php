@@ -52,7 +52,7 @@ class UsersControllerTest extends IntegrationTestCase
         $this->assertNoRedirect();
 
         $this->assertResponseContains('<input type="email" name="email" id="email">');
-        $this->assertResponseContains('<input type="password" name="password" id="password">');
+        $this->assertResponseContains('<input type="password" name="password" id="password" value="">');
 
         $this->assertSession(null, 'Auth.User.id');
     }
@@ -271,7 +271,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseSuccess();
 
-        $this->assertRedirect('/');
+        $this->assertRedirect('/login');
 
         $user = $this->Users->get(1);
 
@@ -316,20 +316,10 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseSuccess();
 
-        $this->assertRedirect('/');
+        $this->assertRedirect('/login');
 
         $user = $this->Users->get(1);
 
         $this->assertNotEmpty($user->get('activation_key'));
-    }
-
-    public function testResetPasswordFail()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    public function testResetPasswordPass()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
     }
 }

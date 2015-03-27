@@ -123,5 +123,4 @@ class UserTaskTest extends TestCase
 
         $this->assertEquals(4, $this->Users->find('all')->Count());
     }
-    
 }
