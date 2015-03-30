@@ -1,3 +1,10 @@
+[![Build Status](https://travis-ci.org/cakemanager/cakephp-cakemanager.svg?branch=develop)](https://travis-ci.org/cakemanager/cakephp-cakemanager)
+[![Coverage Status](https://coveralls.io/repos/cakemanager/cakephp-cakemanager/badge.svg)](https://coveralls.io/r/cakemanager/cakephp-cakemanager)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Latest Stable Version](https://poser.pugx.org/cakemanager/cakephp-cakemanager/v/stable.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager) 
+[![Total Downloads](https://poser.pugx.org/cakemanager/cakephp-cakemanager/downloads.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager)
+[![License](https://poser.pugx.org/cakemanager/cakephp-cakemanager/license.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager)
+
 CakeManager Plugin for Cake 3.x
 ===================
 
