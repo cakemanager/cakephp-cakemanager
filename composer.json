@@ -11,7 +11,7 @@
     ],
     "require": {
         "cakephp/cakephp": "~3.0",
-        "cakemanager/cakephp-utils": "1.0.x-dev"
+        "cakemanager/cakephp-utils": "1.0.*@dev"
     },
     "require-dev": {
         "phpunit/phpunit": " 4.6.*@dev"
