@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/cakemanager/cakephp-cakemanager.svg?branch=develop)](https://travis-ci.org/cakemanager/cakephp-cakemanager)
-[![Coverage Status](https://coveralls.io/repos/cakemanager/cakephp-cakemanager/badge.svg)](https://coveralls.io/r/cakemanager/cakephp-cakemanager)
+[![Coverage Status](https://coveralls.io/repos/cakemanager/cakephp-cakemanager/badge.svg?branch=develop)](https://coveralls.io/r/cakemanager/cakephp-cakemanager?branch=develop)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Latest Stable Version](https://poser.pugx.org/cakemanager/cakephp-cakemanager/v/stable.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager) 
 [![Total Downloads](https://poser.pugx.org/cakemanager/cakephp-cakemanager/downloads.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager)
