@@ -29,7 +29,7 @@ class InitializeTask extends Shell
     /**
      * main() method.
      *
-     * @return void
+     * @return bool
      */
     public function main()
     {
@@ -40,7 +40,7 @@ class InitializeTask extends Shell
     /**
      * roles() method.
      *
-     * @return void
+     * @return bool
      */
     protected function _roles()
     {

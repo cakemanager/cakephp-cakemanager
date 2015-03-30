@@ -30,13 +30,6 @@ class RolesFixture extends TestFixture
     public $fields = [
         'id' => [
             'type' => 'integer',
-            'length' => 11,
-            'unsigned' => false,
-            'null' => false,
-            'default' => null,
-            'comment' => '',
-            'autoIncrement' => true,
-            'precision' => null
         ],
         'name' => [
             'type' => 'string',
