@@ -135,6 +135,39 @@ class ManagerComponentTest extends TestCase
     }
 
     /**
+     * Test adminBeforeFilter event
+     *
+     * @return void
+     */
+    public function testAdminBeforeFilterEvent()
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => [
+                'prefix' => 'admin',
+                'plugin' => 'cakemanager',
+                'controller' => 'users',
+                'action' => 'index'
+        ]]);
+        $response = new Response();
+
+        $eventManager = $this->getMock('Cake\Event\EventManager', ['dispatch']);
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response, null, $eventManager]);
+
+        $event = new Event('Controller.adminBeforeFilter', $this->controller);
+
+        $this->Manager->Controller->Menu->clear();
+        
+        $expected = ['main' => []];
+
+        $this->assertEquals($expected, $this->Manager->Controller->Menu->getMenu());
+
+        $this->Manager->adminBeforeFilter($event);
+
+        $this->assertNotEquals($expected, $this->Manager->Controller->Menu->getMenu());
+    }
+
+    /**
      * Test beforeRender event
      *
      * @return void
@@ -171,6 +204,35 @@ class ManagerComponentTest extends TestCase
         $event = new Event('Controller.beforeRender', $this->controller);
 
         $manager->beforeRender($event);
+    }
+
+    /**
+     * Test adminBeforeRender event
+     *
+     * @return void
+     */
+    public function testAdminBeforeRenderEvent()
+    {
+        // Setup our component and fake test controller
+        $request = new Request(['params' => [
+                'prefix' => 'admin',
+                'plugin' => 'cakemanager',
+                'controller' => 'users',
+                'action' => 'index'
+        ]]);
+        $response = new Response();
+
+        $eventManager = $this->getMock('Cake\Event\EventManager', ['dispatch']);
+
+        $this->controller = $this->getMock('Cake\Controller\Controller', ['redirect'], [$request, $response, null, $eventManager]);
+
+        $event = new Event('Controller.adminBeforeRender', $this->controller);
+
+        $this->assertEmpty($this->Manager->Controller->viewVars);
+
+        $this->Manager->adminBeforeRender($event);
+
+        $this->assertEquals('Mock_Controlle', $this->Manager->Controller->viewVars['title']);
     }
 
     /**
