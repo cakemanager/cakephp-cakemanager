@@ -14,8 +14,8 @@
  */
 namespace CakeManager\Test\TestCase\Controller\Admin;
 
-use Cake\TestSuite\IntegrationTestCase;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestCase;
 
 /**
  * CakeManager\Controller\Admin\RolesController Test Case
