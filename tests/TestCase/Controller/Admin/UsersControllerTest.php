@@ -14,9 +14,9 @@
  */
 namespace CakeManager\Test\TestCase\Controller\Admin;
 
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
-use Cake\Core\Configure;
 
 /**
  * CakeManager\Controller\Admin\UsersController Test Case
@@ -352,7 +352,6 @@ class UsersControllerTest extends IntegrationTestCase
         $user = $this->Users->get(5);
         
         $this->assertEquals($originalPassword, $user->get('password'));
-        
     }
 
     /**
