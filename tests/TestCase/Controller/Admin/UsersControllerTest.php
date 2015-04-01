@@ -77,6 +77,10 @@ class UsersControllerTest extends IntegrationTestCase
         $this->get('/admin/manager/users/edit');
         $this->assertRedirect('/users/login');
 
+        // new password
+        $this->get('/admin/manager/users/newPassword');
+        $this->assertRedirect('/users/login');
+
         // delete
         $this->get('/admin/manager/users/delete');
         $this->assertRedirect('/users/login');
@@ -98,6 +102,10 @@ class UsersControllerTest extends IntegrationTestCase
 
         // edit
         $this->get('/admin/manager/users/edit');
+        $this->assertResponseError();
+
+        // new password
+        $this->get('/admin/manager/users/newPassword');
         $this->assertResponseError();
 
         // delete
@@ -126,7 +134,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseOk();
 
-        $this->assertTemplate('Admin\Users\index.ctp');
+        $this->assertTemplate('Admin' . DS . 'Users' . DS . 'index.ctp');
 
         $this->assertNotEmpty($this->viewVariable('users'));
         $this->assertNotEmpty($this->viewVariable('searchFilters'));
@@ -153,7 +161,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseOk();
 
-        $this->assertTemplate('Admin\Users\view.ctp');
+        $this->assertTemplate('Admin' . DS . 'Users' . DS . 'view.ctp');
 
         $this->assertNotEmpty($this->viewVariable('user'));
     }
@@ -181,7 +189,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseOk();
 
-        $this->assertTemplate('Admin\Users\add.ctp');
+        $this->assertTemplate('Admin' . DS . 'Users' . DS . 'add.ctp');
 
         $this->assertNotEmpty($this->viewVariable('user'));
         $this->assertNotEmpty($this->viewVariable('roles'));
@@ -242,7 +250,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseOk();
 
-        $this->assertTemplate('Admin\Users\edit.ctp');
+        $this->assertTemplate('Admin' . DS . 'Users' . DS . 'edit.ctp');
 
         $this->assertNotEmpty($this->viewVariable('user'));
         $this->assertNotEmpty($this->viewVariable('roles'));
@@ -306,7 +314,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseOk();
 
-        $this->assertTemplate('Admin\Users\new_password.ctp');
+        $this->assertTemplate('Admin' . DS . 'Users' . DS . 'new_password.ctp');
 
         $this->assertNotEmpty($this->viewVariable('user'));
 
@@ -340,17 +348,17 @@ class UsersControllerTest extends IntegrationTestCase
         $originalPassword = $user->get('password');
 
         $data = [
-        'new_password' => 'custom1',
-        'confirm_password' => 'custom2'
+            'new_password' => 'custom1',
+            'confirm_password' => 'custom2'
         ];
 
         $this->post('/admin/manager/users/newPassword/5', $data);
-        
+
         $this->assertResponseSuccess();
         $this->assertNoRedirect();
-        
+
         $user = $this->Users->get(5);
-        
+
         $this->assertEquals($originalPassword, $user->get('password'));
     }
 
@@ -380,10 +388,10 @@ class UsersControllerTest extends IntegrationTestCase
         ];
 
         $this->post('/admin/manager/users/newPassword/5', $data);
-        
+
         $this->assertResponseSuccess();
         $this->assertRedirect();
-        
+
         $user = $this->Users->get(5);
         $this->assertNotEquals($originalPassword, $user->get('password'));
     }
@@ -404,14 +412,14 @@ class UsersControllerTest extends IntegrationTestCase
                 ]
             ]
         ]);
-        
+
         $this->assertEquals(5, $this->Users->find('all')->count());
-        
+
         $this->delete('/admin/manager/users/delete/5');
-        
+
         $this->assertResponseSuccess();
         $this->assertRedirect('/admin/manager/users');
-        
+
         $this->assertEquals(4, $this->Users->find('all')->count());
     }
 }
