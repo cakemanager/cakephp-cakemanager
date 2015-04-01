@@ -14,7 +14,7 @@
  */
 namespace CakeManager\Test\TestCase\View\Helper;
 
-use CakeManager\View\Helper\MainMenuHelper;
+use CakeManager\View\Helper\HeaderMenuHelper;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -36,7 +36,7 @@ class HeaderMenuHelperTest extends TestCase
 
         $this->View->set('menu', $this->_setMenu());
 
-        $this->MainMenuHelper = new MainMenuHelper($this->View);
+        $this->HeaderMenuHelper = new HeaderMenuHelper($this->View);
         $this->MenuHelper = new \Utils\View\Helper\MenuHelper($this->View);
     }
 
@@ -47,7 +47,7 @@ class HeaderMenuHelperTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->MainMenuHelper);
+        unset($this->HeaderMenuHelper);
 
         parent::tearDown();
     }
@@ -60,7 +60,7 @@ class HeaderMenuHelperTest extends TestCase
     public function testBuild()
     {
         $menu = $this->MenuHelper->menu('header', 'CakeManager.HeaderMenu');
-        
+
         $this->assertContains('<div class="header-help">', $menu);
         $this->assertContains('<span><a target="_blank" href="http://cakemanager.org/docs/1.0/">CakeManager Documentation</a></span>', $menu);
         $this->assertContains('<span><a target="_blank" href="https://github.com/bobmulder/cakephp-cakemanager">CakeManager GitHub</a></span>', $menu);
@@ -69,6 +69,78 @@ class HeaderMenuHelperTest extends TestCase
         $this->assertContains('</div>', $menu);
     }
 
+    /**
+     * Test afterMenu method
+     *
+     * @return void
+     */
+    public function testAfterMenu()
+    {
+        $this->assertEquals('</div>', $this->HeaderMenuHelper->afterMenu());
+    }
+
+    /**
+     * Test afterSubItem method
+     *
+     * @return void
+     */
+    public function testAfterSubItem()
+    {
+        $this->assertEquals('', $this->HeaderMenuHelper->afterSubItem());
+    }
+
+    /**
+     * Test beforeMenu method
+     *
+     * @return void
+     */
+    public function testBeforeMenu()
+    {
+        $this->assertEquals('<div class="header-help">', $this->HeaderMenuHelper->beforeMenu());
+    }
+
+    /**
+     * Test beforeSubItem method
+     *
+     * @return void
+     */
+    public function testBeforeSubItem()
+    {
+        $this->assertEquals('', $this->HeaderMenuHelper->beforeSubItem());
+    }
+
+    /**
+     * Test item method
+     *
+     * @return void
+     */
+    public function testItem()
+    {
+        $data = [
+            'url' => 'http://cakemanager.org',
+            'title' => 'CakeManager'
+        ];
+
+        $expected = '<span><a target="_blank" href="http://cakemanager.org">CakeManager</a></span>';
+
+        $this->assertEquals($expected, $this->HeaderMenuHelper->item($data));
+    }
+
+    /**
+     * Test subItem method
+     *
+     * @return void
+     */
+    public function testSubItem()
+    {
+        $this->assertEquals('', $this->HeaderMenuHelper->subItem());
+    }
+
+    /**
+     * _setMenu
+     *
+     * @eturn array
+     */
     protected function _setMenu()
     {
         return [

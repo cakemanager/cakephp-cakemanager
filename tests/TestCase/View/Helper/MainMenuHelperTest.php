@@ -60,13 +60,96 @@ class MainMenuHelperTest extends TestCase
     public function testBuild()
     {
         $menu = $this->MenuHelper->menu('main', 'CakeManager.MainMenu');
-        
+
         $this->assertContains('<li class="active"><a href="/admin/manager/pages/dashboard">Dashboard</a></li>', $menu);
         $this->assertContains('<li ><a href="/admin/manager/users">Users</a></li>', $menu);
         $this->assertContains('<li ><a href="/admin/manager/roles">Roles</a></li>', $menu);
         $this->assertContains('<li ><a href="/admin/manager/pages/plugins">Plugins</a></li>', $menu);
     }
 
+    /**
+     * Test afterMenu method
+     *
+     * @return void
+     */
+    public function testAfterMenu()
+    {
+        $this->assertEquals('', $this->MainMenuHelper->afterMenu());
+    }
+
+    /**
+     * Test afterSubItem method
+     *
+     * @return void
+     */
+    public function testAfterSubItem()
+    {
+        $this->assertEquals('', $this->MainMenuHelper->afterSubItem());
+    }
+
+    /**
+     * Test beforeMenu method
+     *
+     * @return void
+     */
+    public function testBeforeMenu()
+    {
+        $this->assertEquals('', $this->MainMenuHelper->beforeMenu());
+    }
+
+    /**
+     * Test beforeSubItem method
+     *
+     * @return void
+     */
+    public function testBeforeSubItem()
+    {
+        $this->assertEquals('', $this->MainMenuHelper->beforeSubItem());
+    }
+
+    /**
+     * Test item method
+     *
+     * @return void
+     */
+    public function testItem()
+    {
+        $data = [
+            'url' => 'http://cakemanager.org',
+            'title' => 'CakeManager',
+            'active' => true
+        ];
+
+        $expected = '<li class="active"><a href="http://cakemanager.org">CakeManager</a></li>';
+
+        $this->assertEquals($expected, $this->MainMenuHelper->item($data));
+
+        $data = [
+            'url' => 'http://cakemanager.org',
+            'title' => 'CakeManager',
+            'active' => false
+        ];
+
+        $expected = '<li ><a href="http://cakemanager.org">CakeManager</a></li>';
+
+        $this->assertEquals($expected, $this->MainMenuHelper->item($data));
+    }
+
+    /**
+     * Test subItem method
+     *
+     * @return void
+     */
+    public function testSubItem()
+    {
+        $this->assertEquals('', $this->MainMenuHelper->subItem());
+    }
+
+    /**
+     * _setMenu
+     *
+     * @eturn array
+     */
     protected function _setMenu()
     {
         return [
