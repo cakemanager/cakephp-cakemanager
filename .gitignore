@@ -8,3 +8,4 @@ app/[Cc]onfig/database.php
 
 /vendor/
 api/
+composer.lock

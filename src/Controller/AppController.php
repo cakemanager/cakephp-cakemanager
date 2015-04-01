@@ -22,5 +22,15 @@ use App\Controller\AppController as BaseController;
  */
 class AppController extends BaseController
 {
-    
+
+    /**
+     * beforeFilter Callback
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        parent::beforeFilter($event);
+    }
 }
