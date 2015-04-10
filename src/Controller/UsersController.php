@@ -67,8 +67,7 @@ class UsersController extends AppController
 
         // Redirect if user is already logged in
         if ($this->authUser) {
-            $redirect = $this->Users->Roles->redirectFrom($this->authUser['role_id']);
-            return $this->redirect($redirect);
+            return $this->redirect('/login');
         }
 
         $user = $this->Users->newEntity();

@@ -70,7 +70,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->assertResponseSuccess();
 
-        $this->assertRedirect('/admin/manager/users');
+        $this->assertRedirect('/login');
     }
 
     /**
