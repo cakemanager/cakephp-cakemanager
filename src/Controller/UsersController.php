@@ -85,24 +85,23 @@ class UsersController extends AppController
             }
 
             if ($this->Users->save($user)) {
-                // firing an event: afterLogin
+                // firing an event: afterRegister
                 $_event = new Event('Controller.Users.afterRegister', $this, [
                     'user' => $user
                 ]);
                 $this->eventManager()->dispatch($_event);
 
-                $this->Flash->success(__('Registered succesfully!'));
+                // firing an event: afterInvalidRegister
+                $_event = new Event('Controller.Users.afterInvalidRegister', $this, [
+                    'user' => $user
+                ]);
+                $this->eventManager()->dispatch($_event);
 
+                $this->Flash->success(__('Registered succesfully!'));
                 return $this->redirect(['action' => 'login']);
             } else {
                 $this->Flash->error(__('Could not register. Please, try again.'));
             }
-
-            // firing an event: afterInvalidLogin
-            $_event = new Event('Controller.Users.afterInvalidRegister', $this, [
-                'user' => $user
-            ]);
-            $this->eventManager()->dispatch($_event);
         }
 
         $this->set(compact('user'));
@@ -244,7 +243,7 @@ class UsersController extends AppController
         if ($this->Users->activateUser($email, $activationKey)) {
             $this->Flash->success(__('Congratulations! Your account has been activated!'));
 
-            // firing an event: afterInvalidLogin
+            // firing an event: afterActivate
             $_event = new Event('Controller.Users.afterActivate', $this, [
                 'email' => $email
             ]);
@@ -307,7 +306,7 @@ class UsersController extends AppController
                 $user->set('activation_key', null);
 
                 if ($this->Users->save($user)) {
-                    // firing an event: afterInvalidLogin
+                    // firing an event: afterResetPassword
                     $_event = new Event('Controller.Users.afterResetPassword', $this, [
                         'user' => $user
                     ]);
