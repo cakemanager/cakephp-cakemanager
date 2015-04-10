@@ -42,7 +42,7 @@ class UsersControllerTest extends IntegrationTestCase
 
     /**
      * Test the register-page when register if disabled
-     * 
+     *
      */
     public function testRegisterInvalid()
     {
