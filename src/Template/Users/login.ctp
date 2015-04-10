@@ -8,5 +8,6 @@
     </fieldset>
     <?= $this->Form->button(__('Login')); ?>
     <?= $this->Form->end() ?>
+    <?= ($registerEnabled ? $this->Html->link('Register', ['action' => 'register']) . ' | ' : null) ?>
     <?= $this->Html->link('Forgot password', ['action' => 'forgotPassword']); ?>
 </div>

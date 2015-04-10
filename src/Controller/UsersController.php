@@ -16,6 +16,7 @@ namespace CakeManager\Controller;
 
 use CakeManager\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 
 /**
@@ -36,7 +37,7 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         // Auth-settings: Allows all user-related methods
-        $this->Auth->allow(['resetPassword', 'forgotPassword', 'logout', 'login', 'activate']);
+        $this->Auth->allow(['resetPassword', 'forgotPassword', 'logout', 'login', 'activate', 'register']);
 
         // Setting up the base-theme
         if (!$this->theme) {
@@ -47,6 +48,66 @@ class UsersController extends AppController
         if (!$this->layout) {
             $this->layout = "base";
         }
+    }
+
+    /**
+     * Register action
+     *
+     * # Enabling / Disabling register action
+     *
+     * Configure::write('CM.Register', true);
+     *
+     * @return type
+     */
+    public function register()
+    {
+        if (!Configure::read('CM.Register')) {
+            return $this->redirect('/');
+        }
+
+        // Redirect if user is already logged in
+        if ($this->authUser) {
+            $redirect = $this->Users->Roles->redirectFrom($this->authUser['role_id']);
+            return $this->redirect($redirect);
+        }
+
+        $user = $this->Users->newEntity();
+
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+
+            $user->set('role_id', 3);
+            $user->set('active', true);
+
+            if (Configure::read('CM.ActivationOnRegister')) {
+                $user->set('activation_key', $this->Users->generateActivationKey());
+                $user->set('active', false);
+            }
+
+            if ($this->Users->save($user)) {
+                // firing an event: afterLogin
+                $_event = new Event('Controller.Users.afterRegister', $this, [
+                    'user' => $user
+                ]);
+                $this->eventManager()->dispatch($_event);
+
+                $this->Flash->success(__('Registered succesfully!'));
+
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error(__('Could not register. Please, try again.'));
+            }
+
+            // firing an event: afterInvalidLogin
+            $_event = new Event('Controller.Users.afterInvalidRegister', $this, [
+                'user' => $user
+            ]);
+            $this->eventManager()->dispatch($_event);
+        }
+
+        $this->set(compact('user'));
+
+        $this->render(Configure::read('CM.UserViews.register'));
     }
 
     /**
@@ -92,6 +153,8 @@ class UsersController extends AppController
 
             $this->Flash->error(__('Your username or password is incorrect.'));
         }
+
+        $this->set('registerEnabled', Configure::read('CM.Register'));
 
         $this->render(Configure::read('CM.UserViews.login'));
     }
@@ -180,10 +243,17 @@ class UsersController extends AppController
         // If the user has been activated
         if ($this->Users->activateUser($email, $activationKey)) {
             $this->Flash->success(__('Congratulations! Your account has been activated!'));
+
+            // firing an event: afterInvalidLogin
+            $_event = new Event('Controller.Users.afterActivate', $this, [
+                'email' => $email
+            ]);
+            $this->eventManager()->dispatch($_event);
+
             return $this->redirect('/login');
         }
 
-        // If noting happened. Safety :)
+        // If noting happened. Just for safety :)
         $this->Flash->error(__('Something went wrong.') . ' ' . __('Your account could not be activated.'));
         return $this->redirect('/login');
     }
@@ -233,10 +303,16 @@ class UsersController extends AppController
 
                 $user = $this->Users->patchEntity($data, $this->request->data);
 
-                $data->set('active', 1);
-                $data->set('activation_key', null);
+                $user->set('active', 1);
+                $user->set('activation_key', null);
 
-                if ($this->Users->save($data)) {
+                if ($this->Users->save($user)) {
+                    // firing an event: afterInvalidLogin
+                    $_event = new Event('Controller.Users.afterResetPassword', $this, [
+                        'user' => $user
+                    ]);
+                    $this->eventManager()->dispatch($_event);
+
                     $this->Flash->success(__('Your password has been saved.'));
                     return $this->redirect('/login');
                 }

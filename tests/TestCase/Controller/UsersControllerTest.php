@@ -41,6 +41,135 @@ class UsersControllerTest extends IntegrationTestCase
     }
 
     /**
+     * Test the register-page when register if disabled
+     * 
+     */
+    public function testRegisterInvalid()
+    {
+        \Cake\Core\Configure::write('CM.Register', false);
+
+        $this->get('/register');
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/');
+
+        \Cake\Core\Configure::write('CM.Register', true);
+
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => 5,
+                    'role_id' => 1,
+                    'email' => 'newuser@email.nl'
+                ]
+            ]
+        ]);
+
+        $this->get('/register');
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/admin/manager/users');
+    }
+
+    /**
+     * Test if a register-form is created.
+     *
+     */
+    public function testRegisterForm()
+    {
+        \Cake\Core\Configure::write('CM.Register', true);
+
+        $this->get('/register');
+
+        $this->assertResponseSuccess();
+
+        $this->assertNoRedirect();
+
+        $this->assertResponseContains('<input type="email" name="email" required="required" maxlength="255" id="email">');
+        $this->assertResponseContains('<input type="password" name="new_password" required="required" id="new-password" value="">');
+        $this->assertResponseContains('<input type="password" name="confirm_password" required="required" id="confirm-password" value="">');
+    }
+
+    /**
+     * Test if a user is created with activation.
+     *
+     */
+    public function testRegisterActionPassWithActivation()
+    {
+        \Cake\Core\Configure::write('CM.Register', true);
+        \Cake\Core\Configure::write('CM.ActivationOnRegister', true);
+
+        $data = [
+            'email' => 'bob@cakemanager.org',
+            'new_password' => 'test',
+            'confirm_password' => 'test',
+        ];
+
+        $this->post('/register', $data);
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/users/login');
+
+        $user = $this->Users->get(5);
+
+        $this->assertNotNull($user->get('activation_key'));
+        $this->assertEquals(false, $user->get('active'));
+    }
+
+    /**
+     * Test if a user is created without activation.
+     *
+     */
+    public function testRegisterActionPassWithoutActivation()
+    {
+        \Cake\Core\Configure::write('CM.Register', true);
+        \Cake\Core\Configure::write('CM.ActivationOnRegister', false);
+
+        $data = [
+            'email' => 'bob@cakemanager.org',
+            'new_password' => 'test',
+            'confirm_password' => 'test',
+        ];
+
+        $this->post('/register', $data);
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/users/login');
+
+        $user = $this->Users->get(5);
+
+        $this->assertNull($user->get('activation_key'));
+        $this->assertEquals(true, $user->get('active'));
+    }
+
+    /**
+     * Test user redirected when logged in.
+     *
+     */
+    public function testLoginRedirect()
+    {
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => 5,
+                    'role_id' => 1,
+                    'email' => 'newuser@email.nl'
+                ]
+            ]
+        ]);
+
+        $this->get('/login');
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/admin/manager/users');
+    }
+
+    /**
      * Test if a login-form is created.
      *
      */
@@ -66,13 +195,15 @@ class UsersControllerTest extends IntegrationTestCase
     public function testLoginActionPass()
     {
         // creating a new user
-        $data = [
-            'role_id' => 1,
+        $user = $this->Users->newEntity([
             'email' => 'newuser@email.nl',
             'password' => 'test',
-        ];
+        ]);
 
-        $this->Users->save($this->Users->newEntity($data));
+        $user->set('role_id', 1);
+        $user->set('active', 1);
+
+        $this->Users->save($user);
 
         $login = [
             'email' => 'newuser@email.nl',
@@ -81,8 +212,12 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->post('/users/login', $login);
 
-        $this->assertSession(0, 'Auth.User.id');
-        $this->assertSession(null, 'Auth.User.email');
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/admin/manager/users');
+
+        $this->assertSession(5, 'Auth.User.id');
+        $this->assertSession('newuser@email.nl', 'Auth.User.email');
     }
 
     /**
@@ -92,6 +227,8 @@ class UsersControllerTest extends IntegrationTestCase
     public function testLogoutActionFail()
     {
         $this->get('/users/logout');
+
+        $this->assertResponseSuccess();
 
         $this->assertRedirect('/users/login');
     }
@@ -298,6 +435,15 @@ class UsersControllerTest extends IntegrationTestCase
         $this->assertRedirect('/login');
     }
 
+    public function testForgotPasswordForm()
+    {
+        $this->get('/users/forgotPassword');
+
+        $this->assertResponseSuccess();
+        
+        $this->assertResponseContains('<input type="email" name="email" id="email">');
+    }
+
     /**
      * Test request true
      *
@@ -321,5 +467,80 @@ class UsersControllerTest extends IntegrationTestCase
         $user = $this->Users->get(1);
 
         $this->assertNotEmpty($user->get('activation_key'));
+    }
+
+    /**
+     * Test reset password while logged in
+     *
+     */
+    public function testResetPasswordLoggedIn()
+    {
+        $this->session(['Auth.User' => [
+                'id' => 1,
+                'role_id' => 1,
+        ]]);
+
+        $this->get('/users/resetPassword/bob@cakemanager.org/');
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect();
+    }
+
+    /**
+     * Test reset password with wrong / no key
+     *
+     */
+    public function testResetPasswordWrongKey()
+    {
+        $user = $this->Users->get(1);
+
+        $user->set('activation_key', $this->Users->generateActivationKey());
+
+        $user->set('active', 0);
+
+        $this->Users->save($user);
+
+        $this->assertEquals(0, $user->active);
+
+        $this->get('/users/resetPassword/' . $user->email . '/');
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect();
+
+        $this->get('/users/resetPassword/' . $user->email . '/THISISTHEWRONGKEY');
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect();
+    }
+
+    /**
+     * Test reset password pass
+     *
+     */
+    public function testResetPasswordPass()
+    {
+        $user = $this->Users->get(1);
+
+        $user->set('activation_key', $this->Users->generateActivationKey());
+
+        $user->set('active', 0);
+
+        $this->Users->save($user);
+
+        $this->assertEquals(0, $user->active);
+
+        $data = [
+            'new_password' => 'test',
+            'confirm_password' => 'test',
+        ];
+
+        $this->post('/users/resetPassword/' . $user->email . '/' . $user->activation_key . '/', $data);
+
+        $this->assertResponseSuccess();
+
+        $this->assertRedirect('/login');
     }
 }
