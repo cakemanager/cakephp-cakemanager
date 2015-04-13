@@ -22,7 +22,7 @@ $this->assign('title', $title);
         <title>
             <?= $this->fetch('title') ?>
         </title>
-        <?= $this->Html->meta('icon') ?>
+        <?= $this->Html->meta('icon', 'CakeManager./img/cm.ico', ['type' => 'icon']) ?>
 
         <?= $this->Html->css('base.css') ?>
         <?= $this->Html->css('cake.css') ?>
