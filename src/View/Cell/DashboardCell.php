@@ -127,11 +127,11 @@ class DashboardCell extends Cell
                 'url' => 'https://github.com/cakemanager/cakephp-whosonline',
                 'description' => 'Plugin to follow your users on your app.'
             ],
-            'PostTypes [not stable yet]' => [
+            'PostTypes' => [
                 'url' => 'https://github.com/cakemanager/cakephp-posttypes',
                 'description' => 'Plugin to create dynamic CRUD for your admin-panel.'
             ],
-            'Settings [not stable yet]' => [
+            'Settings' => [
                 'url' => 'https://github.com/cakemanager/cakephp-settings',
                 'description' => 'Plugin to save settings in your database and manage them.'
             ],
