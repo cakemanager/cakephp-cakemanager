@@ -17,3 +17,8 @@ li.active>a:not(.button) {
     font-weight: bold;
 }
 
+.header-title a {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
