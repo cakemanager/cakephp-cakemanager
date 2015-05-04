@@ -12,6 +12,7 @@
     echo $this->Form->input('email');
     echo $this->Form->input('password');
     echo $this->Form->input('active', ['type' => 'checkbox']);
+    echo $this->Form->input('send_mail', ['type' => 'checkbox']);
 
     foreach ($customFields as $key => $field) {
         echo $this->Form->input($key, ($field ? $field : []));

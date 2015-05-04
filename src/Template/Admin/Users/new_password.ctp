@@ -7,11 +7,12 @@
 
 <?= $this->Form->create($user); ?>
 <fieldset>
-    <legend><?= __('Edit User') ?></legend>
+    <legend><?= __('Change Password') ?></legend>
     <?php
     echo $this->Form->input('users_email', ['disabled', 'value' => $user->email]);
     echo $this->Form->input('new_password', ['type' => 'password', 'value' => '']);
     echo $this->Form->input('confirm_password', ['type' => 'password', 'value' => '']);
+    echo $this->Form->input('send_mail', ['type' => 'checkbox']);
     ?>
 </fieldset>
 <?= $this->Form->button(__('Submit')) ?>

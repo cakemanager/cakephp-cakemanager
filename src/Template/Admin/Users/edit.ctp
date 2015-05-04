@@ -2,6 +2,7 @@
 
 <?= $this->Html->link(__('All users'), ['action' => 'index']) ?> | 
 <?= $this->Html->link(__('New password'), ['action' => 'newPassword', $user->id]) ?> | 
+<?= $this->Html->link('Set unactive and send activation-mail', ['action' => 'sendActivationMail', $user->id]) ?> | 
 <?= $this->Form->postLink(__('Delete user'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete {0}?', $user->email)]) ?>
 
 <hr>
@@ -18,11 +19,9 @@
     foreach ($customFields as $key => $field) {
         echo $this->Form->input($key, ($field ? $field : []));
     }
-
-    echo $this->Html->link('Change Password', ['action' => 'newPassword', $user->id]);
     ?>
 
-
+    <?= $this->Html->link('Change Password', ['action' => 'newPassword', $user->id]) ?>
 
 </fieldset>
 <?= $this->Form->button(__('Submit')) ?>

@@ -16,6 +16,7 @@ namespace CakeManager\Controller\Admin;
 
 use CakeManager\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Utility\Hash;
 
 /**
@@ -89,7 +90,7 @@ class UsersController extends AppController
     public function index()
     {
         $this->Search->addFilter('email');
-        
+
         $this->Search->addFilter('role_id', [
             'options' => $this->Users->Roles->find('list')->toArray(),
         ]);
@@ -127,12 +128,24 @@ class UsersController extends AppController
 
         $user->accessible('role_id', true); // the role_id field should be accessible
         $user->accessible('active', true); // the active field should be accessible
+        $user->accessible('send_mail', true); // checkbox to send an e-mail
 
         $roles = $this->Users->Roles->find('list');
 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
+
+            if (!$user->get('active')) {
+                $user->set('activation_key', $this->Users->generateActivationKey());
+            }
+
             if ($this->Users->save($user)) {
+                // firing an event: afterRegister
+                $_event = new Event('Controller.Users.afterRegister', $this, [
+                    'user' => $user,
+                    'sendMail' => $user->send_mail
+                ]);
+                $this->eventManager()->dispatch($_event);
                 $this->Flash->success('The user has been saved.');
                 return $this->redirect(['action' => 'index']);
             } else {
@@ -196,9 +209,14 @@ class UsersController extends AppController
             'contain' => []
         ]);
 
+        $user->accessible('send_mail', true); // checkbox to send an e-mail
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
+                if ($user->send_mail) {
+                    $this->EmailListener->passwordConfirmation($user);
+                }
                 $this->Flash->success('The user has been saved.');
                 return $this->redirect($this->referer());
             } else {
@@ -209,6 +227,32 @@ class UsersController extends AppController
         $this->set(compact('user'));
 
         $this->render(Configure::read('CM.AdminUserViews.newPassword'));
+    }
+
+    /**
+     * Send Activation Mail method
+     *
+     * Method to unactivate a specific user and send a new activation-mail.
+     *
+     * @param int $id User id.
+     * @return void|\Cake\Network\Response
+     */
+    public function sendActivationMail($id = null)
+    {
+        $user = $this->Users->get($id, [
+            'contain' => []
+        ]);
+
+        $user->set('active', false);
+        $user->set('activation_key', $this->Users->generateActivationKey());
+
+        if ($this->Users->save($user)) {
+            $this->EmailListener->activation($user);
+            $this->Flash->success('The user is unactive and has received a new activation link.');
+            return $this->redirect($this->referer());
+        } else {
+            $this->Flash->error('The user couldn\'t recieve a new activation link. Please, try again.');
+        }
     }
 
     /**

@@ -15,7 +15,6 @@
  */
 use Cake\Core\App;
 use Cake\Core\Configure;
-use CakeManager\Controller\Event\MailEventListener;
 
 /**
  * Default Session-settings
@@ -49,8 +48,32 @@ Configure::write('CM.Version', "1.0.0-RC2");
  * Mail Settings
  */
 Configure::write('CM.Mail', [
-    'From' => ['noreply@cakemanager.org' => 'CakeManager'],
-    'afterLogin' => true,
+    'transport' => false,
+    'sender' => [
+        'email' => 'no-reply@mymail.com',
+        'name' => 'CakeManager'
+    ],
+    'from' => ['noreply@cakemanager.org' => 'CakeManager'],
+    'activation' => [
+        'subject' => 'Activation for CakeManager',
+        'layout' => 'CakeManager.base',
+        'template' => 'CakeManager.activation',
+    ],
+    'activationConfirmation' => [
+        'subject' => 'Welcome to CakeManager!',
+        'layout' => 'CakeManager.base',
+        'template' => 'CakeManager.activationConfirmation',
+    ],
+    'forgotPassword' => [
+        'subject' => 'New password request',
+        'layout' => 'CakeManager.base',
+        'template' => 'CakeManager.forgotPassword',
+    ],
+    'passwordConfirmation' => [
+        'subject' => 'Password changed',
+        'layout' => 'CakeManager.base',
+        'template' => 'CakeManager.passwordConfirmation',
+    ]
 ]);
 
 /**
@@ -99,8 +122,3 @@ Configure::write('CM.AdminRoleViews', [
 
 Configure::write('CM.UserFields', [
 ]);
-
-/**
- * Attach the MailEventListener to the event manager
- */
-Cake\Event\EventManager::instance()->attach(new MailEventListener());
