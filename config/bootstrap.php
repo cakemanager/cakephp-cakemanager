@@ -53,7 +53,7 @@ Configure::write('CM.Mail', [
         'email' => 'no-reply@mymail.com',
         'name' => 'CakeManager'
     ],
-    'from' => ['noreply@cakemanager.org' => 'CakeManager'],
+    'from' => ['no-reply@mymail.com' => 'CakeManager'],
     'activation' => [
         'subject' => 'Activation for CakeManager',
         'layout' => 'CakeManager.base',

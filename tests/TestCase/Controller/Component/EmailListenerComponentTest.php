@@ -160,7 +160,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('Activation for CakeManager', $this->readAttribute($result, '_subject'));
 
@@ -209,7 +209,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('Activation for CakeManager Custom', $this->readAttribute($result, '_subject'));
 
@@ -272,7 +272,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('Welcome to CakeManager!', $this->readAttribute($result, '_subject'));
 
@@ -319,7 +319,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('Welcome to CakeManager! Custom', $this->readAttribute($result, '_subject'));
 
@@ -382,7 +382,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('New password request', $this->readAttribute($result, '_subject'));
 
@@ -429,7 +429,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('New password request custom', $this->readAttribute($result, '_subject'));
 
@@ -492,7 +492,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('Password changed', $this->readAttribute($result, '_subject'));
 
@@ -539,7 +539,7 @@ class EmailListenerComponentTest extends TestCase
 
         $_from = $this->readAttribute($result, '_from');
 
-        $this->assertEquals('CakeManager', $_from['noreply@cakemanager.org']);
+        $this->assertEquals('CakeManager', $_from['no-reply@mymail.com']);
 
         $this->assertEquals('Password changed custom', $this->readAttribute($result, '_subject'));
 
