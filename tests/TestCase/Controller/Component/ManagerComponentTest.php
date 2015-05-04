@@ -231,8 +231,6 @@ class ManagerComponentTest extends TestCase
         $this->assertEmpty($this->Manager->Controller->viewVars);
 
         $this->Manager->adminBeforeRender($event);
-
-        $this->assertEquals('Mock_Controlle', $this->Manager->Controller->viewVars['title']);
     }
 
     /**
