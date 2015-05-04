@@ -51,7 +51,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @param array $options Options.
      * @return string
      */
-    public function afterMenu($menu = array(), $options = array())
+    public function afterMenu($menu = [], $options = [])
     {
         return '';
     }
@@ -65,7 +65,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @param array $options Options.
      * @return string
      */
-    public function afterSubItem($item = array(), $options = array())
+    public function afterSubItem($item = [], $options = [])
     {
         return '';
     }
@@ -79,7 +79,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @param array $options Options.
      * @return string
      */
-    public function beforeMenu($menu = array(), $options = array())
+    public function beforeMenu($menu = [], $options = [])
     {
         return '';
     }
@@ -93,7 +93,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @param array $options Options.
      * @return string
      */
-    public function beforeSubItem($item = array(), $options = array())
+    public function beforeSubItem($item = [], $options = [])
     {
         return '';
     }
@@ -107,7 +107,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @param array $options Options.
      * @return string
      */
-    public function item($item = array(), $options = array())
+    public function item($item = [], $options = [])
     {
         $html = '<li ' . ($item['active'] ? 'class="active"' : '') . '>' .
             $this->Html->link(__($item['title']), $item['url']) . '</li>';
@@ -123,7 +123,7 @@ class MainMenuHelper extends Helper implements MenuBuilderInterface
      * @param array $options Options.
      * @return string
      */
-    public function subItem($item = array(), $options = array())
+    public function subItem($item = [], $options = [])
     {
         return '';
     }
