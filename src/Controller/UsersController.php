@@ -115,7 +115,7 @@ class UsersController extends AppController
      *
      * Configure::write('CM.UserViews.login', 'custom/view');
      *
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      */
     public function login()
     {
@@ -172,7 +172,7 @@ class UsersController extends AppController
      *
      * Configure::write('CM.UserViews.forgot_password', 'custom/view');
      *
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      */
     public function forgotPassword()
     {
@@ -217,13 +217,13 @@ class UsersController extends AppController
      *
      * @param string $email The e-mailaddress from the user.
      * @param string $activationKey The refering activation key.
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      */
     public function activate($email, $activationKey = null)
     {
         // If there's no activation_key
         if (!$activationKey) {
-            $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
+            $this->Flash->error(__('Your account could not be activated.'));
             return $this->redirect($this->referer());
         }
 
@@ -234,7 +234,7 @@ class UsersController extends AppController
 
         // If the email and key doesn't match
         if (!$this->Users->validateActivationKey($email, $activationKey)) {
-            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.'));
+            $this->Flash->error(__('Your account could not be activated.'));
             return $this->redirect('/login');
         }
 
@@ -252,7 +252,7 @@ class UsersController extends AppController
         }
 
         // If noting happened. Just for safety :)
-        $this->Flash->error(__('Something went wrong.') . ' ' . __('Your account could not be activated.'));
+        $this->Flash->error(__('Your account could not be activated.'));
         return $this->redirect('/login');
     }
 
@@ -268,13 +268,13 @@ class UsersController extends AppController
      *
      * @param string $email The e-mailaddress from the user.
      * @param string $activationKey The refering activation key.
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      */
     public function resetPassword($email, $activationKey = null)
     {
         // If there's no activation_key
         if (!$activationKey) {
-            $this->Flash->error(__('Activationkey invalid.') . ' ' . __('Your account could not be activated.'));
+            $this->Flash->error(__('Your account could not be activated.'));
             return $this->redirect($this->referer());
         }
 
@@ -285,7 +285,7 @@ class UsersController extends AppController
 
         // If the email and key doesn't match
         if (!$this->Users->validateActivationKey($email, $activationKey)) {
-            $this->Flash->error(__('your e-mailaddress is not linked to your activationkey.'));
+            $this->Flash->error(__('Your account could not be activated.'));
             return $this->redirect('/login');
         }
 
@@ -311,12 +311,12 @@ class UsersController extends AppController
                     ]);
                     $this->eventManager()->dispatch($_event);
 
-                    $this->Flash->success(__('Your password has been saved.'));
+                    $this->Flash->success(__('Your password has been changed.'));
                     return $this->redirect('/login');
                 }
             }
 
-            $this->Flash->error(__('Someting went wrong. Your password could nog be saved.'));
+            $this->Flash->error(__('Your account could not be activated.'));
         }
 
         $this->render(Configure::read('CM.UserViews.resetPassword'));
@@ -328,7 +328,7 @@ class UsersController extends AppController
      * This method logs the user out and redirects to the login-page.
      * The login-page is chosen by the AuthComponent
      *
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      */
     public function logout()
     {

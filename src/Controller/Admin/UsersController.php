@@ -146,10 +146,10 @@ class UsersController extends AppController
                     'sendMail' => $user->send_mail
                 ]);
                 $this->eventManager()->dispatch($_event);
-                $this->Flash->success('The user has been saved.');
+                $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error('The user could not be saved. Please, try again.');
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
 
@@ -181,10 +181,10 @@ class UsersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
-                $this->Flash->success('The user has been saved.');
+                $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error('The user could not be saved. Please, try again.');
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
 
@@ -217,10 +217,10 @@ class UsersController extends AppController
                 if ($user->send_mail) {
                     $this->EmailListener->passwordConfirmation($user);
                 }
-                $this->Flash->success('The user has been saved.');
+                $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect($this->referer());
             } else {
-                $this->Flash->error('The user could not be saved. Please, try again.');
+                $this->Flash->error(__('The password could not be saved. Please, try again.'));
             }
         }
 
@@ -248,10 +248,10 @@ class UsersController extends AppController
 
         if ($this->Users->save($user)) {
             $this->EmailListener->activation($user);
-            $this->Flash->success('The user is unactive and has received a new activation link.');
+            $this->Flash->success(__('The e-mail has been sent.'));
             return $this->redirect($this->referer());
         } else {
-            $this->Flash->error('The user couldn\'t recieve a new activation link. Please, try again.');
+            $this->Flash->error(__('The e-mail could not be sent. Please, try again.'));
         }
     }
 
@@ -268,9 +268,9 @@ class UsersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
 
         if ($this->Users->delete($user)) {
-            $this->Flash->success('The user has been deleted.');
+            $this->Flash->success(__('The user has been deleted.'));
         } else {
-            $this->Flash->error('The user could not be deleted. Please, try again.');
+            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
