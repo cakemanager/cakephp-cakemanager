@@ -37,23 +37,8 @@ $this->assign('title', $title);
             <div class="header-title">
                 <span><?= $this->fetch('title') ?></span>
                 <small>
-
-                    <?=
-                    (isset($authUser) ?
-                            "Welcome " . $authUser['email'] . " | "
-                            . $this->Html->link('Logout', [
-                                'plugin'     => 'CakeManager',
-                                'controller' => 'Users',
-                                'action'     => 'logout',
-                                'prefix'     => false,
-                            ]) : $this->Html->link('Login', [
-                                'plugin'     => 'CakeManager',
-                                'controller' => 'Users',
-                                'action'     => 'login',
-                                'prefix'     => false,
-                            ]) )
-                    ?>
-
+                    <?= __('Welcome {0}', $authUser['email']) ?>
+                    <?= $this->Menu->menu('headerLeft', 'CakeManager.HeaderLeftMenu') ?>
                 </small>
             </div>
             <?= $this->Menu->menu('header', 'CakeManager.HeaderMenu') ?>
@@ -67,7 +52,7 @@ $this->assign('title', $title);
                 <div class="row">
 
                     <div class="actions columns large-2 medium-3">
-                        <h3><?= __('Actions') ?></h3>
+                        <h3><?= __('Menu') ?></h3>
                         <ul class="side-nav">
                             <?= $this->Menu->menu('main', 'CakeManager.MainMenu') ?>
                         </ul>
