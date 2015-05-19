@@ -289,7 +289,7 @@ class ManagerComponent extends Component
         ]);
 
         $controller->Menu->add('CakeManager GitHub', [
-            'url' => 'https://github.com/bobmulder/cakephp-cakemanager',
+            'url' => 'https://github.com/cakemanager/cakephp-cakemanager',
         ]);
 
         $controller->Menu->add('Documentation', [
