@@ -53,34 +53,32 @@ class UsersTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-                ->add('id', 'valid', ['rule' => 'numeric'])
-                ->allowEmpty('id', 'create')
-                ->add('email', 'valid', ['rule' => 'email'])
-                ->requirePresence('email', 'create')
-                ->notEmpty('email')
-                ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'])
-                ->notEmpty('password');
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create')
+            ->add('email', 'valid', ['rule' => 'email'])
+            ->requirePresence('email', 'create')
+            ->notEmpty('email')
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'])
+            ->notEmpty('password');
 
         $validator->add('new_password', 'custom', [
             'rule' => function ($value, $context) {
-
                 if ($value !== $context['data']['confirm_password']) {
                     return false;
                 }
                 return true;
             },
-            'message' => 'Passwords are not equal!',
+            'message' => __('Passwords are not equal!'),
         ]);
 
         $validator->add('confirm_password', 'custom', [
             'rule' => function ($value, $context) {
-
                 if ($value !== $context['data']['new_password']) {
                     return false;
                 }
                 return true;
             },
-            'message' => 'Passwords are not equal!',
+            'message' => __('Passwords are not equal.'),
         ]);
 
 

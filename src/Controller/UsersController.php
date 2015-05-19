@@ -48,6 +48,8 @@ class UsersController extends AppController
         if (!$this->layout) {
             $this->layout = "base";
         }
+
+        $this->set('title', 'Users');
     }
 
     /**

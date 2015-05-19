@@ -88,7 +88,7 @@ class RolesController extends AppController
     /**
      * Add method
      *
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      */
     public function add()
     {
@@ -111,7 +111,7 @@ class RolesController extends AppController
      * Edit method
      *
      * @param string|null $id Role id.
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      * @throws \Cake\Network\Exception\NotFoundException Exception if the role couldn't be found.
      */
     public function edit($id = null)
@@ -139,7 +139,7 @@ class RolesController extends AppController
      * Delete method
      *
      * @param string|null $id Role id.
-     * @return void|\Cake\Network\Respose
+     * @return void|\Cake\Network\Response
      * @throws \Cake\Network\Exception\NotFoundException Exception if the role couldn't be found.
      */
     public function delete($id = null)

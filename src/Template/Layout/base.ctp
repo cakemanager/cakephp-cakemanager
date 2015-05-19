@@ -12,7 +12,7 @@
  * @since         0.10.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-$cakeDescription = 'CakeManager';
+$this->assign('title', $title);
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,30 +36,8 @@ $cakeDescription = 'CakeManager';
         <header>
             <div class="header-title">
                 <span><?= $this->fetch('title') ?></span>
-                <small>
-
-                    <?=
-                    (isset($authUser) ?
-                            "Welcome " . $authUser['email'] . " | "
-                            . $this->Html->link('Logout', [
-                                'plugin'     => 'CakeManager',
-                                'controller' => 'Users',
-                                'action'     => 'logout',
-                                'prefix'     => false,
-                            ]) : $this->Html->link('Login', [
-                                'plugin'     => 'CakeManager',
-                                'controller' => 'Users',
-                                'action'     => 'login',
-                                'prefix'     => false,
-                            ]) )
-                    ?>
-
-
-                </small>
             </div>
             <div class="header-help">
-                <span><a target="_blank" href="http://cakemanager.readthedocs.org/en/develop/">CakeManager Documentation</a></span>
-                <span><a target="_blank" href="https://github.com/bobmulder/cakephp-cakemanager">CakeManager GitHub</a></span>
                 <span><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></span>
                 <span><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></span>
             </div>
