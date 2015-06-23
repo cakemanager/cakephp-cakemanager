@@ -44,9 +44,7 @@ class UsersController extends AppController
         }
 
         // Setting up the base-layout
-        if (!$this->layout) {
-            $this->layout = "base";
-        }
+        $this->layout = Configure::read('CM.layout.base');
     }
 
     /**
