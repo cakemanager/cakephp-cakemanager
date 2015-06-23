@@ -54,8 +54,8 @@ Configure::write('CM.UserViews', [
  * Default for the CakeManager itself, you can change it for your own layouts
  */
 Configure::write('CM.UserViews', [
-    'base_layout'   => 'base',
-    'admin_layout'  => 'admin'
+    'CM.layout.base'   => 'base',
+    'CM.layout.admin'  => 'admin'
 ]);
 
 /**
