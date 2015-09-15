@@ -5,8 +5,12 @@
 [![Total Downloads](https://poser.pugx.org/cakemanager/cakephp-cakemanager/downloads.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager)
 [![License](https://poser.pugx.org/cakemanager/cakephp-cakemanager/license.svg)](https://packagist.org/packages/cakemanager/cakephp-cakemanager)
 
-CakeManager Plugin for Cake 3.x
-===================
+[DEPRECATED] CakeManager Plugin for Cake 3.x
+============================================
+
+> WARNING: THIS PLUGIN IS DEPRECATED. 
+
+> USE https://github.com/cakemanager/cakephp-cakeadmin INSTEAD.
 
 The CakeManager offers a build-in login-system, and a strong admin-section to manage your application. You are able to manage your users and roles, and own data. Also the CakeManager offers you many components and behaviors to make developing easier.
 
